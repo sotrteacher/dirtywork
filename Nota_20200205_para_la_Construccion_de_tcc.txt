@@ -1,0 +1,12 @@
+/**Nota_20200205.txt
+ */
+      Untar the TCC archive and type in the MSYS shell:
+        ./configure [--prefix installpath]
+        make
+        make install
+
+      The default install location is c:\Program Files\tcc
+
+      Cygwin can be used too with its mingw cross-compiler installed:
+        ./configure --cross-prefix=i686-w64-mingw32-
+        (the prefix may vary)
