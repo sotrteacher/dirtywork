@@ -1,5 +1,8 @@
 /**ArreglosYEstructuras.c
  */
+#include <stdio.h>
+#include <header.h>
+
 static
 unsigned int boleta[]={
   2009640001,
@@ -32,6 +35,14 @@ unsigned int min_num1(unsigned int *boleta,unsigned int tam)
   return r;
 }
 
+void
+print_dumm(struct dumm *dPt)
+{
+  int i;
+  for(i=0;i<dPt->N;i++){
+    printf("%5d",*(dPt->intPt+i));
+  }
+}
 
 
 
