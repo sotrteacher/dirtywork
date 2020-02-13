@@ -42,7 +42,7 @@ print_dumm(struct dumm *dPt)
   for(i=0;i<dPt->N;i++){
     printf("%5d",*(dPt->intPt+i));
   }
-}
+}/*end print_dumm()*/
 
 
 

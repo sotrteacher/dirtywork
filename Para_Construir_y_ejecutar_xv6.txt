@@ -1,0 +1,91 @@
+Construcci\'{o}n y ejecuci\'{o}n de xv6
+
+Descargar el c\'{o}digo fuente del sistema operativo xv6
+
+Buscar las fuentes de xv6 en github.com
+
+git clone <poner aqu\'{i} la url de xv6>
+
+//Con esto se obtiene un archivo con extensi\'{o}n .tar.bz2; 
+//o bien un archivo con extensi\'{o}n .zip
+
+Si se descarg\'{o} un archivo con extensi\'{o}n zip, extraer 
+su contenido con el comando
+
+unzip filename.zip
+
+Si se descarg\'{o} un archivo con extensi\'{o}n .tar.bz2, 
+extraer su contenido con el comando
+
+tar xvjf filename.tar.bz2
+
+Despu\'{e}s ingresar al directorio que se extrajo con alguno 
+de los comandos anteriores
+
+cd xv6-public/      (o bien cd xv6-public-master/)
+
+Ya que entramos al directorio de las fuentes para hacer una 
+primera construcci\'{o}n solo tenemos que ejecutar el comando 
+
+make
+
+con lo cual, deberemos ver varias lineas de compilaci\'on de 
+archivos fuente --casi todos de lenguaje C, algunos en lenguaje 
+ensamblador y un archivo escrito en PERL--.
+
+[Para instalar el comando file, instale el paquete file]
+sudo apt-get install file
+[Para instalar el comando qemu-system-i386, instale el paquete 
+qemu-system-x86]
+sudo apt-get install qemu-system-x86
+
+Para correr el kernel de xv6 en un emulador, debemos construir el 
+objetivo llamado kernelmemfs ejecutando el comando
+
+make kernelmemfs
+
+qemu-system-i386 -kernel kernelmemfs
+
+(kernelmemfs es un archivo obtenido como resultado de la 
+ejecuci\'{o}n del comando make kernelmemfs)
+
+Si la salida nos muestra el mensaje 
+Could not initialize SDL(No available video device) - exiting
+
+y estamos utilizando la aplicaci\'{o}n Debian, es porque no se 
+est\'{a} ejecutando el servidor X y no hemos exportado la variable 
+de ambiente DISPLAY.
+
+Para resolver esa situaci\'{o}n debemos instalar en windows el 
+servidor X (en particular, estamos usando el programa Xming sobre
+Windows 10).
+
+Tambi\'{e}n tenemos que exportar la variable de ambiente DISPLAY
+usando el comando
+
+export DISPLAY=:0
+
+Una vez hecho esto, debemos ejecutar el comando
+
+qemu-system-i386 -kernel kernelmemfs -m 256
+
+NOTA: si no queremos tener que estar exportando la variable DISPLAY 
+cada vez que lo necesitemos, podemos editar el archivo ~/.bashrc 
+para agregar al final de este el comando export DISPLAY=:0
+
+Por ejemplo, por el momento las \'{u}ltimas l\'{i}neas de ese archivo 
+en mi instalaci\'{o}n de debian son las siguientes:
+[v\'{e}ase el archivo 
+Ultimas_lineas_para_execute_qemu_sobre_app_debian.jpg]
+
+Despu\'{e}s de agregar la l\'{i}nea de "export DISPLAY=:0" al 
+archiv ~/.bashrc podemos ejecutar el comando
+
+source ~/.bashrc
+
+para que nuevamente se lea ese archivo de configuraci\'{o}n.
+
+
+
+
+
