@@ -79,7 +79,7 @@ en mi instalaci\'{o}n de debian son las siguientes:
 Ultimas_lineas_para_execute_qemu_sobre_app_debian.jpg]
 
 Despu\'{e}s de agregar la l\'{i}nea de "export DISPLAY=:0" al 
-archiv ~/.bashrc podemos ejecutar el comando
+archivo ~/.bashrc podemos ejecutar el comando
 
 source ~/.bashrc
 
