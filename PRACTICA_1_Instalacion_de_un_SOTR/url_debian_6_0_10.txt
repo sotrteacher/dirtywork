@@ -1,0 +1,2 @@
+
+https://cdimage.debian.org/mirror/cdimage/archive/6.0.10/i386/iso-cd/

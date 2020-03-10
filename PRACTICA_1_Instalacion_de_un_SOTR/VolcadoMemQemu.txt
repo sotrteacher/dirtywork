@@ -1,0 +1,317 @@
+Volcado de memoria en QEMU
+
+Entrar al directorio de ejemplos
+cd $HOME/marte/examples
+
+Construir kernel
+make hello_world_c.exe
+
+>> Compiling hello_world_c.exe: Use of uninitialized value $GNAT_LIBS_PATH{"rpi"} in concatenation (.) or string at /home/usuario/marte/utils/globals.pl line 16.
+  [OK]
+
+file hello_world_c.exe
+hello_world_c.exe: ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), statically linked, not stripped
+
+Ejecutar kernel en qemu-system-i386
+qemu-system-i386 -kernel hello_world_c.exe
+
+Acceder al Human Monitor Interface (HMP)
+Para entrar en el HMP se presionan las teclas Ctrl+Alt+2 y para volver al modo de 
+ejecuci\'on normal se presionan las teclas Ctrl+Alt+1.
+
+Volcado de memoria virtual & Volcado de memoria f\'isica:
+memsave ADDR SIZE FILENAME
+Vaciado de memoria virtual de SIZE bytes iniciando en la direcci\'on ADDR hacia el 
+archivo FILENAME.
+pmemsave ADDR SIZE FILENAME
+Vaciado de memoria f\'isica de SIZE bytes iniciando en la direcci\'on ADDR hacia el 
+archivo FILENAME.
+
+
+
+El archivo fuente Hello_world_c.c es:
+/*----------------------------------------------------------------------------
+ *-------------------------      M a R T E   O S      ------------------------
+ *----------------------------------------------------------------------------
+ *                                                             V2.0 2017-02-22
+ *
+ *                            H e l l o    W o r l d
+ *
+ *                                    C
+ *
+ * File 'hello_world.c'                                              By MAR.
+ *
+ * 
+ * A simple "hello world" program.
+ *
+ *---------------------------------------------------------------------------*/
+
+#include <stdio.h>
+//#include <debug_marte.h> // For Debugging
+
+
+int main()
+{
+  // For Debugging
+  //init_serial_communication_with_gdb (SERIAL_PORT_1);
+  //set_break_point_here;
+
+  printf("\nHello, I'm a C program running on MaRTE OS.\n\n");
+  printf("Martes 29 de enero de 2019\n");
+
+  return 0;
+}
+--Aqu\'i termina el c\'odigo del archivo hello_world_c.c
+
+Desensamblar del ejecutable hello_world_c.exe la parte que contiene el 
+s\'imbolo _start
+objdump -d hello_world_c.exe | grep _start -A 20 | less
+Podemos guardar este desensamblaje con el comando
+objdump -d hello_world_c.exe | grep _start -A 20 > hello_world_c_start.dis
+Observamos las primeras l\'ineas de hello_world_c_start.dis con 
+head -20 hello_world_c_start.dis
+00100000 <_start>:
+  100000:	eb 0e                	jmp    100010 <boot_entry>
+  100002:	66 90                	xchg   %ax,%ax
+
+00100004 <boot_hdr>:
+  100004:	02 b0 ad 1b 00 00    	add    0x1bad(%eax),%dh
+  10000a:	00 00                	add    %al,(%eax)
+  10000c:	fe 4f 52             	decb   0x52(%edi)
+  10000f:	e4                   	.byte 0xe4
+
+00100010 <boot_entry>:
+  100010:	bc 00 a0 19 00       	mov    $0x19a000,%esp
+  100015:	6a 00                	push   $0x0
+  100017:	9d                   	popf   
+  100018:	8d 3d e8 4f 18 00    	lea    0x184fe8,%edi
+  10001e:	8d 0d c4 aa 27 00    	lea    0x27aac4,%ecx
+  100024:	29 f9                	sub    %edi,%ecx
+  100026:	31 c0                	xor    %eax,%eax
+  100028:	f3 aa                	rep stos %al,%es:(%edi)
+  10002a:	30 c0                	xor    %al,%al
+
+En la primera l\'inea vemos que el s\'imbolo _start est\'a en la 
+direcci\'on 0x100000.
+
+Volcado de los primeros 1024 bytes despu\'es de 0x100000
+En el HMP ejecutar
+(qemu) memsave 0x100000 1024 memoriav.hex
+(qemu) quit
+file memoriav.hex
+memoriav.hex: DOS executable (COM)
+
+Se puede observar el contenido del archivo memoriav.hex usando el editor 
+bless
+bless memoriav.hex &
+
+
+COMO OBTENER EL KERNEL EJECUTABLE DESENSAMBLADO
+Consideremos el archivo fuente de prueba para MaRTE OS llamado
+hello_world_c_1.c
+/*----------------------------------------------------------------------------
+ *-------------------------      M a R T E   O S      ------------------------
+ *----------------------------------------------------------------------------
+ *                                                             V2.0 2017-02-22
+ *
+ *                            H e l l o    W o r l d
+ *
+ *                                    C
+ *
+ * File 'hello_world.c'                                              By MAR.
+ *
+ * 
+ * A simple "hello world" program.
+ *
+ *---------------------------------------------------------------------------*/
+
+#include <stdio.h>
+//#include <debug_marte.h> // For Debugging
+
+int valordretorno=0x32;
+int valorentero=0xcafebabe;
+
+int main()
+{
+  // For Debugging
+  //init_serial_communication_with_gdb (SERIAL_PORT_1);
+  //set_break_point_here;
+
+  printf("\nHello, I'm a C program running on MaRTE OS.\n\n");
+  printf("Martes 29 de enero de 2019\n");
+  printf("\nvalordretorno=%d\n\n",valordretorno);
+  printf("\nValor entero valorentero=%d\n",valorentero);
+
+  //return 0;
+  //return 0x32;
+  return valordretorno;
+}//end main()
+-- FIN DEL ARCHIVO hello_world_c_1.c
+
+Podemos construir el kernel (formato elf) con:
+mgcc hello_world_c_1.c -o hello_world_c_1.exe
+
+Podemos desensamblar el archivo completo usando:
+objdump -d hello_world_c_1.exe > hello_world_c_1.objdump_d
+
+El tama\~no del archivo hello_world_c_1.exe lo podemos conocer con:
+wc -c hello_world_c_1.exe
+En este ejemplo el comando devolvi\'o:
+965420 hello_world_c_1.exe
+
+(un kernel de menos de un megabyte)
+
+En el archivo hello_world_c_1.objdump_d podemos ver el punto de 
+entrada _start del kernel hello_world_c_1.exe
+------------------------------------------------------------------
+hello_world_c_1.exe:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00100000 <_start>:
+  100000:	eb 0e                	jmp    100010 <boot_entry>
+  100002:	66 90                	xchg   %ax,%ax
+
+00100004 <boot_hdr>:
+  100004:	02 b0 ad 1b 00 00    	add    0x1bad(%eax),%dh
+  10000a:	00 00                	add    %al,(%eax)
+  10000c:	fe 4f 52             	decb   0x52(%edi)
+  10000f:	e4                   	.byte 0xe4
+
+00100010 <boot_entry>:
+-------------------------------------------------------------------
+con esto sabemos que el kernel ser\'a cargado en memoria en la 
+direcci\'on 0x00100000 (en un megabyte). En este fragmento de 
+c\'odigo vemos que en la direcci\'on de memoria 0x00100004 estar\'a 
+ubicada la constante 0x1badb002 (interpretada en little endian) que 
+corresponde al est\'andar multiboot.
+
+Y tambi\'en podemos ver el c\'odigo desensamblado correspondiente a 
+la funci\'on main del fuente hello_world_c_1.c, el c\'odigo de main 
+desensamblado es:
+-------------------------------------------------------------------
+0010003c <main>:
+  10003c:	55                   	push   %ebp
+  10003d:	89 e5                	mov    %esp,%ebp
+  10003f:	83 e4 f0             	and    $0xfffffff0,%esp
+  100042:	83 ec 10             	sub    $0x10,%esp
+  100045:	c7 04 24 00 50 17 00 	movl   $0x175000,(%esp)
+  10004c:	e8 69 21 00 00       	call   1021ba <puts>
+  100051:	c7 04 24 2e 50 17 00 	movl   $0x17502e,(%esp)
+  100058:	e8 5d 21 00 00       	call   1021ba <puts>
+  10005d:	a1 00 30 18 00       	mov    0x183000,%eax
+  100062:	89 44 24 04          	mov    %eax,0x4(%esp)
+  100066:	c7 04 24 49 50 17 00 	movl   $0x175049,(%esp)
+  10006d:	e8 fe 20 00 00       	call   102170 <printf>
+  100072:	a1 04 30 18 00       	mov    0x183004,%eax
+  100077:	89 44 24 04          	mov    %eax,0x4(%esp)
+  10007b:	c7 04 24 5d 50 17 00 	movl   $0x17505d,(%esp)
+  100082:	e8 e9 20 00 00       	call   102170 <printf>
+  100087:	a1 00 30 18 00       	mov    0x183000,%eax
+  10008c:	90                   	nop
+  10008d:	c9                   	leave  
+  10008e:	c3                   	ret    
+  10008f:	90                   	nop
+-------------------------------------------------------------------
+En este c\'odigo podemos ver que la direcci\'on m\'as alta a la que 
+se hace referencia es 0x183004, as\'i que un entero de 4 bytes 
+almacenado ah\'i quedar\'a ubicado en los bytes con direcciones 
+0x183004, 0x183005, 0x183006, y 0x183007. Como sabemos que el 
+s\'imbolo _start est\'a en la direcci\'on 0x100000, para obtener 
+un volcado de la memoria que incluya desde el s\'imbolo _start 
+hasta el valor de 4 bytes almacenado en 0x183004, deberemos 
+volcar SIZE=0x183007 - 0x100000 + 1 = 0x083007 + 1 = 0x083008 
+           = 8*16^{4}+3*16^{3}+4=8*65536+3*4096+8=524288+12288+8
+           = 536576 + 8 = 536584 bytes
+Por lo tanto, en el HMP de qemu (Ctrl+Alt+2) usaremos:
+(qemu) memsave 0x00100000 536584 hello_world_c_1_mem_virt_0x100000_plus_536584.hex
+o bien
+(qemu) pmemsave 0x00100000 536580 hello_world_c_1_mem_phys_0x100000_plus_536584.hex
+para poder visualizar en el archivo .hex los bytes almacenados en el intervalo de 
+memoria desde 0x100000 hasta 0x183007. 
+Para ver el contenido del archivo 
+hello_world_c_1_mem_virt_0x100000_plus_536580.hex
+usaremos el programa bless (un programa editor binario o a nivel de bytes).
+Para ver el contenido de hello_world_c_1_mem_virt_0x100000_plus_536584.hex
+con bless, desde una terminal ejecutamos
+bless hello_world_c_1_mem_virt_0x100000_plus_536584.hex &
+
+
+Ubicaci\'on de variables globales en archivo de volcado de memoria
+
+La variable global en el archivo fuente hello_world_c_1.c
+int valordretorno=0x32;
+se imprime en la l\'inea (dentro de la funci\'on main)
+  printf("\nvalordretorno=%d\n\n",valordretorno);
+Ve\'amos c\'omo se hace el llamado a la funci\'on printf en el 
+fragmento de c\'odigo ensamblador de arriba: 
+En la l\'inea 
+  10005d:	a1 00 30 18 00       	mov    0x183000,%eax
+se coloca el contenido de la direcci\'on 0x183000 en el registro %eax.
+En el programa Bless podemos ver que en esa direcci\'on est\'an 
+los bytes (Menu Search->Goto Offset y colocamos el offset 0x83000)
+32 00 00 00
+los cu\'ales decodificados en little endian corresponden al n\'umero
+0x00000032 = 50. (Para decodificar en little endian damos clic en el checkbox
+en la parte de abajo de la ventana junto a la etiqueta 
+"Show little endian decoding"). Entonces la instrucci\'on
+  10005d:	a1 00 30 18 00       	mov    0x183000,%eax
+coloca el decimal 50 en el registro %eax. La siguiente instrucci\'on:
+  100062:	89 44 24 04          	mov    %eax,0x4(%esp)
+coloca el contenido de %eax (50) en la direcci\'on %esp+0x4. La 
+siguiente instrucci\'on:
+  100066:	c7 04 24 49 50 17 00 	movl   $0x175049,(%esp)
+coloca el literal hexadecimal 0x175049 en la direcci\'on contenida en %esp.
+Cabe mencionar que en bless se puede llevar el cursor a un offset, colocando 
+en el cuadro de texto Offset por ejemplo el offset 0x75049, y dando clic 
+en el bot\'on "Go to Offset". Con lo que encontramos que en la direcci\'on
+0x175049 est\'an los bytes
+0A 76 61 6C 6F 72 64 72 65 74 6F 72 6E 6F 3D 25 64 0A 0A 00
+\n  v  a  l  o  r  d  r  e  t  o  r  n  o  =  %  d \n \n \0
+La siguiente instrucci\'on es:
+  10006d:	e8 fe 20 00 00       	call   102170 <printf>
+con la que se hace el llamado a la funci\'on printf.
+
+
+La variable global en el archivo fuente hello_world_c_1.c
+int valorentero=0xcafebabe;
+se imprime en la l\'inea (dentro de la funci\'on main)
+  printf("\nValor entero valorentero=%d\n",valorentero);
+Ve\'amos c\'omo se hace el llamado a la funci\'on printf en el 
+fragmento de c\'odigo ensamblador de arriba: 
+En la l\'inea 
+  100072:	a1 04 30 18 00       	mov    0x183004,%eax
+se coloca el contenido de la direcci\'on 0x183004 en el registro %eax.
+En el programa Bless podemos ver que en esa direcci\'on est\'an 
+los bytes (Menu Search->Goto Offset y colocamos el offset 0x83004)
+BE BA FE CA
+los cu\'ales decodificados en little endian corresponden al n\'umero
+0xcafebabe = 3405691582. (Para decodificar en little endian damos clic en el checkbox
+en la parte de abajo de la ventana junto a la etiqueta 
+"Show little endian decoding" y para observar en hexadecimal damos clic 
+en el checkbox en la parte de abajo de la ventana junto a la etiqueta 
+"Show unsigned as hexadecimal"). Entonces la instrucci\'on
+  100072:	a1 04 30 18 00       	mov    0x183004,%eax
+coloca el hexadecimal 0xcafebabe en el registro %eax. La siguiente 
+instrucci\'on:
+  100077:	89 44 24 04          	mov    %eax,0x4(%esp)
+coloca el contenido de %eax (0xcafebabe) en la direcci\'on %esp+0x4. La 
+siguiente instrucci\'on:
+  10007b:	c7 04 24 5d 50 17 00 	movl   $0x17505d,(%esp)
+coloca el literal hexadecimal 0x17505d en la direcci\'on contenida en %esp.
+Cabe mencionar que en bless se puede llevar el cursor a un offset, colocando 
+en el cuadro de texto Offset por ejemplo el offset 0x7505d, y dando clic 
+en el bot\'on "Go to Offset". Con lo que encontramos que en la direcci\'on
+0x17505d est\'an los bytes
+0A 56 61 6C 6F 72 20 65 6E 74 65 72 6F 20 76 61 6C 6F 72 65 6E 74 65 72 6F
+\n  V  a  l  o  r     e  n  t  e  r  o     v  a  l  o  r  e  n  t  e  r  o
+3D 25 64 0A 00
+ =  %  d \n \0
+La siguiente instrucci\'on es:
+  100082:	e8 e9 20 00 00       	call   102170 <printf>
+con la que se hace el llamado a la funci\'on printf.
+
+
+
+

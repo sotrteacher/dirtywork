@@ -1,0 +1,42 @@
+.PHONY: clean default
+
+CC=mgcc
+CXX=mg++
+GNAT=mgnatmake
+ADA_FLAGS = -gnata -gnato -g
+CFLAGS = -g -Wall
+SRC := $(wildcard *.c -or *.adb)
+
+default: hello_world.exe hello_world_c.exe
+
+%.exe: $(SRC)
+	@exec echo -en "\n>> Compiling $@: ";
+	@if [ -f $*.c ]; then $(CC) $(CFLAGS) $*.c -o $@ 1> /dev/null; fi
+	@if [ -f $*.adb ]; then $(GNAT) $(ADA_FLAGS) $*.adb -o $@ 1> /dev/null; fi
+	@if [ -f $*.cc ]; then $(CXX) $(CFLAGS) $*.cc -o $@ 1> /dev/null; fi
+	@exec echo "  [OK]";
+
+RUTA=../../MAKEFILE_GRUB_Legacy_Kernel_elf
+os.iso: $(KERNEL_ELF)
+	cp -v $(KERNEL_ELF) $(RUTA)/iso/boot/kernel.elf
+	genisoimage -R				\
+                    -b boot/grub/stage2_eltorito\
+                    -no-emul-boot               \
+                    -boot-load-size 4           \
+                    -A os                       \
+                    -input-charset utf8         \
+                    -quiet                      \
+                    -boot-info-table            \
+                    -o os.iso                   \
+                    $(RUTA)/iso
+
+runqemu: os.iso
+#	qemu-system-i386 -cdrom ../../MAKEFILE_GRUB_Legacy_Kernel_elf/os.iso -m 512
+	qemu-system-i386 -cdrom os.iso -m 512
+
+clean:
+	rm -vf os.iso
+	@exec echo -e "\n>> Cleaning... ";
+	@find \( -name '*.[oa]' -or -name '*~*' -or -name '*.ali' -or -name '*.log' \
+		-or -name '*.exe' -or -name 'mprogram' -or -name 'a.out' \) -print -delete
+	@exec echo ">> End Cleaning"

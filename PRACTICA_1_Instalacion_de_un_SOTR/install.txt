@@ -1,0 +1,298 @@
+          MaRTE OS
+                             ----------
+
+        Minimal Real Time Operating System for Embedded Applications
+                       Version 2.0 - Feb 2017
+
+         Copyright (C) 2000-2017  Universidad de Cantabria, SPAIN
+
+         Authors: Mario Aldea Rivas         aldeam@unican.es
+                  Michael Gonzalez Harbour     mgh@unican.es
+
+
+                          Installation Guide
+                         ====================
+
+Contents
+========
+
+ Requirements
+ Installation
+ What to do next?
+
+
+Requirements
+============
+
+Host Computer
+  - 64/32-bits Linux with compilation environment
+  - (If only the RPi architecture is required it is enough with a 32-bits
+     Linux box)
+  - AdaCore GNAT compiler
+
+Target Computer (architecture X86)
+  - An i386 PC or above (32 bits architecture)
+  - Ethernet card for remote loading (optional)
+  - Serial port for remote debugging (optional)
+
+Target Computer (architecture RPi)
+  - Raspberry Pi 1 Model B
+
+
+Installation
+============
+
+0) Requirements
+
+   0.1) Setting the 64/32-bits Linux compilation environment
+
+   Make sure you have the environment properly set up:
+
+   $ sudo apt-get install build-essential libc6-dev-i386  
+
+   0.2) Installing native AdaCore GNAT compiler
+
+   MaRTE OS is written in Ada, then even in the case you are not going
+   to program Ada applications, you will need the GNAT compiler to
+   compile the MaRTE kernel. Installing it is very easy and can be
+   done in your own user directory without affecting the rest of the
+   system. Each MaRTE OS version has support for a set of AdaCore compiler
+   versions. Make sure you are using the right compiler, otherwise the
+   MaRTE OS installer will complain.
+
+   Installing an AdaCore GNAT compiler is very simple. Just go to the
+   AdaCore website at https://libre.adacore.com/ and download the
+   compiler. Then, you have to decompress it and execute a simple
+   script.
+
+   For example, for the GNAT-GPL-2016 version execute:
+
+   $ cd $HOME/myapps
+   $ tar -zxvf gnat-gpl-2016-x86_64-linux-bin.tar.gz
+   $ cd gnat-gpl-2016-x86_64-linux-bin
+   $ ./doinstall
+   $  Choose a non-standard installation and specify where you want to
+      have the compiler (i.e: $HOME/myapps)
+
+   Remember to put the directory where GNAT binaries are located AT
+   THE FRONT of your PATH:
+
+   $ export PATH=$HOME/myapps/gnat/bin:$PATH
+
+   For making it permanent you can add the previous command to your shell
+   startup script (i.e: $HOME/.bashrc or $HOME/.bash_profile)
+
+   For RPi architecture it is also required the GNAT for ARM (read the
+   INSTALL_RPi.txt document sections "Installation.0").
+
+1) Installing MaRTE OS
+
+   1.1) Untar and 'minstall'
+
+   MaRTE OS is very simple to install. You just have to uncompress it
+   and run a script. Check that you have the GNAT compiler in front of
+   your path ($ echo $PATH) and execute the following commands:
+
+        $ cd $HOME
+        $ tar -zxvf marte-version.tar.gz
+        $ cd marte
+        $ ./minstall
+
+   'minstall' will try to find your GNAT installation path and a make a few
+   symbolic links.
+
+   1.2) Compile MaRTE libraries
+
+   After 'minstall' has finished its work it provides the list of
+   available architectures (according to the GNAT/GCC installed in
+   your system).
+
+   It is convenient to include the 'utils/' directory in your path in
+   order to have direct access to MaRTE tools :
+
+        $ export PATH=$PATH:$HOME/marte/utils
+
+   To make this change permanent you can add the previous command to
+   your shell startup script (i.e: $HOME/.bashrc or
+   $HOME/.bash_profile).
+
+   If you are installing a binary version of MaRTE OS you have already
+   finished the installation. You can read how to switch between
+   architectures bellow in this chapter and jump to section 2 "Check
+   your installation with an example".
+
+   If you are installing a source distribution of MaRTE OS the final
+   step will be to compile MaRTE OS kernel and libraries. To do it,
+   you must set the chosen architecture (using script
+   'msetcurrentarch') and compile two libraries:
+
+	- GNAT RTS modified for MaRTE (using script 'mkrtsmarteuc')
+	- MaRTE library "libmarte.a" (using script 'mkmarte')
+
+   For example, if you want to compile MaRTE for "linux_lib"
+   architecture you should execute:
+
+        $ msetcurrentarch linux_lib
+        $ mkrtsmarteuc
+        $ mkmarte
+
+   You can do the same for different architectures since in the same
+   MaRTE installation it is possible to have several architectures
+   copiled and ready to use.
+
+   Once you have compiled all the architectures you want, it is
+   possible to switch from one architecture to another using the
+   script 'msetcurrentarch':
+
+       $ msetcurrentarch architecture_name
+
+   Examples of use of 'msetcurrentarch' are shown below:
+
+        $ msetcurrentarch linux
+        $ msetcurrentarch linux_lib
+        $ msetcurrentarch x86 [i386 | pi | pii]
+        $ msetcurrentarch rpi
+
+    Notice the architecture "x86" requires and extra parameter (the
+    processor):
+
+        - i386: Intel x86 processor. PIT is used as timer and clock.
+        - pi: Pentium I. PIT is used as timer and TSC as clock.
+        - pii: Pentium II or above. LocalAPIC timer used as timer
+               and TSC as clock.
+
+    Note: Sometimes you will want to have several instances of MaRTE OS
+    installed on the same system (for example to have several versions of
+    MaRTE OS) leading to a collision when using the directories in the
+    $PATH variable. One possibility is to have them with different names
+    and make a symbolic link to know which one you want to use at the moment.
+    (The same goes for the GNAT compilers). For example, in the following
+    tree "marte" is a the symbolic link (ln -s realmarte marte):
+
+        |-- marte -> marte-13Jan2009/
+        |-- marte-22Aug2008/
+        `-- marte-13Jan2009/
+
+2) Check your installation with an example
+
+    At this point, a working MaRTE OS environment should exist in your
+    host. In order to check it you can compile an example from the MaRTE OS
+    'example/' directory.
+
+        $ cd $HOME/marte/examples
+        $ mgcc hello_world_c.c (for a C application)
+        $ mgnatmake hello_world.adb (for an Ada application)
+        $ mg++ hello_world_cpp.cc (for a C++ application)
+
+    The compilation and linking processes should be accomplished
+    without any error, and the resulting application 'a.out' should
+    have been created. You can use 'mgcc' with the same options as 'gcc'.
+    For instance to set the output path and filename for the application you
+    could use the `-o' option.
+
+        $ mgcc hello_world_c.c -o mprogram
+
+    For more information about building, running, and debugging user
+    applications please chech the next sections and the documentation
+    in the MaRTE OS website (http://marte.unican.es)
+
+3) Running the application.
+
+   (For RPi architecture go to INSTALL_RPi.txt section "Installation.3")
+
+    If you have chosen linux or linux_lib as the architecture you can run the
+    program as any other linux application:
+
+        $ ./mprogram
+
+    For the x86 architecture there are several ways of running the 'mprogram'
+    we just built in the previous section. You can use your own PC by adding
+    it to your GRUB menu, you can use an emulator or you can use a target PC.
+    These possibilities are well explained in the tutorials section at the
+    MaRTE OS website (http://marte.unican.es/). 
+
+    For example, using the QEMU emulator (version 0.12.3 or above) a
+    'mprogram' compiled for the x86 architecture can be executed using the
+    following command:
+
+        $ qemu -kernel mprogram
+
+4) Debugging the application
+
+   (For RPi architecture go to INSTALL_RPi.txt section "Installation.4")
+
+    If you have chosen linux or linux_lib as the architecture you can debug
+    the program as any other linux application:
+
+        $ cd $HOME/marte
+        $ mgnatmake -g hello_world.adb -o mprogram
+                    or
+        $ mgcc -g hello_world_c.c -o mprogram
+        $ gdb mprogram
+
+    For the x86 architecture if you are using a target PC you can debug it
+    through a Serial Port cable. Edit 'hello_world.adb' or 'hello_world_c.c',
+    uncomment the lines labeled as "For Debugging" and recompile the program
+    with the -g flag:
+
+        $ mgnatmake -g hello_world.adb -o mprogram
+                    or
+        $ mgcc -g hello_world_c.c -o mprogram
+
+    Now your program gets blocked before displaying the hello world message.
+    Run 'gdb':
+
+        $ gdb mprogram
+
+    The connection with the target is performed executing the following
+    gdb command:
+
+        (gdb) target remote /dev/ttyS0
+
+    Where '/dev/ttyS0' is the device file for the serial port 1. After
+    this you should get a message like this:
+
+    Remote debugging using /dev/ttyS0
+    main () at hello_world.c:25
+    25        printf("\nHello, I'm a C program running on the MaRTE OS.\n\n");
+
+    For the x86 architecture if you are using the QEMU emulator as a target PC
+    you can use its built-in debugging capabilities. (More in the tutorials
+    section):
+
+        $ qemu -kernel mprogram -s -S &
+        $ gdb mprogram
+        (gdb) target remote localhost:1234
+        (gdb) break main
+        (gdb) cont
+
+
+What to do next?
+================
+
+You should read the README and the "MaRTE User's Guide"
+(marte_ug.html) in order to get an overview of MaRTE services and
+usage.
+
+To know more about some extra utilities provided with MaRTE you should
+read the tutorial "MaRTE OS misc utilities" in the documentation
+section of the MaRTE OS web page
+(http://marte.unican.es/documentation.htm).
+
+If you want to use MaRTE OS in a cross development environment
+(architecture X86) read the "MaRTE OS Boot process (x86 architecture)"
+tutorial in the documentation section of the MaRTE OS web page.
+
+If you want to use MaRTE OS with the QEMU emulator (architecture X86)
+read the tutorial "Hello MaRTE OS using an emulator" tutorial in the
+documentation section of the MaRTE OS web page.
+
+
+--------------------------------------------------------------------------
+  Contact Address:                          MaRTE OS Internet site:
+  aldeam@unican.es                          http://marte.unican.es
+
+              Department of Electronica y Computadores
+                Group of Computadores y Tiempo Real
+                       University of Cantabria
+--------------------------------------------------------------------------
