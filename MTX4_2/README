@@ -1,0 +1,4 @@
+mtxlib contains object code getc.o, putc.o, bio.o, setds.o and 
+a new member queue.o.    Their source files are in MTXLIB.src/
+---------------------------------------------------------------
+t.c includes kernel.c
