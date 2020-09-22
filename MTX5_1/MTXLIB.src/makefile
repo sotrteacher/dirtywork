@@ -4,11 +4,12 @@ OBJ = bio.o\
       queue.o\
       setds.o\
       diskio.o\
-      loader.o
+      loader.o\
+      crt0.o
 
 AS = as86
 CC = bcc
-AR = ar
+AR = ar86
 ../mtxlib:$(OBJ)
 	$(AR) r $@ $^
 bio.o:bio.c
@@ -24,4 +25,6 @@ setds.o:setds.s
 diskio.o:diskio.s
 	$(AS) $< -o $@
 loader.o:loader.c
+	$(CC) -c -ansi $< -o $@
+crt0.o:crt0.c
 	$(CC) -c -ansi $< -o $@

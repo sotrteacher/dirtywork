@@ -1,8 +1,7 @@
-/******** #include "type.h" **********/
 typedef unsigned char u8;
 typedef unsigned int  u16;
 typedef unsigned long u32;
-
+ 
 
 /*********** EXT2 FS types for loader.c ******************/
 typedef struct ext2_inode {
@@ -51,7 +50,7 @@ typedef struct h{
   u32 sep, pad, tsize, dsize, bsize, zero, tot, symsize;
 } HEADER;
 
-u16 header(HEADER *hp)
+u16 header(hp) HEADER *hp;
 { 
    tsize=hp->tsize; dsize=hp->dsize; bsize=hp->bsize; tot=hp->tot;
    /*******
@@ -60,12 +59,12 @@ u16 header(HEADER *hp)
    ************/
 }
 
-u16 getblk(u16 blk, char *buf)
+u16 getblk(blk, buf) u16 blk; char *buf;
 {
     diskr( blk/18, ((2*blk)%36)/18, (((2*blk)%36)%18), buf);
 }
 
-u16 search(INODE *ip, char *name)
+u16 search(ip, name) INODE *ip; char *name;
 {
    int i; char c;
    DIR  *dp; 
@@ -93,7 +92,7 @@ u16 search(INODE *ip, char *name)
 u16 nn;
 char *name[32];  // at most 32 component names
 
-int breakup(char *path)
+int breakup(path) char *path;
 {
   int i;
   char *cp;
@@ -122,7 +121,7 @@ int breakup(char *path)
 
 char path[32];
 
-int load(char *filename, u16 segment)
+int load(filename, segment) char *filename; u16 segment;
 { 
   u16    i;
   u16    me, blk, iblk;
@@ -147,8 +146,8 @@ int load(char *filename, u16 segment)
   for (i=0; i<nn; i++){
       me = search(ip, name[i]);
       if (me == 0){
-          printf("\nloader: can't find %s\n", name[i]); 
-          return -1;
+          printf("loader: can't find %s\n", name[i]); 
+          return 0;    // for failure
       }
       me--;
       getblk(iblk+(me/8), b1);      /* read block inode of me */
@@ -199,7 +198,7 @@ int load(char *filename, u16 segment)
    return 1;
 }  
 
-int move(u16 segment, u16 tsize, u16 dsize)
+int move(segment, tsize, dsize) u16 segment, tsize, dsize;
 {
   u16 i,w;
   
@@ -209,7 +208,8 @@ int move(u16 segment, u16 tsize, u16 dsize)
   }
 }
 
-int clear_bss(u16 segment, u16 tsize, u16 dsize, u16 bsize)
+int clear_bss(segment, tsize, dsize, bsize) 
+u16 segment, tsize, dsize, bsize;
 {
    u16 i,j, seg, tdsize, rem;
 

@@ -13,12 +13,12 @@
 !You should have received a copy of the GNU General Public License
 !along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !********************************************************************/
-
         MTXSEG  = 0x1000
 	
        .globl _main,_running,_scheduler
        .globl _proc, _procSize
        .globl _tswitch
+       .globl _color,_putc
 	
         jmpi   start,MTXSEG
 
@@ -63,6 +63,10 @@ RESUME:
 	
 ! added functions for KUMODE
 	.globl _int80h,_goUmode,_kcinth
+	.globl _diskr,_setes,_inces
+        .globl _printf
+!	.globl _getc,_putc,_printf,_color	
+
 !These offsets are defined in struct proc
 USS =   4
 USP =   6
@@ -114,6 +118,5 @@ _goUmode:
         pop cx
         pop bx
         pop ax  
-        iret
 
-	
+        iret

@@ -13,7 +13,6 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ********************************************************************/
-
 int ksleep(int event)
 {
   running->status = SLEEP;
@@ -41,7 +40,6 @@ int kwakeup(int event)
     if (p->event == event){
        p->status = READY;
        enqueue(&readyQueue, p);
-       printf("kwaeup: wakeup %d\n", p->pid);
        continue;
     }
     enqueue(&q, p);
@@ -49,7 +47,7 @@ int kwakeup(int event)
   sleepList = q;
 }
 
-/**********************
+/******* another way to wakeup *******
 int kwakeup(int event)
 {
   PROC *p, *q; int i;
@@ -70,10 +68,11 @@ int kwakeup(int event)
     // not the first element   
     q->next = p->next;   // delete p from list
     ready(p);
-    p = q->next;
+    p = p->next;
   }          
 }
-*************************/
+************************************/
+
 int kexit(int exitValue)
 {
   int i, wk1; PROC *p;
@@ -83,17 +82,18 @@ int kexit(int exitValue)
       p = &proc[i];
       if (p->status != FREE && p->ppid == running->pid){
           p->ppid = 1;
-          p->parent = &proc[1];
-          wk1++;
+          p->parent = &proc[1]; wk1++;
       }
   }
+  // restore name string
+  strcpy(running->name, pname[running->pid]);
   /* record exitValue and become a ZOMBIE */
   running->exitCode = exitValue;
   running->status = ZOMBIE;
-
+  
   /* wakeup parent and P1 */
   kwakeup(running->parent);
-  if (wk1) // if sent any child to P1: wake up P1 also
+  if (wk1)
      kwakeup(&proc[1]);
   tswitch();
 }

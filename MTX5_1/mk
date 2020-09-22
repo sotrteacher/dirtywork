@@ -9,6 +9,6 @@ cp mtx /mnt/boot
 umount /mnt
 rm *.o mtx
 
-(cd USER; mku u1)
+(cd USER; mkallu)
 
 echo done

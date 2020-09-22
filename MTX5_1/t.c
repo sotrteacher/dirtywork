@@ -13,43 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ********************************************************************/
-
 #include "type.h"
-
-/********* in type.h ***********
-typedef unsigned char   u8;
-typedef unsigned short u16;
-typedef unsigned long  u32;
-
-#define NULL     0
-#define NPROC    9
-#define SSIZE 1024
-
-//******* PROC status ********
-#define FREE     0
-#define READY    1
-#define RUNNING  2
-#define STOPPED  3
-#define SLEEP    4
-#define ZOMBIE   5
-
-typedef struct proc{
-    struct proc *next;
-    int    *ksp;
-
-    int    uss, usp;
-    int    pid;                // add pid for identify the proc
-    int    status;             // status = FREE|READY|RUNNING|SLEEP|ZOMBIE    
-    int    ppid;               // parent pid
-    struct proc *parent;
-    int    priority;
-    int    event;
-    int    exitCode;
-
-    char   name[32];
-    int    kstack[SSIZE];      // per proc stack area
-}PROC;
-*******************************/
 
 PROC proc[NPROC], *running, *freeList, *readyQueue, *sleepList;
 int procSize = sizeof(PROC);
@@ -62,18 +26,18 @@ char *pname[]={"Sun", "Mercury", "Venus", "Earth",  "Mars", "Jupiter",
 /**************************************************
   bio.o, queue.o loader.o are in mtxlib
 **************************************************/
-/* #include "bio.c" */
-/* #include "queue.c" */
-/* #include "loader.c" */
-
 #include "wait.c"
 #include "kernel.c"
 #include "int.c"
+#include "fe.c"
 
 int init()
 {
-    PROC *p; int i;
+    PROC *p;
+    int i;
+    color= 0x0A;
     printf("init ....");
+
     for (i=0; i<NPROC; i++){   // initialize all procs
         p = &proc[i];
         p->pid = i;
@@ -100,8 +64,8 @@ int init()
 int scheduler()
 {
     if (running->status == RUNNING){
-        running->status = READY;
-        enqueue(&readyQueue, running);
+       running->status = READY;
+       enqueue(&readyQueue, running);
     }
     running = dequeue(&readyQueue);
     running->status = RUNNING;
@@ -109,21 +73,21 @@ int scheduler()
 
 int int80h();
 
-int set_vec(u16 vector, u16 handler)
+int set_vec(u16 vector, u16 addr)
 {
-  // put_word(word, segment, offset) in mtxlib
-     put_word(handler, 0, vector<<2);
-     put_word(0x1000,  0, (vector<<2) + 2);
+    u16 location,cs;
+    location = vector << 2;
+    put_word(addr, 0, location);
+    put_word(0x1000,0,location+2);
 }
             
 main()
 {
     printf("MTX starts in main()\n");
     init();      // initialize and create P0 as running
-    set_vec(80, int80h);
+    set_vec(80,int80h);
 
     kfork("/bin/u1");     // P0 kfork() P1
-
     while(1){
       printf("P0 running\n");
       if (nproc==2 && proc[1].status != READY)

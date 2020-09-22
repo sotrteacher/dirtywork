@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ********************************************************************/
+extern int goUmode();
+PROC *kfork();
 
 int makeUimage(char *filename, PROC *p)
 {
@@ -38,6 +40,7 @@ int makeUimage(char *filename, PROC *p)
    for (i=1; i<=12; i++){
        put_word(0, segment, -2*i);
    }
+
    put_word(0x0200,  segment, -2*1);   /* flag */  
    put_word(segment, segment, -2*2);   /* uCS */
    put_word(segment, segment, -2*11);  /* uES */
@@ -60,10 +63,11 @@ PROC *kfork(char *filename)
   u16  segment;
 
   /*** get a PROC for child process: ***/
-  if ( (p = get_proc(&freeList)) == 0){
+  if ( (p = get_proc(&freeList)) == NULL){
        printf("no more proc\n");
        return 0;
   }
+
   /* initialize the new proc and its stack */
   p->status = READY;
   p->ppid = running->pid;
@@ -75,18 +79,20 @@ PROC *kfork(char *filename)
       p->kstack[SSIZE-i] = 0;
  
   // fill in resume address
-  p->kstack[SSIZE-1] = (int)body;
-  // save stack TOP address in PROC
+  p->kstack[SSIZE-1] = (int)goUmode;
   p->ksp = &(p->kstack[SSIZE - 9]);
 
   enqueue(&readyQueue, p);
+  printList("readyQueue ", readyQueue);
   nproc++;
+  segment = (p->pid+1)*0x1000;
+
   if (filename){
-    /******** create Umode image *******************/
-    segment = 0x1000*(p->pid+1);
-    makeUimage("/bin/u1", p);
+     /******** create Umode image *******************/
+     segment = 0x1000*(p->pid+1);
+     makeUimage(filename, p);
   }
-  printf("Proc %d kforked a child %d at segment=%x\n",
+  printf("Proc %d forked a child %d at segment=%x\n",
           running->pid, p->pid, segment);
   return p;
 }
@@ -101,10 +107,11 @@ int do_tswitch()
 int do_kfork()
 {
   PROC *p;
-  printf("proc %d kfork a child ", running->pid);
-  p = kfork("/bin/u1");  // every proc has /bin/u1 as Umode image
+  printf("proc%d kfork a child\n");
+  //p = kfork("/u1");
+  p = kfork("/bin/u1");
   if (p == 0)
-     printf("kfork failed\n");
+    printf("kfork failed\n");
   else
     printf("child pid = %d\n", p->pid);
 }
@@ -143,6 +150,7 @@ int body()
 {
   char c;
   printf("proc %d resumes to body()\n", running->pid);
+
   while(1){
     printf("-----------------------------------------\n");
     printList("freelist  ", freeList);
@@ -163,10 +171,10 @@ int body()
   }
 }
 
-
 int color;
-extern PROC proc[];
+extern int loader();
 
+extern PROC proc[];
 int kmode()
 {
   body();
@@ -229,12 +237,4 @@ int chname(char * y)
   printf("changing name of proc %d to %s\n", running->pid, buf);
   strcpy(running->name, buf); 
   printf("done\n");
-}
-
-int kkfork()
-{
-  PROC *p = kfork("/bin/u1");
-  if (p==0)
-    return -1;
-  return p->pid;
 }
