@@ -1,0 +1,15 @@
+/******************** u1.c file of Umode image **********************/
+main()
+{
+  int pid=getpid();
+  printf("I'am proc %d in Umode: running segment=0x%x\n",pid,getcs());
+  printf("Enter a key : "); getc();
+  printf("proc %d syscall to kernel  to die\n",pid);
+  exit(0);
+}
+int getpid()         // assume : getpid() call# = 0
+{return syscall(0,0,0,0);}
+
+int exit(int exitValue)// assume : exit() cal# = 6
+{syscall(6,exitValue,0,0);}
+
