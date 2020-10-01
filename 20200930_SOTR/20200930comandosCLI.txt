@@ -1,0 +1,115 @@
+Comandos para compilaci\'on y enlazado
+Los comandos usados durante la sesi\'on de hoy fueron los siguientes:
+
+Dados los archivos
+/******************** hola.c *******************/
+#include <stdio.h>
+void funcion();
+
+int
+main()
+{
+  printf("Testing percent lx:%lx\n",0x100000000);
+  printf("Testing percent x:%x\n",0x100000000);
+  printf("Testing percent lx:%lx\n",funcion);
+  printf("Testing percent x:%x\n",funcion);
+  funcion();
+  return 0;
+}
+
+/******************** archivo.c *******************/
+#include <stdio.h>
+int getcs();
+int get_ebp();
+int get_esp();
+int get_rbp();
+
+void funcion()
+{
+  printf("HOLA MUNDO C\nCS=0x%x\nebp=0x%x\nesp=0x%x\n",
+         getcs(),get_ebp(),get_esp());
+  printf("rbp=0x%lx\n",get_rbp());
+}
+
+#================== getcs.s ======================
+.globl getcs,get_ebp,get_esp
+
+getcs:
+  movl %cs, %eax
+  ret
+ 
+get_ebp:
+  movl %ebp, %eax
+  ret
+
+get_esp:
+  movl %esp, %eax
+  ret
+
+
+En la sesi\'{o}n de hoy mi\'{e}rcoles 30 de septiembre de 2020
+les present\'{e} varios comandos para realizar diferentes cosas 
+a partir de los tres archivos fuentes incluidos arriba.
+
+0) Primero, para instalar paquetes de Debian en el sistema, conviene 
+previamente, actualizar la base de datos de paquetes disponibles 
+para instalaci\'{o}n con
+$ sudo apt-get update
+
+1) Luego, para instalar paquetes de Debian en el sistema, se usa 
+el comando
+$ sudo apt-get install pkgname
+donde pkgname se debe remplazar por el nombre del paquete que se 
+quiere instalar.
+
+De esta forma, se instalaron varios paquetes como bcc, gcc, g++, 
+vim, nano, make, etc\'{e}tera.
+
+2) Para preprocesar un archivo se uiliz\'{o}:
+$ gcc -E hola.c
+Con esto, el archivo preprocesado se despliega en la pantalla. Con 
+el comando
+$ gcc -E hola.c > hola.pre
+se guarda el archivo preprocesado en el archivo hola.pre
+
+Con el comando 
+$ wc -l hola.pre
+se obtiene cu\'{a}ntas l\'{i}neas tiene el archivo hola.pre
+
+3) Para construir un archivo ejecutable a partir de los tres archivos 
+fuente: hola.c, archivo.c, getcs.s, se puede usar el comando
+$ gcc hola.c archivo.c getcs.s 
+En este caso, si no hay errores, el nombre del archivo ejecutable 
+ser\'{a} el nombre por defecto a.out
+Si queremos que el archivo ejecutable tenga el nombre exe, debemos 
+usar
+$ gcc hola.c archivo.c getcs.s -o exe
+El programa ejecutable se puede poner en ejecuci\'{o}n tecleando
+$ ./exe
+
+4) Compilaci\'{o}n separada
+Se puede construir el mismo programa ejecutable compilando por 
+separado cada uno de los archivos fuente:
+$ gcc -c hola.c -o hola.o
+$ gcc -c archivo.c -o archivo.o
+$ as getcs.s -o getcs.o
+$ gcc hola.o archivo.o getcs.o -o test
+En este caso, el ejecutable se llamar\'{a} test. Lo ejecutamos con 
+$ ./test
+El programa hace algunas cosas hasta cierto punto in\'{u}tiles. Pero 
+en este momento, el objetivo no es que el programa haga algo en s\'{i}.
+En lugar de eso, el objetivo es mostrar que se puede construir programas 
+a partir de archivos objeto (hola.o, archivo.o, getcs.o), y que los  
+c\'{o}digos fuente de los archivos con los que se construyen estos archivos 
+objeto, pueden ser de diferentes lenguajes de programaci\'{o}n. En este 
+ejemplo, los archivos fuente hola.c y archivo.c est\'{a}n escritos en 
+lenguaje C; mientras que el archivo getcs.s est\'{a} escrito en lenguaje 
+ensamblador para microprocesadores Intel x86 --usando la as\'{i} llamada 
+sintaxis AT&T.
+
+
+
+
+
+
+
