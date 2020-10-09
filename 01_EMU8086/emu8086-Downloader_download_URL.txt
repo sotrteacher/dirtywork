@@ -1,0 +1,14 @@
+https://qpdownload.com/8086-microprocessor-emulator/
+Esta url la encontr\'e usando duckduckgo en Tor. 
+De esta --^ url descargu\'e el archivo
+emu8086v408r_0240263350.exe
+En una m\'aquina virtual Oracle Virtualbox (con Windows 7), 
+ejecut\'e este programa, y se descarg\'o el archivo 
+emu8086v408r.exe
+Este \'ultimo archivo, lo ejecut\'e en otra m\'aquina 
+virtual Oracle Virtualbox (con Windows XP), y con esa 
+ejecuci\'on, se instal\'o el programa emu8086 en el 
+Windows XP de esa m\'aquina virtual Oracle Virtualbox.
+El emu8086 instalado en Windows XP.
+
+
