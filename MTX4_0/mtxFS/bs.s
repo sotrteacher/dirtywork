@@ -92,7 +92,7 @@ _putc:
 	mov    bp,sp
 	
         movb   al,4[bp]        ! get the char into aL
-        movb   ah,#14          ! aH = 14
+        movb   ah,#14          ! aH = 14 teletype function
         mov    bx,#0x000C      ! bL = cyan color 
         int    0x10            ! call BIOS to display the char
 

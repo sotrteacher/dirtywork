@@ -32,7 +32,7 @@ int scheduler()
 
 main()
 {
-  printf("\nIn mtx kernel main()...\n");
+  printf("\nIn mtx kernel main() 2020.09.08...\n");
   running = &proc;
   printf("call tswitch()\n");
      tswitch();
