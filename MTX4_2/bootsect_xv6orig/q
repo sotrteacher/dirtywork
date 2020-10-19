@@ -1,0 +1,18 @@
+ 1384  dd if=mtx of=mFDimage seek=1 bs=512 conv=notrunc
+ 1440  dd if=mtx of=mFDimage seek=1 bs=512 conv=notrunc
+ 1442  dd if=mtx of=mFDimage seek=1 bs=512 
+ 1549  dd if=mtx of=mFDimage bs=512 seek=1 conv=notrunc
+ 1569  dd if=mtx of=mFDimage bs=512 seek=1 conv=notrunc
+ 1573  dd if=mtx of=mFDimage bs=512 seek=1 conv=notrunc
+ 1582  dd if=mtx of=mFDimage bs=512 seek=1 conv=notrunc
+ 1758  dd if=mtx of=mFDimage seek=1 bs=512 conv=notrunc
+ 2042  dd if=mtx of=mHDimage seek=1 conv=notrunc
+ 2056  dd if=bootsect/xv6memfs.img of=mHDimage seek=1 conv=notrunc
+ 2078  dd if=xv6memfs.img of=mHDimage.img seek=1 conv=notrunc
+ 2092  dd if=kernelmemfs of=mHDimage seek=1 conv=notrunc
+ 2097  dd if=mtx of=mHDimage seek=1 conv=notrunc
+ 2145  dd if=kernelmemfs of=mHDimage seek=1 conv=notrunc
+ 2151  dd if=kernelmemfs of=mHDimage seek=1 conv=notrunc
+ 2153  historygrep dd|grep seek
+ 2154  history|grep dd|grep seek
+ 2156  history|grep dd|grep seek|less

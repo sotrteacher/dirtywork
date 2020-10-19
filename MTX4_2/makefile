@@ -27,6 +27,13 @@ mFDimage:mtx booter
 	cp -v mtx ./mount_point/boot/
 	genext2fs -b 1440 -d ./mount_point/  mFDimage
 	dd if=booter of=mFDimage bs=1024 count=1 conv=notrunc
+loader:loader_mtx.s
+	as86 -o loader_mtx.o loader_mtx.s
+	ld86 -d -o loader loader_mtx.o
+rwl: loader # run with loader
+	dd if=loader of=mFDimage bs=512 count=1 conv=notrunc
+	dd if=mtx of=mFDimage seek=1 bs=512 conv=notrunc
+	qemu-system-i386 -fda mFDimage -no-fd-bootchk
 
 clean:
 	rm -v *.o MTXLIB.src/*.o mtx ./mount_point/boot/mtx booter mFDimage mtxlib

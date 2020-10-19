@@ -1,1 +1,3 @@
-qemu -fda ../FDimage -no-fd-bootchk
+#qemu -fda ../FDimage -no-fd-bootchk
+qemu-system-i386 -fda mFDimage -no-fd-bootchk
+
