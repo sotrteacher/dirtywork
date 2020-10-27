@@ -1,0 +1,79 @@
+#!/bin/bash
+
+if [ $# != 2 ]; then echo Usage: dump partition vmware OR qemu; exit; fi
+
+if [ $2 = qemu ]; then
+   VMDISK="/root/vmware/Other/vdisk"
+   UMOUNT="umount"
+
+   SECTOR=$(../ptable $VMDISK $1)
+   OFFSET=$(expr $SECTOR \* 512)
+   echo sector=$SECTOR offset=$OFFSET
+#   read dummy
+   mount -o loop,offset=$OFFSET $VMDISK /mnt
+fi
+
+if [ $2 = "vmware" ]; then
+   MOUNT="vmware-mount"
+   VMDISK="/root/vmware/Other/Other.vmdk " 
+   UMOUNT="vmware-mount -d"
+   $MOUNT $VMDISK $1 /mnt
+fi
+
+rm /mnt/bin/*
+rm bin/*
+
+mku init
+mku login
+mku sh
+mku cat
+mku mkdir
+mku rmdir
+mku creat
+mku divide
+mku rm
+mku chmod
+mku chown
+mku cp
+mku mv
+mku ls
+mku more
+mku pause
+mku ps
+mku grep
+mku lpr
+mku hits
+mku sync
+mku kill
+mku itimer
+mku man
+mku mount
+mku mp
+mku umount
+mku touch
+mku link
+mku unlink
+mku symlink
+mku while1
+mku matrix
+mku norace
+mku race
+mku qsort
+mku ps
+mku trap
+mku cdserver
+mku cdclient
+mku vfork
+mku test
+mku append
+mku mkfs
+mku l2u
+mku sbrk
+mku rbrk
+
+$UMOUNT /mnt
+
+rm a.out *.o
+
+
+

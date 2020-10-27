@@ -1,0 +1,118 @@
+GAS LISTING apentry.s 			page 1
+
+
+   1              	#********************************************************************
+   2              	#Copyright 2010-2015 K.C. Wang, <kwang@eecs.wsu.edu>
+   3              	#This program is free software: you can redistribute it and/or modify
+   4              	#it under the terms of the GNU General Public License as published by
+   5              	#the Free Software Foundation, either version 3 of the License, or
+   6              	#(at your option) any later version.
+   7              	
+   8              	#This program is distributed in the hope that it will be useful,
+   9              	#but WITHOUT ANY WARRANTY; without even the implied warranty of
+  10              	#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  11              	#GNU General Public License for more details.
+  12              	
+  13              	#You should have received a copy of the GNU General Public License
+  14              	#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  15              	#********************************************************************/
+  16              	
+  17              	# apentry.s: entry code of APs in 16-bit real mode, in 2nd 1KB of mtximage.
+  18              	# loaded to 0x9100:0000 during booting and runs from there.
+  19              	
+  20              	      .text	
+  21              	      .global start
+  22              	.code16           
+  23              	start: # assembled at 0 but runs at 0x91000 ==> ADD 0x91000 to all addresses
+  24 0000 FA       	      cli            
+  25 0001 8CC8     	      movw    %cs,%ax    # cs=0x9100
+  26 0003 8ED8     	      movw    %ax,%ds
+  27 0005 8EC0     	      movw    %ax,%es
+  28 0007 8ED0     	      movw    %ax,%ss
+  29              		
+  30              	# enter protected mode
+  31 0009 0F011682 	      lgdt    gdtdesc
+  31      00
+  32 000e 0F20C0   	      movl    %cr0, %eax
+  33 0011 6683C801 	      orl     $0x01,%eax
+  34 0015 0F22C0   	      movl    %eax, %cr0
+  35              		
+  36              	# do a ljmp to flush instruction cache and set CS to KCODE_SEL
+  37 0018 66EA2010 	      ljmpl   $0x08, $(0x91000+start32)  # need ljmpl for 4-byte target address
+  37      09000800 
+  38              	.code32
+  39              	start32:
+  40 0020 B8100000 	      movl    $0x10, %eax   # set KDS=0x10
+  40      00
+  41 0025 8ED8     	      movw    %ax, %ds
+  42 0027 8EC0     	      movw    %ax, %es
+  43 0029 8ED0     	      movw    %ax, %ss
+  44 002b 8EE0     	      movw    %ax, %fs
+  45 002d 8EE8     	      movw    %ax, %gs
+  46              	
+  47              	# use 4GB flat segments to get APIC's ID at 0xFEE00000
+  48 002f BB0000E0 	      movl $0xFEE00000, %ebx
+  48      FE
+  49 0034 83C320   	      addl $0x0020, %ebx       # ID register at offset 0x0020
+  50 0037 8B03     	      movl 0(%ebx), %eax       # read APIC.ID register
+  51 0039 C1E818   	      shrl $24,  %eax          # shift ID to low byte
+  52 003c 89C7     	      movl %eax, %edi          # save ID in edi
+  53              		
+GAS LISTING apentry.s 			page 2
+
+
+  54              	# turn on paging by using the pgdir at 101000, which ID maps 0-8MB
+  55 003e B8001010 	      movl   $0x101000,%eax
+  55      00
+  56 0043 0F22D8   	      movl   %eax, %cr3
+  57 0046 0F20C0   	      movl   %cr0, %eax
+  58 0049 0D000000 	      orl    $0x80000000,%eax
+  58      80
+  59 004e 0F22C0   	      movl   %eax, %cr0
+  60 0051 EB00     	      jmp    1f
+  61              	1:
+  62              	
+  63              	#----- BSP deposited these at 0x90000 for APPs ----------
+  64              	#  0x90000 : APstart() entry address
+  65              	#       +4 : AP1's stack pointer,
+  66              	#	+8 : AP2's stack pointer
+  67              	#      +12 : AP3's stack pointer, etc.
+  68              	#--------------------------------------------------------	
+  69 0053 BB000009 	      movl   $(0x90000+start), %ebx  
+  69      00
+  70 0058 89F9     	      movl   %edi,%ecx                 # AP ID number
+  71 005a C1E102   	      shll   $2,%ecx                   # multiply by 4                
+  72 005d 01CB     	      addl   %ecx, %ebx                # this AP's stack pointer
+  73 005f 8B23     	      movl   (%ebx),%esp               # set %esp
+  74 0061 57       	      pushl  %edi                      # push on ID number
+  75 0062 FF150000 	      call   *(0x90000+start)          # call APstart(ID) in smp.c
+  75      0900
+  76              		
+  77 0068 EBFE     	spin: jmp    spin                      # should never reach here  
+  78 006a 00000000 	gdt: .quad   0x0000000000000000        # null descriptor
+  78      00000000 
+  79 0072 FFFF0000 	     .quad   0x00cF9a000000FFFF        # kcs 00cF 9=PpLS=1001
+  79      009ACF00 
+  80 007a FFFF0000 	     .quad   0x00cF92000000FFFF        # kds
+  80      0092CF00 
+  81              	gdtdesc:
+  82 0082 1700     	     .word   24-1
+  83 0084 6A100900 	     .long   0x91000+gdt
+  84              	
+  85 0088 00000000 	.org 512
+  85      00000000 
+  85      00000000 
+  85      00000000 
+  85      00000000 
+  86              	
+GAS LISTING apentry.s 			page 3
+
+
+DEFINED SYMBOLS
+           apentry.s:23     .text:0000000000000000 start
+           apentry.s:81     .text:0000000000000082 gdtdesc
+           apentry.s:39     .text:0000000000000020 start32
+           apentry.s:77     .text:0000000000000068 spin
+           apentry.s:78     .text:000000000000006a gdt
+
+NO UNDEFINED SYMBOLS

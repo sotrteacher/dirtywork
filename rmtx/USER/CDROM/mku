@@ -1,0 +1,11 @@
+echo compiling $1.c .....
+as86 -o u.o u.s
+bcc -c -ansi $1.c
+
+echo linking .......
+ld86 u.o $1.o ../mtxlib /usr/lib/bcc/libc.a 
+
+echo copying $1 into $MTX-3/bin/$1
+cp -ap a.out /mnt/bin/$1
+
+echo done $1

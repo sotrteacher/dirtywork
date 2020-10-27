@@ -1,0 +1,111 @@
+# apentry.s: entry code of APs in 16-bit real mode, in 2nd 1KB of mtximage.
+# loaded to 0x9100:0000 during booting and runs from there.
+
+      .text	
+      .global start
+.code16           
+start: # assembled at 0 but runs at 0x91000 ==> ADD 0x91000 to all addresses
+      cli            
+      movw    %cs,%ax    # cs=0x9100
+      movw    %ax,%ds
+      movw    %ax,%es
+      movw    %ax,%ss
+	
+# enter protected mode
+      lgdt    gdtdesc
+      movl    %cr0, %eax
+      orl     $0x01,%eax
+      movl    %eax, %cr0
+	
+# do a ljmp to flush instruction cache and set CS to KCODE_SEL
+      ljmpl   $0x08, $(0x91000+start32)  # need ljmpl for 4-byte target address
+.code32
+start32:
+      movl    $0x10, %eax   # set KDS=0x10
+      movw    %ax, %ds
+      movw    %ax, %es
+      movw    %ax, %ss
+      movw    %ax,%fs
+      movw    %ax,%gs
+
+# use 4GB flat segments to get APIC's ID at 0xFEE00000
+      movl $0xFEE00000, %ebx
+      addl $0x0020, %ebx       # ID register at offset 0x0020
+      movl 0(%ebx),%eax        # read APIC.ID register
+      shrl $24,%eax            # shift ID to low byte
+      movl %eax, %edi          # save ID in edi
+      addl $0x30, %eax         # change to ASCII
+
+      movl $msg1, %ebx         # pad into msg1
+      addl $0x91000,%ebx
+      addl $2,%ebx
+      movb %al, (%ebx)
+      movl $msg2, %ebx         # pad into msg2
+      addl $0x91000,%ebx
+      addl $2,%ebx
+      movb %al, (%ebx)
+	
+# To verify OK, print a line of AP starting
+      movl  $0xB8F50,%ebx      # must use real address 0xB8000
+      movl  $msg1,%esi
+      addl  $0x91000,%esi
+prt1: xorw %ax,%ax
+      movb (%esi),%al
+      cmpb  $0,%al
+      je   out1
+      addw $0x0E00,%ax
+      movw  %ax,(%ebx)
+      addl $1,%esi
+      addl $2,%ebx
+      jmp  prt1
+out1:
+	
+# turn on paging by using the pgdir at 101000, which maps 0-8MB
+      movl   $0x101000,%eax
+      movl   %eax, %cr3
+      movl   %cr0, %eax
+      orl    $0x80000000,%eax
+      movl   %eax, %cr0
+      jmp    1f
+1:
+# To verify OK, print a line of caps AP STARTING
+      movl  $0x800B8FF0,%ebx  # use VA now
+      movl  $msg2,%esi
+      addl  $0x91000,%esi
+prt2: xorw %ax,%ax
+      movb (%esi),%al
+      cmpb  $0,%al
+      je    out2
+      addw $0x0D00,%ax
+      movw  %ax,(%ebx)
+      addl $1,%esi
+      addl $2,%ebx
+      jmp  prt2
+out2:	
+
+#----- BSP deposited these at 0x90000 for APPs ----------
+#  0x90000 : APstart() entry address
+#       +4 : AP1's stack pointer,
+#	+8 : AP2's stack pointer
+#      +12 : AP3's stack pointer, etc.
+#--------------------------------------------------------	
+      movl   $(0x90000+start), %ebx  
+      movl   %edi,%ecx                 # AP ID number
+      shll   $2,%ecx                   # multiply by 4                
+      addl   %ecx, %ebx                # this AP's stack pointer
+      movl   (%ebx),%esp               # set %esp
+      pushl  %edi                      # push on ID number
+      call   *(0x90000+start)          # call APstart(ID) in smp.c
+	
+spin: jmp    spin                      # should never reach here  
+gdt: .quad   0x0000000000000000        # null descriptor
+     .quad   0x00cF9a000000FFFF        # kcs 00cF 9=PpLS=1001
+     .quad   0x00cF92000000FFFF        # kds
+gdtdesc:
+     .word   24-1
+     .long   0x91000+gdt
+
+msg1: .asciz "AP  start: enter protected mode"
+msg2: .asciz "AP  START: ENABLE 8MB PAGING"
+.org 512
+

@@ -1,0 +1,18 @@
+---------- HOW TO RECOMPILE and INSTALL user mode programs -------------
+
+1. To compile and install a user mode program, e.g. test.c
+   Run  mku test 
+2. To recompile and install ALL in this directory:
+   Run  mkallu
+
+------------------- OR: Run make on the Makefile -----------------------
+3. To re-compile and install ALL user mode programs in THIS directory:
+
+   Run    makeall
+
+which makes all the binary executables into the bin/ directory and then
+install them to PARTITION 3 of VMware VM's IDE hard disk.
+
+4. If needed, modify the PARTITION# in the vmware-mount line (3 for now) 
+   to the desired partition. 
+----------------------------------------------------------------------

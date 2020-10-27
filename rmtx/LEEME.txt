@@ -1,0 +1,28 @@
+                                        Octubre de 2020.
+Para constrir e instalar el sistema 
+MTX 16 bits real mode, ejecutar los siguientes comandos:
+
+$ make mtx
+
+y despu\'es
+
+$ make -f mk2
+
+El sistema se instala en la partici\'on 1 de mHDimage.
+
+Para ejecutar el sistema en qemu-system-i386, ejecutar 
+el comando
+
+$ make -f mk2 rfhd
+
+como el sistema se instala en la partici\'on 1, en el 
+primer men\'u se debe pulsar la tecla 1.
+
+Se puede usar cualquiera de los usuarios y passwords 
+siguientes:
+Contenido del archivo /etc/passwd: (leido del disco virtual vdisk)
+root:12345:0:0:super user:/:sh
+kcw:abcde:1:1:kcw user:/user/kcw:sh
+guest:mercy:2:2:guest user:/user/guest:sh
+buster:123:3:3:buster dog:/user/buster:sh
+

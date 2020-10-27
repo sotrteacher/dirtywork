@@ -1,0 +1,195 @@
+GAS LISTING setup.s 			page 1
+
+
+   1              	#********************************************************************
+   2              	#Copyright 2010-2015 K.C. Wang, <kwang@eecs.wsu.edu>
+   3              	#This program is free software: you can redistribute it and/or modify
+   4              	#it under the terms of the GNU General Public License as published by
+   5              	#the Free Software Foundation, either version 3 of the License, or
+   6              	#(at your option) any later version.
+   7              	
+   8              	#This program is distributed in the hope that it will be useful,
+   9              	#but WITHOUT ANY WARRANTY; without even the implied warranty of
+  10              	#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  11              	#GNU General Public License for more details.
+  12              	
+  13              	#You should have received a copy of the GNU General Public License
+  14              	#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  15              	#********************************************************************/
+  16              	
+  17              	#--------------------------- KCW: setup.s -----------------------------------
+  18              	# booter reloads booter+setup to 0x9000. booter runs at 0x9000:0, load kernel
+  19              	# image to 0x1000:0, then ljmp to 0x9020:0 to run setup here
+  20              	# ------------------------- Algorithm: --------------------------------------
+  21              	# 1. begin in 16-bit mode: set segment registers and stack.
+  22              	# 2. move gdt data structure to 0x9F000
+  23              	# 3. load GDTR with gdt_48
+  24              	# 4. enter protected mode, set up segment selectors and stack
+  25              	# 5. ljmp to 32-bit mode code at do32.
+  26              	# 6. move kernel to K_HIM=0x100000 (1MB)
+  27              	# 7. ljmp to CS:K_HIM to run kernel at K_HIM
+  28              	#----------------------------------------------------------------------------
+  29              			.text
+  30              			.globl	start
+  31              	 
+  32              	                .set KCODE_SEL,  0x08	# code segment selector in kernel mode 
+  33              	                .set KDATA_SEL,  0x10     # data segment selector in kernel mode
+  34              	                .set GDT_ADDR,   0x9F000
+  35              	                .set GDT_ENTRIES,3
+  36              	                .set GDT_SIZE,  (8*GDT_ENTRIES)
+  37              	                .set K_ADDR,     0x100000
+  38              	                .set K_ORG,      0x10000
+  39              		        .set K_HIM,      0x100000
+  40              	
+  41              	 	        .org 0
+  42              	start:
+  43              	                .code16
+  44              	# set segments registers ds,ss=0x9020
+  45 0000 EA050020 		        ljmp    $0x9020,$go
+  45      90
+  46              	go:	
+  47 0005 8CC8     		        movw	%cs,	%ax
+  48 0007 8ED8     			movw	%ax,	%ds  # ds = 0x9020
+  49 0009 8ED0     			movw	%ax,	%ss  # stack segment = 0x9020
+  50 000b BC0008   			movw	$2048,  %sp  # 8KB stack size
+  51              	
+  52              	# test SETUP.510 for 'R'
+  53              	#	        movw    $510,%bx
+  54              	#	        movb    (%bx),%al
+  55 000e 1E       	                pushw   %ds
+  56 000f B80090   		        movw    $0x9000,%ax
+GAS LISTING setup.s 			page 2
+
+
+  57 0012 8ED8     		        movw    %ax,%ds
+  58 0014 A0FE01   		        movb    510,%al
+  59 0017 3C52     	                cmpb    $0x52,%al
+  60 0019 7505     		        jne     pmode
+  61 001b EA000000 		        ljmp    $0x1000,$0
+  61      10
+  62              	pmode:
+  63 0020 1F       		        popw    %ds
+  64 0021 6A61     		        pushw   $0x61        # show 'a' 
+  65 0023 E88A00   	                call    putc
+  66 0026 83C402   		        addw    $2,%sp
+  67              	
+  68              	# mov gdt struct to 0x98000
+  69 0029 B8009F   			movw	$GDT_ADDR>>4,%ax
+  70 002c 8EC0     			movw	%ax,	%es
+  71 002e BE8B00   			movw	$gdt,	%si
+  72 0031 31FF     			xorw	%di,	%di
+  73 0033 B90600   			movw	$GDT_SIZE>>2,%cx
+  74 0036 F3       			rep
+  75 0037 66A5     			movsl
+  76              		
+  77              	# load GDTR with setup_gdt descriptor
+  78 0039 0F0116A3 		        lgdt	gdt_desc
+  78      00
+  79              	
+  80 003e 6A42     		        pushw   $0x42        # show 'B'
+  81 0040 E86D00   	                call    putc
+  82 0043 83C402   		        addw    $2,%sp
+  83              		
+  84              	# enter protected mode by writing 1 to CR0
+  85 0046 FA       			cli
+  86 0047 0F20C0   		        movl	%cr0,	%eax
+  87 004a 6683C801 			orl	$0x1,	%eax
+  88 004e 0F22C0   			movl	%eax,	%cr0
+  89              	
+  90              	# do a ljmp to flush instruction cache and set CS to KCODE_SEL
+  91              	
+  92              	#	        .byte   0x66, 0xea   # prefix + ljmp-opcode
+  93              	#               .long	0x90200+do32
+  94              	#        	.word	KCODE_SEL     # CS selector
+  95 0051 66EA5902 	                ljmpl   $KCODE_SEL,$(0x90200+do32)     
+  95      09000800 
+  96              	.code32
+  97              	do32:	
+  98              	#load other selector registers
+  99 0059 B8100000 	                movl    $KDATA_SEL,%eax	
+  99      00
+ 100 005e 8ED8     		        movw	%ax,	%ds
+ 101 0060 8ED0     			movw	%ax,	%ss
+ 102 0062 8EE0     	        	movw	%ax,	%fs
+ 103 0064 8EE8     			movw	%ax,	%gs
+ 104              	
+ 105              	#               movw    $0,     %ax
+ 106 0066 8EC0     			movw	%ax,	%es
+ 107              	# mv kernel from 0x10000 to 0x100000, then jump to 0x100000
+ 108 0068 FC       		        cld
+ 109 0069 BE000001 		        movl  $K_ORG,   %esi
+GAS LISTING setup.s 			page 3
+
+
+ 109      00
+ 110 006e BF000010 		        movl  $K_HIM,   %edi
+ 110      00
+ 111 0073 B9000001 	                movl  $1024*64, %ecx  # assume 128K kernel  
+ 111      00
+ 112 0078 F3       	                rep
+ 113 0079 A5       		        movsl
+ 114              	
+ 115 007a C7051000 		        movl    $K_HIM, 0x90010       # K_HIM location into 0x90010
+ 115      09000000 
+ 115      1000
+ 116 0084 EA000010 		        ljmp    $KCODE_SEL,$K_HIM
+ 116      000800
+ 117              	
+ 118              	gdt:   
+ 119 008b 00000000 			.quad	0x0000000000000000 # null descriptor
+ 119      00000000 
+ 120 0093 FFFF0000 			.quad	0x00cF9a000000FFFF # kcs 00cF 9=PpLS=1001
+ 120      009ACF00 
+ 121 009b FFFF0000 			.quad	0x00cF92000000FFFF # kds
+ 121      0092CF00 
+ 122              	
+ 123              	gdt_desc:
+ 124 00a3 1700     			.word	.-gdt-1
+ 125 00a5 00F00900 			.long	GDT_ADDR  # hard coded but can be altered if needed
+ 126              	
+ 127              	.code16
+ 128              	
+ 129              	getc:
+ 130 00a9 30E4     	        xorb   %ah,%ah       
+ 131 00ab CD16     	        int    $0x16        
+ 132 00ad 247F     	        andb   $0x7F,%al    
+ 133 00af C3       	        ret 
+ 134              	
+ 135              	putc: #void putc(char c): call BIOS 0x10 to print char           
+ 136 00b0 55       	               pushw %bp
+ 137 00b1 89E5     		       movw  %sp,%bp
+ 138 00b3 8A4604   	               movb 4(%bp), %al
+ 139 00b6 B40E     	               movb $14, %ah
+ 140 00b8 BB0B00   	               movw $0x000B,%bx 
+ 141 00bb CD10     	               int  $0x10       
+ 142 00bd 5D       	               popw  %bp
+ 143 00be C3       		       ret
+ 144 00bf 00000000 	.org 510
+ 144      00000000 
+ 144      00000000 
+ 144      00000000 
+ 144      00000000 
+ 145 01fe 5252     		 .byte 'R','R'
+ 146              	.org 512
+GAS LISTING setup.s 			page 4
+
+
+DEFINED SYMBOLS
+             setup.s:42     .text:0000000000000000 start
+             setup.s:32     *ABS*:0000000000000008 KCODE_SEL
+             setup.s:33     *ABS*:0000000000000010 KDATA_SEL
+             setup.s:34     *ABS*:000000000009f000 GDT_ADDR
+             setup.s:35     *ABS*:0000000000000003 GDT_ENTRIES
+             setup.s:36     *ABS*:0000000000000018 GDT_SIZE
+             setup.s:37     *ABS*:0000000000100000 K_ADDR
+             setup.s:38     *ABS*:0000000000010000 K_ORG
+             setup.s:39     *ABS*:0000000000100000 K_HIM
+             setup.s:46     .text:0000000000000005 go
+             setup.s:62     .text:0000000000000020 pmode
+             setup.s:135    .text:00000000000000b0 putc
+             setup.s:118    .text:000000000000008b gdt
+             setup.s:123    .text:00000000000000a3 gdt_desc
+             setup.s:97     .text:0000000000000059 do32
+             setup.s:129    .text:00000000000000a9 getc
+
+NO UNDEFINED SYMBOLS

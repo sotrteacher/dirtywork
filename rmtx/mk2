@@ -1,0 +1,39 @@
+# FORMA DE USO:
+# make -f mk2 install
+# o bien
+# make -f mk2
+HDIMAGE=mHDimage
+# SECTOR se calcula como sigue:
+# export SECTOR=$(./ptable mHDimage 1)
+# echo $SECTOR
+SECTOR=63
+# OFFSET se calcula como sigue:
+# export OFFSET=$(expr $SECTOR \* 512)
+# echo $OFFSET
+OFFSET=32256
+install:mtx
+	@echo sector=$(SECTOR) offset=$(OFFSET)
+	sudo mount -o loop,offset=$(OFFSET) $(HDIMAGE) ./mount_point/
+	./header/h $<
+	dd if=$< of=hdmtx bs=32 skip=1
+	cd SETUP && $(MAKE) clean
+	cd SETUP && $(MAKE)
+	dd if=SETUP/boot    of=mtximage
+	dd if=SETUP/setup   of=mtximage bs=512  seek=1 count=1 conv=notrunc
+	dd if=SETUP/apentry of=mtximage bs=1024 seek=1 count=1 conv=notrunc
+	dd if=hdmtx of=mtximage bs=1024 seek=2 conv=notrunc
+	rm -v hdmtx
+	ls -l mtximage
+	sudo cp -v mtximage ./mount_point/boot/mtx
+	cd USER/ && $(MAKE) -f makefile
+	cd USER/ && $(MAKE) -f makefile install
+	sudo umount -v ./mount_point/ 
+
+rfhd:
+	qemu-system-i386 -drive file=$(HDIMAGE),index=0,media=disk,format=raw -m 256
+montaje:
+	@echo sector=$(SECTOR) offset=$(OFFSET)
+	sudo mount -o loop,offset=$(OFFSET) $(HDIMAGE) ./mount_point/
+desmontaje:
+	sudo umount -v ./mount_point/ 
+

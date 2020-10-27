@@ -1,0 +1,74 @@
+# protected mode MTX by KCW
+		.text
+		.globl	start
+               
+	        .code16
+start:
+# reload booter+setup to 0x9000:0
+	        movw    $0x9000,%ax
+	        movw    %ax,%es      # set ES=0x9000
+	        xorw    %dx,%dx      # head 0, drive 0
+	        xorw    %cx,%cx      # cyl 0
+	        incb    %cl          # sector 1
+	        xorw    %bx,%bx      # loading address=0x9000:0
+	        movw    $0x0204,%ax  # read 4 sectors boot+head
+	        int     $0x13        # call BIOS
+	
+# long jump to 0x9000:next to continue execution there
+#	        ljmp    $0x9000,$next
+next:	
+# set segments registers ds,ss=0x9000
+	        movw	%cs,	%ax
+		movw	%ax,	%ds  # ds = 0x9000
+		movw	%ax,	%ss  # stack segment = 0x9000
+		movw	$8192,  %sp  # 8KB stack size
+
+# load kernel to K_ADDR seg. To simplify loading, we put kernel at CYL=1 so that
+# we don't have to mess with computing (CHS); trade space on FD for simplicity
+		movw	$0x1000,%ax
+		movw	%ax,	%es
+		movw	$36,    %cx  # assume image <= KCYL*36 sectors
+load_kernel:
+	        pushw   $0x2A        # show a * for each CYL loaded
+                call    putc
+	        addw    $2,%sp
+
+        	call	load_cyl
+		incw	cyl          # inc cyl by 1 for next CYL
+
+                # inc ES by 36*0x20 for next loading address ES:0
+                movw    %es,%ax
+	        addw    $0x20*36,%ax
+	        movw    %ax,%es
+
+#	        loop	load_kernel
+               
+# ljmp to 0x9020:0x0000 to execute setup
+	        ljmp    $0x9020,$0x0000
+	
+#================= the following are subroutines ============================
+cyl:	        .word   1            # kernel begins at cyl 1 		
+load_cyl:
+		pushw	%cx          # cx = iteration count ; preserve it
+                xorw    %dx,%dx      # h=0, drive=0
+	        xorw    %cx,%cx
+	        movb    cyl,%ch
+                movb    $1,%cl
+	        xorw    %bx,%bx
+                movw    $0x0224,%ax  # read 36 sectors
+		int	$0x13
+		popw	%cx          # restore cx
+		ret
+	
+putc: #void putc(char c): call BIOS 0x10 to print char           
+               pushw %bp
+	       movw  %sp,%bp
+               movb 4(%bp), %al
+               movb $14, %ah
+               movw $0x000B,%bx 
+               int  $0x10       
+               popw  %bp
+	       ret
+.org  510
+	.byte 'R','R'
+#===================== end of boot.s =========================================

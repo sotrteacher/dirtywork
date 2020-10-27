@@ -1,0 +1,157 @@
+GAS LISTING boot.s 			page 1
+
+
+   1              	#********************************************************************
+   2              	#Copyright 2010-2015 K.C. Wang, <kwang@eecs.wsu.edu>
+   3              	#This program is free software: you can redistribute it and/or modify
+   4              	#it under the terms of the GNU General Public License as published by
+   5              	#the Free Software Foundation, either version 3 of the License, or
+   6              	#(at your option) any later version.
+   7              	
+   8              	#This program is distributed in the hope that it will be useful,
+   9              	#but WITHOUT ANY WARRANTY; without even the implied warranty of
+  10              	#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  11              	#GNU General Public License for more details.
+  12              	
+  13              	#You should have received a copy of the GNU General Public License
+  14              	#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  15              	#********************************************************************/
+  16              	
+  17              	# protected mode MTX by KCW
+  18              	#------------------------- Algorithm ---------------------------------------
+  19              	# 1. reload booter+setup to 0x9000 ; apentry to 0x9100
+  20              	# 2. set ds,ss to 0x9000, sp=8KB in ss
+  21              	# 3. load whole image to 0x1000:0 from CYL 1, 1,2,...
+  22              	# 4. move MTX kernel DOWNward by 2KB ; segment by segment
+  23              	# 5. if BOOT.510='RR' : ljmp to 0x1000:0 to run real mode MTX
+  24              	# 6. if BOOT.510='PP' : ljmp to 0x9020:0 to run SETUP	
+  25              	#---------------------------------------------------------------------------
+  26              			.text
+  27              			.globl	start
+  28              	               
+  29              		        .code16
+  30              	start:
+  31              	# reload booter+setup to 0x9000:0
+  32 0000 B80090   		        movw    $0x9000,%ax
+  33 0003 8EC0     		        movw    %ax,%es      # set ES=0x9000
+  34 0005 31D2     		        xorw    %dx,%dx      # head 0, drive 0
+  35 0007 31C9     		        xorw    %cx,%cx      # cyl 0
+  36 0009 FEC1     		        incb    %cl          # sector 1
+  37 000b 31DB     		        xorw    %bx,%bx      # loading address=0x9000:0
+  38 000d B80202   		        movw    $0x0202,%ax  # read 2 sectors |boot+setup| to 0x90000
+  39 0010 CD13     		        int     $0x13        # call BIOS
+  40              	
+  41 0012 B80091   		        movw    $0x9100,%ax
+  42 0015 8EC0     		        movw    %ax,%es      # set ES=0x9000
+  43 0017 31D2     		        xorw    %dx,%dx      # head 0, drive 0
+  44 0019 31C9     		        xorw    %cx,%cx      # cyl 0
+  45 001b 80C104   	                addb    $4,%cl       # sector #4
+  46 001e 31DB     		        xorw    %bx,%bx      # loading address=0x9100:0
+  47 0020 B80202   		        movw    $0x0202,%ax  # read 2 sectors |apentry| to 0x91000
+  48 0023 CD13     		        int     $0x13        # call BIOS
+  49              		
+  50              	# long jump to 0x9000:next to continue execution there
+  51              	#	        ljmp    $0x9000,$next
+  52              	next:	
+  53              	# set segments registers ds,ss=0x9000
+  54 0025 8CC8     		        movw	%cs,	%ax
+  55 0027 8ED8     			movw	%ax,	%ds  # ds = 0x9000
+  56 0029 8ED0     			movw	%ax,	%ss  # stack segment = 0x9000
+  57 002b BC0020   			movw	$8192,  %sp  # 8KB stack size
+GAS LISTING boot.s 			page 2
+
+
+  58              	
+  59              	# load all CYLsto 0x10000	; then move MTX kernel downward by 2KB
+  60 002e B80010   	                movw    $0x1000,%ax
+  61 0031 8EC0     		        movw    %ax,%es      # ES = 0x1000
+  62 0033 B91000   	                movw    $16,%cx      # max image size = 256KB = 16 CYLs
+  63              	load_image:	
+  64 0036 E83100   	                call	load_cyl
+  65 0039 FF066800 			incw	cyl          # inc cyl by 1 for next CYL
+  66              	
+  67              	# inc ES by 36*0x20 for next loading address ES:0
+  68 003d 8CC0     	                movw    %es,%ax
+  69 003f 058004   		        addw    $0x20*36,%ax
+  70 0042 8EC0     		        movw    %ax,%es
+  71 0044 E2F0     		        loop	load_image
+  72              	
+  73              	# must move loaded image DOWNward by 2KB since |BOOT+SETUP|APentry|
+  74 0046 B90800   	                movw $8,%cx          # assume at most 8 segment 
+  75 0049 B80010   		        movw $0x1000,%ax
+  76              	again:
+  77 004c 50       		        pushw %ax
+  78 004d E82E00   		        call  move_down
+  79 0050 58       		        popw  %ax
+  80 0051 050010   		        addw  $0x1000,%ax
+  81 0054 E2F6     		        loop  again
+  82              	
+  83 0056 A1FE01   	                movw  510,%ax
+  84 0059 3D5252   		        cmpw  $0x5252,%ax
+  85 005c 7505     		        jne   protected
+  86              	# ljmp to 0x1000:0x0000 to run real mode MTX kernel
+  87 005e EA000000 		        ljmp    $0x1000,$0x0000
+  87      10
+  88 0063 EA000020 	protected:	ljmp    $0x9020,$0x0000
+  88      90
+  89              	#================= the following are subroutines ============================
+  90 0068 0000     	cyl:	        .word   0            # kernel begins at cyl 1 		
+  91              	load_cyl:
+  92 006a 51       			pushw	%cx          # cx = iteration count ; preserve it
+  93 006b 31D2     	                xorw    %dx,%dx      # h=0, drive=0
+  94 006d 31C9     		        xorw    %cx,%cx
+  95 006f 8A2E6800 		        movb    cyl,%ch
+  96 0073 B101     	                movb    $1,%cl
+  97 0075 31DB     		        xorw    %bx,%bx
+  98 0077 B82402   	                movw    $0x0224,%ax  # read 36 sectors
+  99 007a CD13     			int	$0x13
+ 100 007c 59       			popw	%cx          # restore cx
+ 101 007d C3       			ret
+ 102              	
+ 103              	# move(segment) move 32K words from segment+0x80 to segment
+ 104              	
+ 105              	move_down:
+ 106 007e 55       		pushw %bp
+ 107 007f 89E5     	        movw  %sp, %bp
+ 108              		
+ 109 0081 8B4604   		movw  4(%bp), %ax
+ 110 0084 8EC0     		movw  %ax,%es
+ 111 0086 31FF     		xorw  %di,%di
+ 112              	
+GAS LISTING boot.s 			page 3
+
+
+ 113 0088 058000   	        addw  $0x80,%ax
+ 114 008b 8ED8     		movw  %ax, %ds
+ 115 008d 31F6     		xorw  %si,%si
+ 116              	
+ 117 008f B90080   	        movw  $32768,%cx
+ 118 0092 F3       		rep
+ 119 0093 A5       		movsw
+ 120              		
+ 121 0094 5D       	        popw  %bp
+ 122 0095 C3       		ret
+ 123              	
+ 124              		
+ 125              	#======== really do not need these, just ensure booter is 512 bytes ==========
+ 126 0096 00000000 	.org	510
+ 126      00000000 
+ 126      00000000 
+ 126      00000000 
+ 126      00000000 
+ 127 01fe 5252     	.word	0x5252   # 'RR' for real mode kernel
+ 128              	#===================== end of boot.s =========================================
+GAS LISTING boot.s 			page 4
+
+
+DEFINED SYMBOLS
+              boot.s:30     .text:0000000000000000 start
+              boot.s:52     .text:0000000000000025 next
+              boot.s:63     .text:0000000000000036 load_image
+              boot.s:91     .text:000000000000006a load_cyl
+              boot.s:90     .text:0000000000000068 cyl
+              boot.s:76     .text:000000000000004c again
+              boot.s:105    .text:000000000000007e move_down
+              boot.s:88     .text:0000000000000063 protected
+
+NO UNDEFINED SYMBOLS

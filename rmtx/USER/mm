@@ -1,0 +1,10 @@
+echo compiling $1.c .....
+as86 -o u.o u.s
+bcc -c -ansi $1.c
+
+echo linking .......
+#ld86 u.o $1.o mtxlib /usr/lib/bcc/libc.a 2> /dev/null 
+ld86 u.o $1.o mtxlib /usr/lib/bcc/libc.a
+
+
+echo done $1

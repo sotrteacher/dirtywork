@@ -1,0 +1,45 @@
+#include <mtx_type.h>
+
+int con_child;
+
+main(int argc, char *argv[ ])
+{
+  int in, out;
+
+  in  = open("/dev/tty0", O_RDONLY);
+  out = open("/dev/tty0", O_WRONLY);
+  printf("%s\n", "KCINIT : fork a login task on console");
+
+  con_child=fork();
+  if (con_child)
+      parent();
+  else
+    login();
+}
+
+int login()
+{
+  exec("login /dev/tty0");
+}
+      
+int parent()
+{
+  int pid, status;
+  printf("KCINIT : waiting .....\n");
+  while(1){
+    pid = wait(&status);
+    if (pid==con_child){
+       printf("-----------------------------------------------------\n");
+       printf("KCINIT: Oh my God! My beloved login child %d has died\n", pid);
+       printf("KCINIT: Oh well..! I'll just fork another one!\n");
+       printf("-----------------------------------------------------\n");
+       con_child = fork();
+       if (con_child)
+	 continue;
+       else
+         login();
+    }
+    printf("KCINIT : I just buried an orphan child task\n");
+  }
+}
+

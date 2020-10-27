@@ -1,0 +1,36 @@
+MOUNT="vmware-mount"
+VMDISK="/root/vmware/Other/Other-0.vmdk " 
+UMOUNT="vmware-mount -d"
+if [ $# \< 1 ]
+ then
+     echo Useg: mk numuber
+     exit
+fi
+
+ls -l $1
+
+# read header; patch DS, dsize, bsize into MTX: 2,4,6
+header/h $1
+
+dd if=$1 of=hdmtx bs=32 skip=1
+
+(cd SETUP; make clean; make)
+
+dd if=SETUP/boot    of=mtximage
+dd if=SETUP/setup   of=mtximage bs=512  seek=1 count=1 conv=notrunc
+dd if=SETUP/apentry of=mtximage bs=1024 seek=1 count=1 conv=notrunc
+dd if=hdmtx of=mtximage bs=1024 seek=2 conv=notrunc
+rm hdmtx
+
+echo mount vmware disk P$2 on /mnt
+$MOUNT $VMDISK $2 /mnt
+
+echo copy mtximage to /mnt
+cp mtximage /mnt/boot/mtx
+rm mtximage
+
+echo umount /mnt
+$UMOUNT /mnt
+
+echo done
+

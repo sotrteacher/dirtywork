@@ -1,0 +1,5 @@
+vmware-mount /root/vmware/Other/Other.vmdk 3 /mnt
+rm /mnt/bin/*
+
+cp -av bin/* /mnt/bin
+vmware-mount -d /mnt
