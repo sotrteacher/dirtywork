@@ -1,0 +1,7 @@
+QEMU = qemu-system-i386
+periodic_threads_clock_nanosleep: periodic_threads_clock_nanosleep.c
+	mgcc $(CFLAGS) periodic_threads_clock_nanosleep.c -o ptcn
+run:ptcn
+	$(QEMU) -kernel $<
+clean:
+	rm -v ptcn
