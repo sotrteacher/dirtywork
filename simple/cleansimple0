@@ -1,0 +1,12 @@
+#!/usr/bin/perl -w
+
+# subfunction exec_command
+sub exec_command
+{
+    my $cmd = shift(@_);
+    printf "$cmd\n";
+    system ($cmd) == 0 or die "Can't execute $cmd\n";
+}
+
+exec_command "make -f mk_simple0 clean";
+

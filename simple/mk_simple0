@@ -1,0 +1,13 @@
+EXE = periodic_thread_0
+QEMU = qemu-system-i386
+INC = ../../arch/include/
+CC = gcc
+$(EXE): simple_periodic_thread_0.c
+#	mgcc $(CFLAGS) $< -o $@
+	mgcc $< -o $@
+testh:simple_periodic_thread_0.c
+	$(CC) -H -nostdinc -I$(INC) -m32 -march=i686 -c $<
+run:$(EXE)
+	$(QEMU) -kernel $<
+clean:
+	rm -v $(EXE)
