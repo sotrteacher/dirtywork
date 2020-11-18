@@ -35,7 +35,7 @@ void * periodic (void *arg)
   }
 }/*end periodic()*/
 
-// Main thread. It creates a periodic thread
+// Main thread. It creates two periodic threads
 int main ()
 {
   pthread_t th;
@@ -63,9 +63,11 @@ int main ()
   CHK( pthread_attr_init (&attr) );
   CHK( pthread_create (&th, &attr, periodic, &period2) );
 
-  // Allows thread to execute for a while
+  // Allows threads to execute for a while
   sleep (22);
   printf ("Main thread finishing after 22 seconds\n"); 
   return 0;
 }/*end main()*/
+
+
 
