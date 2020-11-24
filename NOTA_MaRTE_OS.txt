@@ -1,0 +1,14 @@
+2020.11.07
+En el archivo kernel/marte-kernel-scheduler.adb,
+en el procedimiento Timer_Interrupt_Handler
+(l\'inea 920): se comentaron las l\'ineas 952,953,954,955
+--               MaRTE.Direct_IO.Put (" ERROR:");
+--               DBG.Show_In_Secs (CS_Time);
+--               MaRTE.Direct_IO.Put (":");
+--               DBG.Show_In_Secs (Now);
+y en su lugar coloqu\'e una l\'inea
+null;
+
+2020.11.11 SEGUN PARECE, SOLO HAY QUE reconstruir la 
+biblioteca libmarte.a con el comando mkmarte.
+
