@@ -1,0 +1,1820 @@
+# 1 "bsp.c"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "bsp.c"
+# 48 "bsp.c"
+# 1 "../include/qp_port.h" 1
+# 54 "../include/qp_port.h"
+# 1 "../port/qf_port.h" 1
+# 55 "../port/qf_port.h"
+# 1 "../port/qep_port.h" 1
+# 37 "../port/qep_port.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdint.h" 1
+# 42 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdint.h"
+typedef signed char int8_t;
+typedef short int int16_t;
+typedef int int32_t;
+
+
+
+__extension__
+typedef long long int int64_t;
+
+
+
+
+typedef unsigned char uint8_t;
+typedef unsigned short int uint16_t;
+
+typedef unsigned int uint32_t;
+
+
+
+
+
+__extension__
+typedef unsigned long long int uint64_t;
+
+
+
+
+
+
+typedef signed char int_least8_t;
+typedef short int int_least16_t;
+typedef int int_least32_t;
+
+
+
+__extension__
+typedef long long int int_least64_t;
+
+
+
+typedef unsigned char uint_least8_t;
+typedef unsigned short int uint_least16_t;
+typedef unsigned int uint_least32_t;
+
+
+
+__extension__
+typedef unsigned long long int uint_least64_t;
+
+
+
+
+
+
+typedef signed char int_fast8_t;
+
+
+
+
+
+typedef int int_fast16_t;
+typedef int int_fast32_t;
+__extension__
+typedef long long int int_fast64_t;
+
+
+
+typedef unsigned char uint_fast8_t;
+
+
+
+
+
+typedef unsigned int uint_fast16_t;
+typedef unsigned int uint_fast32_t;
+__extension__
+typedef unsigned long long int uint_fast64_t;
+# 131 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdint.h"
+typedef int intptr_t;
+
+
+typedef unsigned int uintptr_t;
+# 143 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdint.h"
+__extension__
+typedef long long int intmax_t;
+__extension__
+typedef unsigned long long int uintmax_t;
+# 38 "../port/qep_port.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdbool.h" 1
+# 39 "../port/qep_port.h" 2
+
+# 1 "../include/qep.h" 1
+# 86 "../include/qep.h"
+    typedef uint16_t QSignal;
+# 143 "../include/qep.h"
+typedef char char_t;
+
+
+typedef int int_t;
+
+
+typedef int enum_t;
+# 158 "../include/qep.h"
+typedef float float32_t;
+# 167 "../include/qep.h"
+typedef double float64_t;
+# 184 "../include/qep.h"
+typedef struct {
+    QSignal sig;
+    uint8_t poolId_;
+    uint8_t volatile refCtr_;
+} QEvt;
+# 239 "../include/qep.h"
+typedef uint_fast8_t QState;
+
+
+typedef QState (*QStateHandler)(void * const me, QEvt const * const e);
+
+
+typedef QState (*QActionHandler)(void * const me);
+# 279 "../include/qep.h"
+typedef struct QMState {
+    struct QMState const *superstate;
+    QStateHandler const stateHandler;
+    QActionHandler const entryAction;
+    QActionHandler const exitAction;
+    QActionHandler const initAction;
+} QMState;
+
+
+typedef struct QMTranActTable {
+    QMState const *target;
+    QActionHandler const act[1];
+} QMTranActTable;
+
+
+
+
+
+
+
+union QMAttr {
+    QMState const *obj;
+    QMTranActTable const *tatbl;
+    QStateHandler fun;
+    QActionHandler act;
+};
+
+
+
+
+typedef struct QMsmVtbl QMsmVtbl;
+# 335 "../include/qep.h"
+typedef struct {
+    QMsmVtbl const *vptr;
+    union QMAttr state;
+    union QMAttr temp;
+} QMsm;
+
+
+struct QMsmVtbl {
+
+    void (*init)(QMsm * const me, QEvt const * const e);
+
+
+    void (*dispatch)(QMsm * const me, QEvt const * const e);
+};
+
+
+void QMsm_ctor(QMsm * const me, QStateHandler initial);
+# 372 "../include/qep.h"
+void QMsm_init_(QMsm * const me, QEvt const * const e);
+# 388 "../include/qep.h"
+void QMsm_dispatch_(QMsm * const me, QEvt const * const e);
+
+
+QState QMsm_execTatbl_(QMsm * const me, QMTranActTable const *tatbl);
+
+
+
+
+_Bool QMsm_isInState(QMsm * const me, QMState const *state);
+# 417 "../include/qep.h"
+typedef QMsm QHsm;
+
+
+
+
+void QHsm_ctor(QHsm * const me, QStateHandler initial);
+# 434 "../include/qep.h"
+void QHsm_init_(QHsm * const me, QEvt const * const e);
+
+
+
+void QHsm_dispatch_(QHsm * const me, QEvt const * const e);
+
+
+
+
+_Bool QHsm_isIn(QHsm * const me, QStateHandler const state);
+
+
+
+
+QState QHsm_top(void const * const me, QEvt const * const e);
+# 469 "../include/qep.h"
+typedef QMsm QFsm;
+
+
+void QFsm_ctor(QFsm * const me, QStateHandler initial);
+
+
+void QFsm_init_(QFsm * const me, QEvt const * const e);
+
+
+void QFsm_dispatch_(QFsm * const me, QEvt const * const e);
+# 496 "../include/qep.h"
+enum {
+
+    Q_RET_SUPER,
+    Q_RET_SUPER_SUB,
+    Q_RET_UNHANDLED,
+
+
+    Q_RET_HANDLED,
+    Q_RET_IGNORED,
+
+
+    Q_RET_ENTRY,
+    Q_RET_EXIT,
+
+
+    Q_RET_NULL,
+
+
+    Q_RET_TRAN,
+    Q_RET_TRAN_INIT,
+    Q_RET_TRAN_HIST,
+    Q_RET_TRAN_EP,
+    Q_RET_TRAN_XP
+};
+# 644 "../include/qep.h"
+enum {
+    Q_ENTRY_SIG = 1,
+    Q_EXIT_SIG,
+    Q_INIT_SIG,
+    Q_USER_SIG
+};
+# 41 "../port/qep_port.h" 2
+# 56 "../port/qf_port.h" 2
+# 1 "../include/qvanilla.h" 1
+# 44 "../include/qvanilla.h"
+# 1 "../include/qequeue.h" 1
+# 81 "../include/qequeue.h"
+    typedef uint_fast32_t QEQueueCtr;
+# 131 "../include/qequeue.h"
+typedef struct QEQueue {
+# 144 "../include/qequeue.h"
+    QEvt const * volatile frontEvt;
+
+
+    QEvt const **ring;
+
+
+
+    QEQueueCtr end;
+
+
+    QEQueueCtr volatile head;
+
+
+    QEQueueCtr volatile tail;
+
+
+    QEQueueCtr volatile nFree;
+# 169 "../include/qequeue.h"
+    QEQueueCtr nMin;
+} QEQueue;
+
+
+
+
+void QEQueue_init(QEQueue * const me,
+                  QEvt const *qSto[], uint_fast16_t const qLen);
+
+
+_Bool QEQueue_post(QEQueue * const me, QEvt const * const e,
+                  uint_fast16_t const margin);
+
+
+void QEQueue_postLIFO(QEQueue * const me, QEvt const * const e);
+
+
+QEvt const *QEQueue_get(QEQueue * const me);
+# 45 "../include/qvanilla.h" 2
+# 1 "../include/qmpool.h" 1
+# 63 "../include/qmpool.h"
+    typedef uint16_t QMPoolSize;
+# 88 "../include/qmpool.h"
+    typedef uint16_t QMPoolCtr;
+# 112 "../include/qmpool.h"
+typedef struct {
+
+    void * volatile free_head;
+
+
+    void *start;
+
+
+    void *end;
+
+
+    QMPoolSize blockSize;
+
+
+    QMPoolCtr nTot;
+
+
+    QMPoolCtr volatile nFree;
+# 138 "../include/qmpool.h"
+    QMPoolCtr nMin;
+} QMPool;
+
+
+
+
+void QMPool_init(QMPool * const me, void * const poolSto,
+                 uint_fast16_t poolSize, uint_fast16_t blockSize);
+
+
+void *QMPool_get(QMPool * const me, uint_fast16_t const margin);
+
+
+void QMPool_put(QMPool * const me, void *b);
+# 46 "../include/qvanilla.h" 2
+# 1 "../include/qpset.h" 1
+# 54 "../include/qpset.h"
+typedef struct {
+    uint_fast8_t volatile bits;
+} QPSet8;
+# 95 "../include/qpset.h"
+typedef struct {
+# 110 "../include/qpset.h"
+    uint_fast8_t volatile bytes;
+# 122 "../include/qpset.h"
+    uint_fast8_t volatile bits[8];
+} QPSet64;
+# 47 "../include/qvanilla.h" 2
+# 77 "../include/qvanilla.h"
+void QF_onIdle(void);
+# 57 "../port/qf_port.h" 2
+# 1 "../include/qf.h" 1
+# 62 "../include/qf.h"
+    typedef uint16_t QEvtSize;
+# 87 "../include/qf.h"
+struct QEQueue;
+# 110 "../include/qf.h"
+typedef struct {
+    QHsm super;
+# 125 "../include/qf.h"
+    QEQueue eQueue;
+# 152 "../include/qf.h"
+    uint_fast8_t prio;
+
+} QActive;
+
+
+typedef struct {
+    QMsmVtbl super;
+
+
+
+    void (*start)(QActive * const me, uint_fast8_t prio,
+                  QEvt const *qSto[], uint_fast16_t qLen,
+                  void *stkSto, uint_fast16_t stkSize,
+                  QEvt const *ie);
+
+
+
+
+
+
+
+    _Bool (*post)(QActive * const me, QEvt const * const e,
+                 uint_fast16_t const margin);
+
+
+
+
+    void (*postLIFO)(QActive * const me, QEvt const * const e);
+
+} QActiveVtbl;
+
+
+
+void QActive_start_(QActive * const me, uint_fast8_t prio,
+                    QEvt const *qSto[], uint_fast16_t qLen,
+                    void *stkSto, uint_fast16_t stkSize,
+                    QEvt const *ie);
+# 282 "../include/qf.h"
+    _Bool QActive_post_(QActive * const me, QEvt const * const e,
+                         uint_fast16_t const margin);
+# 296 "../include/qf.h"
+void QActive_postLIFO_(QActive * const me, QEvt const * const e);
+# 312 "../include/qf.h"
+void QActive_ctor(QActive * const me, QStateHandler initial);
+
+
+
+void QActive_stop(QActive * const me);
+
+
+void QActive_subscribe(QActive const * const me, enum_t const sig);
+
+
+void QActive_unsubscribe(QActive const * const me, enum_t const sig);
+
+
+void QActive_unsubscribeAll(QActive const * const me);
+
+
+
+_Bool QActive_defer(QActive * const me,
+                   QEQueue * const eq, QEvt const * const e);
+
+
+_Bool QActive_recall(QActive * const me, QEQueue * const eq);
+
+
+QEvt const *QActive_get_(QActive *const me);
+# 349 "../include/qf.h"
+typedef QActive QMActive;
+
+
+void QMActive_ctor(QMActive * const me, QStateHandler initial);
+# 369 "../include/qf.h"
+    typedef uint16_t QTimeEvtCtr;
+# 410 "../include/qf.h"
+typedef struct QTimeEvt {
+
+    QEvt super;
+
+
+    struct QTimeEvt * volatile next;
+
+
+    void * volatile act;
+# 427 "../include/qf.h"
+    QTimeEvtCtr volatile ctr;
+# 436 "../include/qf.h"
+    QTimeEvtCtr interval;
+} QTimeEvt;
+
+
+
+
+void QTimeEvt_ctorX(QTimeEvt * const me, QActive * const act,
+                    enum_t const sig, uint_fast8_t tickRate);
+
+
+void QTimeEvt_armX(QTimeEvt * const me,
+                   QTimeEvtCtr const nTicks, QTimeEvtCtr const interval);
+
+
+_Bool QTimeEvt_rearm(QTimeEvt * const me, QTimeEvtCtr const nTicks);
+
+
+_Bool QTimeEvt_disarm(QTimeEvt * const me);
+
+
+QTimeEvtCtr QTimeEvt_ctr(QTimeEvt const * const me);
+# 470 "../include/qf.h"
+typedef struct {
+# 483 "../include/qf.h"
+    uint8_t bits[((63 - 1) / 8) + 1];
+} QSubscrList;
+
+
+
+
+void QF_init(void);
+
+
+void QF_psInit(QSubscrList * const subscrSto, enum_t const maxSignal);
+
+
+void QF_poolInit(void * const poolSto, uint_fast16_t const poolSize,
+                 uint_fast16_t const evtSize);
+
+
+int_t QF_run(void);
+int_t QF_run_event_loop(void);
+
+
+
+void QF_stop(void);
+# 513 "../include/qf.h"
+void QF_onStartup(void);
+# 529 "../include/qf.h"
+void QF_onCleanup(void);
+# 563 "../include/qf.h"
+    void QF_publish_(QEvt const * const e);
+# 601 "../include/qf.h"
+    void QF_tickX_(uint_fast8_t const tickRate);
+# 610 "../include/qf.h"
+_Bool QF_noTimeEvtsActiveX(uint_fast8_t const tickRate);
+
+
+void QF_add_(QActive * const a);
+
+
+void QF_remove_(QActive const * const a);
+
+
+uint_fast16_t QF_getPoolMin(uint_fast8_t const poolId);
+
+
+
+uint_fast16_t QF_getQueueMin(uint_fast8_t const prio);
+
+
+QEvt *QF_newX_(uint_fast16_t const evtSize,
+               uint_fast16_t const margin, enum_t const sig);
+# 676 "../include/qf.h"
+void QF_gc(QEvt const * const e);
+
+
+void QF_bzero(void * const start, uint_fast16_t len);
+# 703 "../include/qf.h"
+extern uint8_t const QF_pwr2Lkup[65];
+
+
+
+
+
+
+extern uint8_t const QF_invPwr2Lkup[65];
+
+
+
+
+
+extern uint8_t const QF_div8Lkup[65];
+# 739 "../include/qf.h"
+    extern uint8_t const QF_log2Lkup[256];
+# 748 "../include/qf.h"
+extern QActive *QF_active_[63 + 1];
+# 58 "../port/qf_port.h" 2
+# 55 "../include/qp_port.h" 2
+# 1 "../include/qassert.h" 1
+# 231 "../include/qassert.h"
+void Q_onAssert(char_t const * const file, int_t line);
+# 56 "../include/qp_port.h" 2
+
+
+
+
+# 1 "../include/qs_dummy.h" 1
+# 61 "../include/qp_port.h" 2
+# 150 "../include/qp_port.h"
+typedef QEvt QEvent;
+# 49 "bsp.c" 2
+# 1 "game.h" 1
+# 38 "game.h"
+enum GameSignals {
+    TIME_TICK_SIG = Q_USER_SIG,
+    PLAYER_TRIGGER_SIG,
+    PLAYER_QUIT_SIG,
+    GAME_OVER_SIG,
+
+
+    MAX_PUB_SIG,
+
+    PLAYER_SHIP_MOVE_SIG,
+
+
+    BLINK_TIMEOUT_SIG,
+    SCREEN_TIMEOUT_SIG,
+
+    TAKE_OFF_SIG,
+    HIT_WALL_SIG,
+    HIT_MINE_SIG,
+    SHIP_IMG_SIG,
+    MISSILE_IMG_SIG,
+    MINE_IMG_SIG,
+    MISSILE_FIRE_SIG,
+    DESTROYED_MINE_SIG,
+    EXPLOSION_SIG,
+    MINE_PLANT_SIG,
+    MINE_DISABLED_SIG,
+    MINE_RECYCLE_SIG,
+    SCORE_SIG,
+
+    MAX_SIG
+};
+
+typedef struct ObjectPosEvtTag {
+    QEvt super;
+    uint8_t x;
+    uint8_t y;
+} ObjectPosEvt;
+
+typedef struct ObjectImageEvtTag {
+    QEvt super;
+    uint8_t x;
+    int8_t y;
+    uint8_t bmp;
+} ObjectImageEvt;
+
+typedef struct MineEvtTag {
+    QEvt super;
+    uint8_t id;
+} MineEvt;
+
+typedef struct ScoreEvtTag {
+    QEvt super;
+    uint16_t score;
+} ScoreEvt;
+# 102 "game.h"
+enum GameBitmapIds {
+    PRESS_BUTTON_BMP,
+    SHIP_BMP,
+    MISSILE_BMP,
+    MINE1_BMP,
+    MINE2_BMP,
+    MINE2_MISSILE_BMP,
+    EXPLOSION0_BMP,
+    EXPLOSION1_BMP,
+    EXPLOSION2_BMP,
+    EXPLOSION3_BMP,
+    MAX_BMP
+};
+
+
+void Tunnel_ctor (void);
+void Ship_ctor (void);
+void Missile_ctor(void);
+
+
+extern QActive * const AO_Tunnel;
+extern QActive * const AO_Ship;
+extern QActive * const AO_Missile;
+
+uint8_t do_bitmaps_overlap(uint8_t bmp_id1, uint8_t x1, uint8_t y1,
+                           uint8_t bmp_id2, uint8_t x2, uint8_t y2);
+
+
+QHsm *Mine1_ctor(uint8_t id);
+QHsm *Mine2_ctor(uint8_t id);
+# 50 "bsp.c" 2
+# 1 "bsp.h" 1
+# 50 "bsp.h"
+void BSP_init(int argc, char *argv[]);
+void BSP_drawBitmap(uint8_t const *bitmap,
+                    uint8_t width,
+                    uint8_t height);
+void BSP_drawNString(uint8_t x,
+                     uint8_t y,
+                     char const *str);
+void BSP_updateScore(uint16_t score);
+
+void BSP_displayOn(void);
+void BSP_displayOff(void);
+
+
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h" 1
+# 12 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/types.h" 1
+# 43 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/types.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/marte_types.h" 1
+# 14 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/marte_types.h"
+typedef struct { char b[344]; } marte_TCB_t;
+typedef struct { char b[136]; } marte_pthread_attr_t;
+typedef struct { char b[140]; } marte_pthread_mutex_t;
+typedef struct { char b[88]; } marte_pthread_mutexattr_t;
+typedef struct { char b[440]; } marte_pthread_cond_t;
+typedef struct { char b[4]; } marte_pthread_condattr_t;
+typedef struct { char b[64]; } marte_sigset_t;
+typedef struct { char b[424]; } marte_sem_t;
+typedef struct { char b[288]; } marte_posix_appsched_actions_t;
+typedef struct { char b[4]; } marte_pthread_key_t;
+typedef struct { char b[4]; } marte_posix_appsched_eventset_t;
+typedef struct { char b[146]; } marte_pthread_once_t;
+
+typedef struct { char b[92]; } _marte_timed_handler_t;
+typedef struct { char b[4]; } _marte_thread_set_t;
+# 44 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/types.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/marte_configuration_parameters.h" 1
+# 45 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/types.h" 2
+
+
+typedef long ptrdiff_t;
+
+
+typedef int clockid_t;
+
+typedef int clock_t;
+
+
+typedef unsigned long long dev_t;
+
+
+
+
+typedef unsigned int gid_t;
+
+
+
+
+typedef unsigned int ino_t;
+
+
+
+
+typedef unsigned int mode_t;
+
+
+
+
+typedef unsigned int nlink_t;
+
+
+
+
+typedef int off_t;
+
+
+
+
+typedef int pid_t;
+
+
+
+
+typedef unsigned int size_t;
+
+
+
+
+
+typedef signed int ssize_t;
+
+
+
+
+
+typedef int time_t;
+
+typedef int *timer_t;
+
+typedef long suseconds_t;
+
+
+typedef unsigned int uid_t;
+
+
+
+
+typedef unsigned long useconds_t;
+# 127 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/types.h"
+typedef marte_TCB_t *pthread_t;
+
+typedef marte_pthread_attr_t pthread_attr_t;
+
+
+typedef marte_pthread_mutex_t pthread_mutex_t;
+
+typedef marte_pthread_mutexattr_t pthread_mutexattr_t;
+
+
+typedef marte_pthread_cond_t pthread_cond_t;
+
+typedef marte_pthread_condattr_t pthread_condattr_t;
+
+
+typedef marte_sem_t sem_t;
+
+
+typedef marte_pthread_key_t pthread_key_t;
+
+
+typedef marte_pthread_once_t pthread_once_t;
+
+
+typedef _marte_timed_handler_t marte_timed_handler_t;
+
+
+typedef _marte_thread_set_t marte_thread_set_t;
+# 13 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/time.h" 1
+# 44 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/time.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/cpp_macros.h" 1
+# 45 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/time.h" 2
+
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/marte_general_constants.h" 1
+# 47 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/time.h" 2
+
+
+struct timeval {
+  time_t tv_sec;
+  suseconds_t tv_usec;
+};
+
+
+struct itimerval{
+  struct timeval it_interval;
+  struct timeval it_value;
+};
+# 68 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/time.h"
+int getitimer(int, struct itimerval *value);
+int setitimer(int, const struct itimerval * value,
+                struct itimerval * ovalue);
+
+int gettimeofday(struct timeval *, void *);
+
+# 14 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/glib.h" 1
+# 57 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/glib.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/tipos.h" 1
+
+
+
+
+typedef void *LIN_ADDR;
+typedef uint8_t BYTE;
+typedef uint16_t WORD;
+typedef uint32_t DWORD;
+typedef uint64_t QWORD;
+# 25 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/tipos.h"
+typedef struct{
+  unsigned int x;
+  unsigned int y;
+}point_t;
+
+
+typedef struct{
+  unsigned int n_points;
+  point_t points[0];
+}array_points_t;
+
+
+typedef struct{
+  unsigned int high;
+  unsigned int width;
+  char * buffer;
+}slice_t;
+# 58 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/glib.h" 2
+
+
+int grx_setbuffer(BYTE *vbuf,BYTE bpp, WORD w, WORD h);
+
+void grx_pixel(WORD x, WORD y, DWORD color);
+DWORD grx_getpixel(WORD x, WORD y);
+
+
+void grx_rectangle(WORD x1, WORD y1, WORD x2, WORD y2, DWORD color);
+void grx_rectangle_fill(WORD x1, WORD y1, WORD x2, WORD y2, DWORD color);
+void grx_line(WORD x1, WORD y1, WORD x2, WORD y2, DWORD color);
+void grx_text(char *text, WORD x, WORD y, DWORD fg, DWORD bg);
+void grx_circle(WORD sx, WORD sy, WORD r, DWORD c);
+void grx_circumference(WORD sx, WORD sy, WORD r, DWORD c);
+void grx_clear(DWORD color);
+# 15 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/tipos.h" 1
+# 16 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h" 2
+# 224 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+extern int vga_version;
+extern int __svgalib_chipset;
+extern int __svgalib_vendor;
+extern int __svgalib_cur_palette;
+
+
+extern unsigned short int rgb15(int r,int g,int b);
+extern unsigned short int rgb16(int r,int g,int b);
+extern unsigned int rgb24(int r,int g,int b);
+extern unsigned int rgb32(int r,int g,int b);
+extern unsigned int rgba(int r,int g,int b);
+extern unsigned short int conversor_32_a_16(unsigned int rgb);
+extern unsigned short int conversor_24_a_16(unsigned int rgb);
+extern unsigned short int conversor_32_a_15(unsigned int rgb);
+extern unsigned short int conversor_24_a_15(unsigned int rgb);
+
+
+
+
+
+
+extern int init_vga_with_associated_mem(int mode,int vendor,int card);
+extern int init_vga(int mode,int vendor,int card);
+
+extern int vga_setmode(int mode);
+
+
+
+extern int vga_clear(void);
+
+
+extern int vga_getxdim(void);
+extern int vga_getydim(void);
+extern int vga_getcolors(void);
+
+extern int vga_setpalette(int index, int red, int green, int blue);
+extern int vga_getpalette(int index, int *red, int *green, int *blue);
+extern int vga_setpalvec(int start, int num, int *pal);
+extern int vga_getpalvec(int start, int num, int *pal);
+
+extern int vga_screenoff(void);
+extern int vga_screenon(void);
+
+extern int vga_setcolor(int color);
+extern int vga_drawpixel(int x, int y);
+extern int vga_drawline(int x1, int y1, int x2, int y2);
+
+extern int vga_drawscanline(int line, unsigned char *colors);
+extern int vga_drawscansegment(unsigned char *colors, int x, int y, int length);
+extern int vga_getpixel(int x, int y);
+extern int vga_getscansegment(unsigned char *colors, int x, int y, int length);
+
+
+extern int vga_cpyblock(int width,int height,void *block);
+extern void draw_image_2(int height, int width, unsigned int *imageptr);
+
+extern point_t conv_to_point(unsigned int x, unsigned int y);
+extern void vga_pixel(point_t point, unsigned int color);
+
+extern void vga_line(point_t point1, point_t point2, unsigned int color);
+extern void vga_rectangle(point_t point1, point_t point2, unsigned int color);
+extern void vga_rectangle_fill(point_t point1, point_t point2, unsigned int color);
+extern void vga_circumference(point_t centre, unsigned int radio, unsigned int color);
+extern void vga_circle(point_t centre, unsigned int radio, unsigned int color);
+extern void vga_text(char *text, point_t point, DWORD fg, DWORD bg);
+
+
+extern void vga_ellipse(point_t point1, point_t point2, unsigned int color);
+
+extern void vga_ellipse_fill(point_t point1, point_t point2, unsigned int color);
+
+extern void vga_polygon(point_t * points, unsigned int n_points, unsigned int color);
+
+extern void vga_polyline(point_t * points, unsigned int n_points, unsigned int color);
+extern int vga_scroll_ver(point_t point1, point_t point2, int lines);
+extern int vga_scroll_hor(point_t point1, point_t point2, int lines);
+# 330 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+typedef struct {
+        int width;
+        int height;
+        int bytesperpixel;
+        int colors;
+        int linewidth;
+        int maxlogicalwidth;
+        int startaddressrange;
+        int maxpixels;
+        int haveblit;
+        int flags;
+
+
+
+        int chiptype;
+        int memory;
+        int linewidth_unit;
+
+        char *linear_aperture;
+        int aperture_size;
+        void (*set_aperture_page) (int page);
+
+        void *extensions;
+
+    } vga_modeinfo;
+
+typedef struct {
+        int version;
+        int size;
+        int chipset;
+        int physmem;
+    } vga_cardinfo;
+
+extern vga_cardinfo *vga_getcardinfo(void);
+extern vga_modeinfo *vga_getmodeinfo(int mode);
+
+extern int vga_getcurrentmode(void);
+
+
+
+    extern int vga_lastmodenumber(void);
+
+
+
+
+extern void restoregray_palette(void);
+
+extern void restorepalette_default(void);
+
+extern void full_blue_screen(void);
+
+extern unsigned char *graph_mem;
+
+
+extern unsigned char *buf_rgb;
+
+extern unsigned char *vga_getgraphmem(void);
+
+extern void vga_setpage(int p);
+
+
+
+
+extern void vga_waitretrace(void);
+extern int vga_claimvideomemory(int n);
+
+
+
+
+
+
+
+    extern void vga_lockvc(void);
+    extern void vga_unlockvc(void);
+# 412 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+extern int vga_setlinearaddressing(void);
+# 473 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+extern void vga_gettextfont(void *font);
+extern void vga_puttextfont(void *font);
+
+
+
+extern int vga_white(void);
+# 488 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+    extern int vga_accel(unsigned operation,...);
+
+
+
+    extern void vga_setcursorposition(int, int);
+    extern void vga_selectcursor(int);
+    extern void vga_setcursorimage(int, int, int, int, unsigned char *);
+
+inline void copy_videomem_32to16(void *src, void *dst, unsigned long int memdiv2);
+inline void copy_videomem_16to16(void *src, void *dst, unsigned long int memdiv4);
+
+
+extern void copy_rect_videomem_16to16(void *src, void *dst, unsigned long int x1,unsigned long int y1,unsigned long int x2,unsigned long int y2);
+extern void copy_rect_videomem_32to16(void *src, void *dst, unsigned long int x1,unsigned long int y1,unsigned long int x2,unsigned long int y2);
+
+
+extern void refresh_screen(void);
+extern void refresh_screen_16(void);
+
+extern void refresh_slice_16(unsigned long int x1,unsigned long int y1,unsigned long int x2,unsigned long int y2);
+# 523 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+extern int vga_changetiming(int pixelClock,
+                              int HDisplay,
+                              int HSyncStart,
+                              int HSyncEnd,
+                              int HTotal,
+                              int VDisplay,
+                              int VSyncStart,
+                              int VSyncEnd,
+                              int VTotal,
+                              int flags);
+
+extern int vga_getcurrenttiming(int *pixelClock,
+                              int *HDisplay,
+                              int *HSyncStart,
+                              int *HSyncEnd,
+                              int *HTotal,
+                              int *VDisplay,
+                              int *VSyncStart,
+                              int *VSyncEnd,
+                              int *VTotal,
+                              int *flags);
+
+
+
+
+extern int vga_guesstiming(int x, int y, int clue, int arg);
+# 652 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/drivers/svga/vga.h"
+int SEQ01;
+unsigned char CR11,CR38,CR39,CR40;
+# 64 "bsp.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/assert.h" 1
+# 65 "bsp.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/time.h" 1
+# 48 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/time.h"
+
+
+struct timespec {
+  time_t tv_sec;
+  int tv_nsec;
+};
+
+struct itimerspec {
+  struct timespec it_interval;
+  struct timespec it_value;
+};
+# 67 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/time.h"
+int clock_settime (clockid_t clock_id, const struct timespec *tp);
+int clock_gettime (clockid_t clock_id, struct timespec *tp);
+int clock_getres (clockid_t clock_id, struct timespec *res);
+
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h" 1
+# 48 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/sys/marte_signals.h" 1
+# 49 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h" 2
+
+
+
+
+
+
+typedef marte_sigset_t sigset_t;
+
+
+
+
+
+union sigval
+{
+  int sival_int;
+  void *sival_ptr;
+};
+
+
+
+
+
+
+typedef struct
+{
+  int si_signo;
+  int si_code;
+  union sigval si_value;
+} siginfo_t;
+# 87 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h"
+struct sigaction {
+  union {
+    void (*sa_u_handler) (int);
+    void (*sa_u_sigaction) (int, siginfo_t *, void *);
+  } sa_u;
+  sigset_t sa_mask;
+  int sa_flags;
+};
+# 106 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h"
+struct sigevent {
+  int sigev_notify;
+  int sigev_signo;
+  union sigval sigev_value;
+};
+# 120 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h"
+int kill(int pid, int sig);
+
+int sigemptyset(sigset_t *set);
+int sigfillset(sigset_t *set);
+int sigaddset(sigset_t *set, int signo);
+int sigdelset(sigset_t *set, int signo);
+int sigismember(const sigset_t *set, int signo);
+
+int sigaction(int sig, const struct sigaction *act,
+              struct sigaction *oact);
+
+int pthread_sigmask(int how, const sigset_t *set, sigset_t *oset);
+int sigprocmask(int how, const sigset_t *set, sigset_t *oset);
+
+int sigpending(sigset_t *set);
+int sigsuspend(const sigset_t *mask);
+
+int sigwait(const sigset_t *set, int *sig);
+int sigwaitinfo(const sigset_t *set, siginfo_t *info);
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/time.h" 1
+# 140 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/signal.h" 2
+
+
+
+int sigqueue(int pid, int signo, const union sigval value);
+
+int pthread_kill(pthread_t thread, int sig);
+
+
+
+
+
+
+
+int raise(int sig);
+
+
+# 72 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/time.h" 2
+int timer_create (clockid_t clock_id, struct sigevent *evp, timer_t *timerid);
+int timer_delete (timer_t timerid);
+
+int timer_settime (timer_t timerid, int flags,
+                   const struct itimerspec *value, struct itimerspec *ovalue);
+int timer_gettime (timer_t timerid, struct itimerspec *value);
+int timer_getoverrun (timer_t timerid);
+
+int nanosleep (const struct timespec *rqtp, struct timespec *rmtp);
+int clock_nanosleep (clockid_t clock_id, int flags,
+                     const struct timespec *rqtp, struct timespec *rmtp);
+
+struct tm {
+        int tm_sec;
+        int tm_min;
+        int tm_hour;
+        int tm_mday;
+        int tm_mon;
+        int tm_year;
+        int tm_wday;
+        int tm_yday;
+        int tm_isdst;
+};
+
+time_t time (time_t *tloc);
+
+char *asctime (const struct tm *tm);
+char *ctime (const time_t *timep);
+struct tm *gmtime (const time_t *clock);
+struct tm *localtime (const time_t *clock);
+time_t mktime (struct tm *timeptr);
+
+
+clock_t clock(void);
+double difftime(time_t time1, time_t time0);
+size_t strftime(char *s, size_t max, const char *format,
+                const struct tm *tm);
+
+
+
+# 66 "bsp.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/misc/timespec_operations.h" 1
+# 47 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/misc/timespec_operations.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdio.h" 1
+# 45 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdio.h"
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdarg.h" 1
+# 74 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdarg.h"
+typedef char * va_list;
+# 46 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdio.h" 2
+
+
+
+
+
+
+
+
+typedef int FILE;
+
+
+extern FILE * stdin;
+extern FILE * stdout;
+extern FILE * stderr;
+
+
+
+
+
+
+
+int putchar(int __c);
+int puts(const char *__str);
+int printf(const char *__format, ...);
+int vprintf(const char *__format, va_list __vl);
+int sprintf(char *__dest, const char *__format, ...);
+int snprintf(char *__dest, int __size, const char *__format, ...);
+int vsprintf(char *__dest, const char *__format, va_list __vl);
+int vsnprintf(char *__dest, int __size, const char *__format, va_list __vl);
+int scanf(const char *__format, ...);
+int sscanf(const char *__str, const char *__format, ...);
+int getchar(void);
+int ungetc(int c, FILE *stream);
+char *gets(char *__str);
+char *fgets(char *__str, int __size, FILE *__stream);
+int fileno(FILE *stream);
+FILE *fopen(const char *__path, const char *__mode);
+
+FILE *freopen(const char *path, const char *mode, FILE *stream);
+int fflush(FILE *stream);
+int fclose(FILE *__stream);
+int fread(void *__buf, size_t __size, size_t __count, FILE *__stream);
+int fwrite(void *__buf, size_t __size, size_t __count, FILE *__stream);
+int fputc(int __c, FILE *__stream);
+int fputs(const char *str, FILE *stream);
+int fgetc(FILE *__stream);
+int fprintf(FILE *__stream, const char *__format, ...);
+
+int fscanf(FILE *__stream, const char *__format, ...);
+int fseek(FILE *__stream, long __offset, int __whence);
+long ftell(FILE *__stream);
+
+
+
+void dohexdump(void *__base, void *__buf, int __len, int __bytes);
+
+
+void perror(const char *__string);
+# 117 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdio.h"
+int printe(const char *__format, ...);
+int vprinte(const char *fmt, va_list args);
+int printc(const char *__format, ...);
+
+
+# 48 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/misc/timespec_operations.h" 2
+
+
+static inline int smaller_timespec (const struct timespec *t1,
+                                    const struct timespec *t2)
+{
+        return t1->tv_sec < t2->tv_sec ||
+               (t1->tv_sec == t2->tv_sec && t1->tv_nsec < t2->tv_nsec);
+}
+
+static inline int smaller_or_equal_timespec (const struct timespec *t1,
+                                             const struct timespec *t2)
+{
+        return t1->tv_sec < t2->tv_sec || (t1->tv_sec == t2->tv_sec &&
+                        t1->tv_nsec <= t2->tv_nsec);
+}
+
+static inline void incr_timespec (struct timespec *t1, const struct timespec *t2)
+{
+        t1->tv_sec += t2->tv_sec;
+        t1->tv_nsec += t2->tv_nsec;
+        if (t1->tv_nsec >= 1000000000) {
+                t1->tv_sec ++;
+                t1->tv_nsec -= 1000000000;
+        }
+}
+
+static inline void decr_timespec (struct timespec *t1, const struct timespec *t2)
+{
+        if (t1->tv_nsec < t2->tv_nsec) {
+                t1->tv_sec -= t2->tv_sec + 1;
+                t1->tv_nsec = t1->tv_nsec + 1000000000 - t2->tv_nsec;
+        } else {
+                t1->tv_sec -= t2->tv_sec;
+                t1->tv_nsec -= t2->tv_nsec;
+        }
+}
+
+static inline void add_timespec (struct timespec *s,
+                                  const struct timespec *t1,
+                                  const struct timespec*t2)
+{
+        s->tv_sec = t1->tv_sec + t2->tv_sec;
+        s->tv_nsec = t1->tv_nsec + t2->tv_nsec;
+        if (s->tv_nsec >= 1000000000) {
+                s->tv_sec ++;
+                s->tv_nsec -= 1000000000;
+        }
+}
+
+static inline void div_timespec (struct timespec *s,
+                                 const struct timespec *dividend,
+                                 const struct timespec *divisor)
+{
+        long long ldividend = dividend->tv_sec*1000000000 + dividend->tv_nsec;
+        long long ldivisor = divisor->tv_sec*1000000000 + divisor->tv_nsec;
+        long long result;
+
+        result = ldividend / ldivisor;
+
+        s->tv_sec = result / 1000000000;
+        s->tv_nsec = result % 1000000000;
+}
+
+static inline void mult_timespec (struct timespec *s,
+                                  const struct timespec *t1,
+                                  const struct timespec *t2)
+{
+        long long lt1 = t1->tv_sec*1000000000 + t1->tv_nsec;
+        long long lt2 = t2->tv_sec*1000000000 + t2->tv_nsec;
+        long long result;
+
+        result = lt1 / lt2;
+
+        s->tv_sec = result / 1000000000;
+        s->tv_nsec = result % 1000000000;
+}
+
+typedef long long unsigned nanosecs_t;
+char str_timespec_s[40];
+static inline char * show_timespec_s (struct timespec *ts)
+{
+        nanosecs_t ns = (nanosecs_t)(ts->tv_sec) * 1000000000 + ts->tv_nsec;
+        nanosecs_t s = ns / 1000000000;
+        nanosecs_t ms = ns % 1000000000;
+        nanosecs_t us = ns % 1000000;
+        ns = ns % 1000;
+        sprintf (str_timespec_s, "%3lus%3lums%3luus%3luns", (unsigned long)s,
+                 (unsigned long)(ms / 1000000), (unsigned long)(us / 1000),
+                 (unsigned long)ns);
+        return str_timespec_s;
+}
+
+
+
+
+
+static inline double timespec_to_double(const struct timespec *time)
+{
+        return time->tv_nsec*0.000000001 + (double)time->tv_sec;
+}
+
+
+
+
+
+static inline void double_to_timespec(double time, struct timespec *ts)
+{
+        ts->tv_sec = (long) time;
+        ts->tv_nsec = (long)((time - (double)ts->tv_sec) * 1000000000);
+}
+# 67 "bsp.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/misc/console_management.h" 1
+# 89 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/misc/console_management.h"
+extern void console_management_init();
+
+
+
+
+
+void clrscr();
+
+
+
+
+
+void set_text_background_color (unsigned char bkc);
+
+
+void set_text_color (unsigned char c);
+
+
+void set_highvideo ();
+
+
+void set_lowvideo ();
+
+
+void set_blink ();
+
+
+void cancel_blink ();
+
+
+void activate_scroll ();
+
+
+void deactivate_scroll ();
+
+
+
+
+
+struct position {
+  int row;
+  int column;
+};
+
+void set_cursor(struct position * to);
+
+
+
+
+
+void get_cursor(struct position * to);
+
+
+
+
+void set_cooked_mode ();
+
+
+
+
+
+
+
+void set_raw_mode ();
+
+
+
+void enable_echo ();
+
+
+void disable_echo ();
+
+
+void set_blocking_mode ();
+
+
+
+void reset_blocking_mode ();
+# 68 "bsp.h" 2
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/string.h" 1
+# 63 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/string.h"
+
+
+
+
+
+
+
+size_t strlen(const char *__s);
+char *strcpy(char *__dest, const char *__src);
+char *strncpy(char *__dest, const char *__src, size_t __n);
+char *strdup(const char *__s);
+char *strcat(char *__dest, const char *__src);
+char *strncat(char *__dest, const char *__src, size_t __n);
+int strcmp(const char *__a, const char *__b);
+int strncmp(const char *__a, const char *__b, size_t __n);
+
+char *strchr(const char *__s, int __c);
+char *strrchr(const char *__s, int __c);
+char *strstr(const char *__haystack, const char *__needle);
+char *strtok(char *__s, const char *__delim);
+char *strtok_r(char *__s, const char *__delim, char **__last);
+char *strpbrk(const char *__s1, const char *__s2);
+size_t strspn(const char *__s1, const char *__s2);
+size_t strcspn(const char *__s1, const char *__s2);
+
+
+
+
+
+
+void *memmove(void *__to, const void *__from, unsigned int __n);
+void *memset(void *__to, int __ch, unsigned int __n);
+
+
+
+
+
+
+void * memchr(const void *b, int c, size_t len);
+
+char *strerror(int __errno);
+
+int strcasecmp(const char *s1, const char *s2);
+int strncasecmp(const char *s1, const char *s2, size_t n);
+
+
+# 69 "bsp.h" 2
+
+# 1 "fonts.h" 1
+# 43 "fonts.h"
+       
+
+
+
+void bmpfont_print(const char *theString, int x, int y,unsigned char *backBuffer, uint8_t color);
+# 71 "bsp.h" 2
+
+
+
+
+_Bool keyboard_support(void);
+void timer_event(void);
+
+
+void initPalette(void);
+# 51 "bsp.c" 2
+# 1 "video.h" 1
+# 50 "video.h"
+enum VideoColor {
+
+    VIDEO_FGND_BLACK = 0x00,
+    VIDEO_FGND_BLUE = 0x01,
+    VIDEO_FGND_GREEN = 0x02,
+    VIDEO_FGND_CYAN = 0x03,
+    VIDEO_FGND_RED = 0x04,
+    VIDEO_FGND_PURPLE = 0x05,
+    VIDEO_FGND_BROWN = 0x06,
+    VIDEO_FGND_LIGHT_GRAY = 0x07,
+    VIDEO_FGND_DARK_GRAY = 0x08,
+    VIDEO_FGND_LIGHT_BLUE = 0x09,
+    VIDEO_FGND_LIGHT_GREEN = 0x0A,
+    VIDEO_FGND_LIGHT_CYAN = 0x0B,
+    VIDEO_FGND_LIGHT_RED = 0x0C,
+    VIDEO_FGND_LIGHT_PURPLE = 0x0D,
+    VIDEO_FGND_YELLOW = 0x0E,
+    VIDEO_FGND_WHITE = 0x0F,
+
+    VIDEO_BGND_BLACK = 0x00,
+    VIDEO_BGND_BLUE = 0x10,
+    VIDEO_BGND_GREEN = 0x20,
+    VIDEO_BGND_CYAN = 0x30,
+    VIDEO_BGND_RED = 0x40,
+    VIDEO_BGND_PURPLE = 0x50,
+    VIDEO_BGND_BROWN = 0x60,
+    VIDEO_BGND_LIGHT_GRAY = 0x70,
+
+    VIDEO_BLINK = 0x80,
+};
+
+void Video_clearScreen(uint8_t bgColor);
+
+void Video_clearRect(uint8_t x1, uint8_t y1, uint8_t x2, uint8_t y2,
+                     uint8_t bgColor);
+
+void Video_printStrAt(uint8_t x, uint8_t y, uint8_t color,
+                      char const *str);
+
+void Video_printNumAt(uint8_t x, uint8_t y, uint8_t color, uint32_t num);
+
+void Video_drawBitmapAt(uint8_t x, uint8_t y,
+                        uint8_t const *bitmap, uint8_t width, uint8_t height);
+
+void Video_drawStringAt(uint8_t x, uint8_t y, char const *str);
+
+
+int screenWidth,screenHeight;
+unsigned char *backBuffer;
+
+void Video_render(void);
+
+void clear_terminal_buffer(uint8_t x1, uint8_t x2, uint8_t y1, uint8_t y2);
+void init_terminal_buffer(void);
+void blit(void);
+# 52 "bsp.c" 2
+
+# 1 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdlib.h" 1
+# 47 "/home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017/arch/include/stdlib.h"
+
+
+
+
+
+
+
+long atol(const char *__str);
+long strtol(const char *__p, char **__out_p, int __base);
+unsigned long strtoul(const char *__p, char **__out_p, int __base);
+double strtod (const char *nptr, char **endptr);
+double atof (const char *nptr);
+
+int rand(void);
+void srand(unsigned __seed);
+
+
+void *malloc(size_t size);
+void *calloc(size_t nelt, size_t eltsize);
+void *realloc(void *buf, size_t new_size);
+void free(void *buf);
+
+void abort(void);
+void exit(int __status);
+
+
+long int labs(long int j);
+long long int llabs(long long int j);
+
+char *getenv(const char *name);
+
+
+
+
+
+# 54 "bsp.c" 2
+
+extern volatile int thread_signal;
+
+static char_t const Q_this_module_[] = "bsp.c";
+# 80 "bsp.c"
+void timer_event(void) {
+    static QEvt const tickEvt = { TIME_TICK_SIG, 0, 0 };
+
+    (QF_tickX_((uint_fast8_t)0));
+    (QF_publish_(&tickEvt));
+}
+
+
+_Bool keyboard_support(void) {
+    static uint8_t ship_pos = (16 / 2);
+    static _Bool result = 0;
+
+
+    char key = getchar();
+    while (getchar() != -1 );
+
+
+    if (!result) {
+        Video_printNumAt(24, 24, VIDEO_FGND_YELLOW, ship_pos);
+        result = 1;
+    }
+
+    switch (key) {
+        case 'w':
+        case 's': {
+            ObjectPosEvt *ope = ((ObjectPosEvt *)QF_newX_((uint_fast16_t)sizeof(ObjectPosEvt), (uint_fast16_t)0, (PLAYER_SHIP_MOVE_SIG)));
+            if ((key == 'w') && (ship_pos > 0x00)) {
+                --ship_pos;
+            }
+            else if ((key == 's')
+                     && (ship_pos < (16 - 3))) {
+                ++ship_pos;
+            }
+            ope->x = (uint8_t)10;
+            ope->y = (uint8_t)ship_pos;
+            ((void)(*((QActiveVtbl const *)((AO_Ship)->super.vptr))->post)((AO_Ship), ((QEvt *)ope), (uint_fast16_t)0));
+
+            Video_printNumAt(24, 24, VIDEO_FGND_YELLOW, ship_pos);
+            break;
+        }
+        case 'e': {
+            static uint16_t ntrig = 0;
+            static QEvt const fireEvt = { PLAYER_TRIGGER_SIG, 0, 0 };
+            (QF_publish_(&fireEvt));
+
+            Video_printNumAt(47, 24, VIDEO_FGND_YELLOW, ++ntrig);
+            break;
+        }
+        case 'x': {
+            static QEvt const quitEvt = { PLAYER_QUIT_SIG, 0, 0 };
+            (QF_publish_(&quitEvt));
+            result = 0;
+            thread_signal = 1;
+            break;
+        }
+    }
+    return result;
+}
+
+
+void BSP_init(int argc, char *argv[]) {
+    char const *com = "COM1";
+
+    if (argc > 1) {
+        com = argv[1];
+    }
+    if (!(0 == 0)) {
+        Q_onAssert(&Q_this_module_[0], (int_t)147);
+    }
+
+    ((void)0);
+    ((void)0);
+
+    Video_clearScreen(VIDEO_BGND_LIGHT_GRAY);
+    Video_clearRect( 0, 0, 80, 1, VIDEO_BGND_RED | VIDEO_BLINK);
+    Video_clearRect( 0, 8, 80, 24, VIDEO_BGND_BLACK | VIDEO_FGND_WHITE);
+    Video_clearRect( 0, 7, 80, 8, VIDEO_BGND_BLUE);
+    Video_clearRect( 0, 24, 80, 25, VIDEO_BGND_BLUE);
+
+    Video_clearRect(24, 24, 28, 25, VIDEO_BGND_RED | VIDEO_BLINK);
+    Video_clearRect(24, 24, 28, 25, VIDEO_BGND_RED | VIDEO_BLINK);
+
+    Video_printStrAt(35, 0, VIDEO_FGND_WHITE, "FLY 'n' SHOOT");
+    Video_printStrAt(15, 2, VIDEO_FGND_BLACK,
+                     "Press W to move the space ship up");
+    Video_printStrAt(15, 3, VIDEO_FGND_BLACK,
+                     "Press S to move the space ship down");
+    Video_printStrAt(15, 4, VIDEO_FGND_BLACK,
+                     "Press E to fire the missile");
+    Video_printStrAt(15, 5, VIDEO_FGND_BLACK,
+                     "Press X to quit the game");
+    Video_printStrAt( 8, 24, VIDEO_FGND_WHITE, "Ship Position:");
+    Video_printStrAt(37, 24, VIDEO_FGND_WHITE, "Triggers:");
+    Video_printStrAt(61, 24, VIDEO_FGND_WHITE, "Score:");
+
+    Video_clearRect(24, 24, 28, 25, VIDEO_BGND_RED);
+    Video_clearRect(47, 24, 51, 25, VIDEO_BGND_RED);
+    Video_clearRect(68, 24, 72, 25, VIDEO_BGND_RED);
+    Video_printNumAt(24, 24, VIDEO_FGND_YELLOW, 0);
+    Video_printNumAt(47, 24, VIDEO_FGND_YELLOW, 0);
+    Video_printNumAt(68, 24, VIDEO_FGND_YELLOW, 0);
+
+    (void)com;
+}
+
+void BSP_drawBitmap(uint8_t const *bitmap, uint8_t width, uint8_t height) {
+    Video_drawBitmapAt(0, 8, bitmap, width, height);
+}
+
+void BSP_drawNString(uint8_t x, uint8_t y, char const *str) {
+    Video_drawStringAt(x, 8 + y*8, str);
+}
+
+void BSP_updateScore(uint16_t score) {
+    if (score == 0) {
+        Video_clearRect(68, 24, 72, 25, VIDEO_BGND_RED);
+    }
+    Video_printNumAt(68, 24, VIDEO_FGND_YELLOW, score);
+}
+
+void BSP_displayOn(void) {
+}
+
+void BSP_displayOff(void) {
+    Video_clearRect( 0, 8, 80, 24, VIDEO_BGND_BLACK | VIDEO_FGND_WHITE);
+}
+
+void QF_onStartup(void) {
+}
+
+void QF_onCleanup(void) {
+}
+
+void QF_onIdle(void) {
+}
+
+void Q_onAssert(char const * const file, int line) {
+
+    Video_clearRect ( 0, 7, 80, 8, VIDEO_BGND_RED);
+    Video_printStrAt( 0, 7, VIDEO_FGND_WHITE, "ASSERTION FAILED in file:");
+    Video_printStrAt(26, 7, VIDEO_FGND_YELLOW, file);
+    Video_printStrAt(57, 7, VIDEO_FGND_WHITE, "line:");
+    Video_printNumAt(62, 7, VIDEO_FGND_YELLOW, line);
+
+    QF_stop();
+}

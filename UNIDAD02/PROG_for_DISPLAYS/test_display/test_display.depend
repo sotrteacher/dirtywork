@@ -1,0 +1,10 @@
+# depslib dependency file v1.0
+1608087921 source:c:\users\lmc\2020\repos_2020\sotr-2020-2\repo\dirtywork\unidad02\prog_for_displays\test_display.c
+	<stdio.h>
+	<stdlib.h>
+	"display.h"
+
+1608091621 c:\users\lmc\2020\repos_2020\sotr-2020-2\repo\dirtywork\unidad02\prog_for_displays\display.h
+	<stdio.h>
+	<ctype.h>
+

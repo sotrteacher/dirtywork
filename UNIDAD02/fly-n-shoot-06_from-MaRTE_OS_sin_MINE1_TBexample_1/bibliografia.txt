@@ -1,0 +1,18 @@
+K. C. Wang (auth.) - 
+Design and Implementation of the MTX Operating Systemi -
+Springer International Publishing (2015)
+
+Miro Samek - 
+Practical UML statecharts in C_C++_ event-driven programming 
+for embedded systems -
+Newnes_Elsevier (2004)
+
+marte/arch/drivers/svga/vga.c
+int vga_setmode(int mode)
+
+game/bsp.c
+void Q_onAssert(char const Q_ROM * const file, int line) {
+
+include/qassert.h
+    #define Q_ASSERT(test_) ((test_) \
+        ? (void)0 : Q_onAssert(&Q_this_module_[0], (int_t)__LINE__))
