@@ -60,6 +60,16 @@ typedef struct s_rect {
   short r2,c2;         /*lower right corner*/
 } RECT;
 
+#define RWIDTH(a)	((a)->c2 - (a)->c1 + 1)
+#define RHEIGHT(a)	((a)->r2 - (a)->r1 + 1)
+#define RASG(a,row1,col1,row2,col2)	((a)->r1=row1;(a)->c1=col1;\
+(a)->r2=row2;(a)->c2=col2;)
+#define RCPY(dst,src)	((dst)->r1=(src)->r1;(dst)->c1=(src)->c1;\
+(dst)->r2=(src)->r2;(dst)->c2=(src)->c2;)
+
+extern RECT GIANT_RECT;
+#define GIANT	9999
+
 #include <stdio.h>
 #include <ctype.h>
 //#include "port.h"

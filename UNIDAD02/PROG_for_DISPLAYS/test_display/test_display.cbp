@@ -31,6 +31,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../display.h" />
 		<Unit filename="../test_display.c">
 			<Option compilerVar="CC" />
 		</Unit>
