@@ -5,6 +5,7 @@
 #include "qp_port.h"           
 #include "bsp.h"                              /* board support package */
 #include "game.h"
+#include <stdlib.h>    /* exit() */
 
 Q_DEFINE_THIS_FILE
 /* Local objects ------------------------------------------------------*/
@@ -209,8 +210,9 @@ QState Bomb4_timing(Bomb4 *me, QEvent const *e) {
       return Q_HANDLED();
 boom:
 #ifdef LMC_16000
-        set_cursorxy(0,5);
-        printf("BOOM!!!!\n");
+      set_cursorxy(0,5);
+      printf("BOOM!!!!\n");
+      exit(0);
 #else
       BSP_boom();
 #endif /*LMC_16000*/

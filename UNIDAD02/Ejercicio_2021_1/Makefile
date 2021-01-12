@@ -1,4 +1,4 @@
-RTOS := flynshoot
+RTOS := ejercicio
 ISOIMAGE := rtos.iso
 .PHONY: clean default $(RTOS).exe
 
@@ -6,15 +6,16 @@ CC = mgcc
 AR = ar
 STRIP = strip
 MARTE = /home/usuario1/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017
-CFLAGS = -Wall -Wextra -I$(MARTE)/arch/drivers/svga -I ../port -I ../include
+#CFLAGS = -Wall -Wextra -I$(MARTE)/arch/drivers/svga -I ../port -I ../include
+CFLAGS = -Wall -Wextra  -I ../port -I ../include
 OFLAGS = -s -Os -DNDEBUG
-LDFLAGS = -lsvga
+#LDFLAGS = -lsvga
 
-default: flynshoot.exe
+default: $(RTOS).exe
 
 #flynshoot.exe:
 $(RTOS).exe:
-	$(CC) $(CFLAGS) $(OFLAGS) ../qep/source/*.c ../qf/source/*.c *.c $(LDFLAGS) -o $@;
+	$(CC) $(CFLAGS) $(OFLAGS)  *.c $(LDFLAGS) -o $@;
 	$(STRIP) --strip-all $@
 #Use typing:make rtos.iso
 $(ISOIMAGE):$(RTOS).exe
@@ -22,8 +23,6 @@ $(ISOIMAGE):$(RTOS).exe
 	cd ../../booteable-sotr/ && ./make_iso.sh
 	@./mover_a_dir_2019.sh
 bsp_testE:bsp.c
-	$(CC) -E $(CFLAGS) $(OFLAGS) $< -o $@
-main_testE:main.c
 	$(CC) -E $(CFLAGS) $(OFLAGS) $< -o $@
 clean: 
 	@exec echo -e "\n>> Cleaning... ";
