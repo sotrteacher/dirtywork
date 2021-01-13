@@ -15,6 +15,7 @@
 #include <misc/timespec_operations.h> /*double_to_timespec()*/
 #include <stdlib.h> /*exit()*/
 static pthread_t thread1,thread2;
+//static pthread_t thread1;
 volatile int thread_signal;
 
 #define SETTING	1
@@ -37,41 +38,13 @@ char keyboard_input(void) {
   while (getchar() != -1 );
 
   return key;
-//    // primera ejecución de handler de teclado
-//    if (!result) {
-//        result = true;
-//    }
-//
-//    switch (key) {
-//        case 'w':                                         /* Up-arrow */
-//        case 's': {                                     /* Down-arrow */
-//        result = true;
-//            break;
-//        }
-//        case 'e': {                                           /* Space */
-//            break;
-//        }                                                       /* Esc */
-//        case 'x': {
-//            break;
-//        }
-//        case 'u': { /*2020.12.11*/
-//            break;
-//        }
-//        case 'd': {
-//            break;
-//        }
-//        case 'a': {
-//            break;
-//        }
-//    }/*end switch()*/
-//    return result;
 }/*keyboard_input()*/
 
 void *thread1_handler (void *arg) {
   double thread1_interval = 0.1;   /* 0.1 second */
   struct timespec thread1_ts;
   //int *thread1_status = (int *)status;
-  (void)arg; /*to avoid th unused parameter compiler warning*/
+  (void)arg; /*to avoid the unused parameter compiler warning*/
   double_to_timespec(thread1_interval,&thread1_ts);
   for (;;) {
     if (estado == TIMING) {
@@ -99,10 +72,10 @@ boom:
 }/*end thread1_handler()*/
 
 void *thread2_handler (void *arg) {
-  double thread2_interval = 0.01; /* 0.01 secomd */
+  double thread2_interval = 0.01; /* 0.01 second */
   struct timespec thread2_ts;
   char c;
-  (void)arg; /*to avoid th unused parameter compiler warning*/
+  (void)arg; /*to avoid the unused parameter compiler warning*/
   double_to_timespec(thread2_interval,&thread2_ts);
   for (;;) {
     c = keyboard_input();
@@ -110,26 +83,36 @@ void *thread2_handler (void *arg) {
       case 'a':{
         if (estado == SETTING) {
           estado = TIMING; 
+          clrscr();
         }else if (estado == TIMING) {
           if (tb->code == tb->defuse) {
             estado = SETTING;
+            tb->code = 0;
+            tb->fine_time = 0;
+            set_cursorxy(0,0); 
+            printf("[State Bomb4_setting]                        \n");
+            printf("Press U to move the timeout up               \n");
+            printf("Press D to move the timeout down             \n");
+            printf("Press A to arm the bomb and transition to Bomb4_timing state\n");
           }
         }
+        break;
       }
       case 'd':{
         if (estado == SETTING) {
-          if (me->timeout > 1) {
-            --me->timeout;
+          if (tb->timeout > 1) {
+            --tb->timeout;
             set_cursorxy(0,5);
             printf("timeout = %2d\n",tb->timeout);
           }
         }else if (estado == TIMING) {
           tb->code <<= 1;
         }
+        break;
       }
       case 'u':{
         if (estado == SETTING) {
-          if (me->timeout < 60) {
+          if (tb->timeout < 60) {
             ++tb->timeout;
             set_cursorxy(0,5);
             printf("timeout = %2d\n",tb->timeout);
@@ -138,6 +121,7 @@ void *thread2_handler (void *arg) {
           tb->code <<= 1;
           tb->code |=1; /* If only UP button is pressed: 1,3,7,15, etc. */
         }
+        break;
       }
     }/*---------------switch()*/
     nanosleep(&thread2_ts,NULL);
@@ -161,13 +145,21 @@ int main()
   disable_echo();// Input characters are not echoed
   clrscr();
 
-  //estado = SETTING;
-  estado = TIMING;
   tb->timeout = 10;
   tb->code = 0;
   tb->defuse = 7;
+  //estado = TIMING;
+  estado = SETTING;
+  set_cursorxy(0,0); 
+  printf("[State Bomb4_setting]                        \n");
+  printf("Press U to move the timeout up               \n");
+  printf("Press D to move the timeout down             \n");
+  printf("Press A to arm the bomb and transition to Bomb4_timing state\n");
+
   pthread_create(&thread1,NULL,thread1_handler,(void*)thread_signal);
+  pthread_create(&thread2,NULL,thread2_handler,(void*)thread_signal);
   pthread_join(thread1,NULL);
+  pthread_join(thread2,NULL);
   return 0;
 }/*end main()*/
 
