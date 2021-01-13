@@ -1,0 +1,11 @@
+VFD=../../FDimage
+
+# clean up files in /bin directory
+mount -o loop $VFD /mnt
+rm /mnt/bin/*
+umount /mnt
+
+mku u1
+mku u2
+
+
