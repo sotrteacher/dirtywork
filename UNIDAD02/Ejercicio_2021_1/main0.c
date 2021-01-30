@@ -15,7 +15,6 @@
 #include <misc/timespec_operations.h> /*double_to_timespec()*/
 #include <stdlib.h> /*exit()*/
 static pthread_t thread1,thread2;
-//static pthread_t thread1;
 volatile int thread_signal;
 
 #define SETTING	1
