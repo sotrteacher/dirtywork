@@ -1,0 +1,17 @@
+ALL: ../ldscript.exe
+EXE = ../ldscript.exe
+OBJ = ldscript.o
+CFLAGS = -Wall
+
+.SUFFIXES:
+.SUFFIXES:	.o	$(SUFFIXES)
+.SUFFIXES:	.c	$(SUFFIXES)
+
+$(EXE):	$(OBJ)
+	gcc -o $(EXE) $(OBJ)
+	strip $(EXE)
+
+.c.o:
+	gcc -c $(CFLAGS) $*.c
+
+ldscript.o:	ldscript.c
