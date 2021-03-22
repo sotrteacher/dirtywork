@@ -1,0 +1,166 @@
+.align 16
+gdt:
+   # Index 0x00
+   # Required dummy
+   .quad   0x00
+
+   # 0x08
+   # Unused
+   .quad   0x00
+
+   # 0x10
+   # protected mode code segment
+   # bit 63         bit 32
+   # 000000000000000 | 1001101000000000
+   # 000000000000000 | 1111111111111111 (limit)
+   # bit 31 (base)      bit 0
+   #.word   0xFFFF
+   #.word   0x0000
+   #.word   0x9A00   # 1001 1010 0000 0000
+   #.word   0x00CF   # 0000 0000 1100 1111
+   .quad 0x00cf9a000000ffff   
+
+   # 0x18
+   # protected mode data segment
+   #.word   0xFFFF
+   #.word   0x0000
+   #.word   0x9200 # 1001 0010 0000 0000
+   #.word   0x00CF # 0000 0000 1100 1111
+   .quad 0x00cf92000000ffff   
+
+   # 0x20
+   # 16 bit code segment
+   #.word   0xFFFF    limit (0-15)
+   #.word   0x0000   base (16-31)
+   #.byte   0x00   base (32-39)
+   #.byte   0x9a   access byte (40-47) - 10011010
+   #.byte   0x0f   flags + limit (48-55)
+   #.word   0x00   base (56-63)
+    .quad 0x00009a000000ffff
+
+   # 0x28
+   # 16 bit data segment   
+   #.word   0xFFFF    limit (0-15)
+   #.word   0x0000   base (16-31)
+   #.byte   0x00   base (32-39)
+   #.byte   0x92   access byte (40-47) - 10010010
+   #.byte   0x0f   flags + limit (48-55)
+   #.word   0x00   base (56-63)
+    .quad 0x000092000000ffff
+
+gdt_end:
+gdt_info:
+   .word   gdt_end - gdt - 1   # Size of GDT
+   .word   0x0000         # Upper 2 Bytes of GDT address.
+   .word   0x0000         # Lower 2 Bytes of GDT address.
+
+# IDT for protected mode
+idt_info:
+   .word   0x0000
+   .word   0x0000
+   .word   0x0000
+
+# IDT for real mode
+idt_real_info:
+   .word   0x03ff
+   .word   0x0000
+   .word   0x0000
+
+.code32
+.text
+.globl setup_32
+setup_32:
+   # Setup stack.
+   movl   $0x00007000, %esp
+   movl   %esp, %ebp
+
+    # Set up GDT
+   movl   $gdt, (gdt_info + 2)
+
+    # Interrupts should already be disabled...
+   cli
+   lgdt   gdt_info
+
+    # *********************
+    # Return to real mode *
+    # *********************
+
+    # Load a new segment with a limit of 0xffff
+    # This is the segment limit required in real-
+    # address mode.
+   jmp   $0x20, $loadRMSeg
+
+.code16
+loadRMSeg:
+   movl   $0x28, %eax
+   movl   %eax, %ds
+   movl   %eax, %gs
+   movl   %eax, %fs
+   movl   %eax, %es
+   movl   %eax, %ss
+
+        # This line allows the interrupt to work.
+        lidt   idt_real_info
+
+   # Preserve %cr0
+   movl   %cr0, %eax
+
+   # Turn off PE bit, bit 0 to return to real mode
+        andl   $0xffffffffe, %eax
+   movl   %eax, %cr0
+
+   jmp   $0x00, $set_rm_segment_regs
+set_rm_segment_regs:
+   movw   $0x0000, %ax
+   movw   %ax, %ds
+   movw   %ax, %gs
+   movw   %ax, %fs
+   movw   %ax, %es
+   movw   %ax, %ss
+
+   # Enable interrupts for memory checking.
+   sti
+
+   
+meme820:
+   xorl   %ebx, %ebx
+
+        # Option 1:
+        # Using GDB and qemu I set a breakpoint at bail820 below.
+        # I can get past int $0x15 and hit the breakpoint, int %0x15 indicates success.
+        # (CF not set) and %eax has the magic value that it should.
+        #
+        # The code then continues on, and I return to protected mode.
+        # As I step through the code in GDB every single interrupt begins to
+        # fire and the code completely goes off the rails. I never see main hit.
+        # $smapBuffer is defined in another file and at address ~0x6000
+   movw    $smapBuffer, %di
+
+       # Options 2:
+       # Using GDB and qemu I set a breakpoint at bail820 below.
+       # Interrupt is called and returns. Memory test indicates that it
+       # failed. Code makes it to my main and life appears to be wonderful.
+       #
+       # For some reason, %esp is no longer at $0x7000 as I set it at the top.
+       #movw    $0x500, %es:(%di)
+
+       # Options 3:
+       # Using GDB and qemu I set a breakpoint at bail820 below.
+       # My breakpoint is never hit. Qemu crashes horribly with the
+       # dump below.
+       #movw    $0x2d0, %di
+
+   movl   $0x0000e820, %eax
+   movl $0x534D4150, %edx
+   movl   $20, %ecx
+   int   $0x15
+bail820:
+
+   cli
+
+   # **************************
+   # Return to protected mode *
+   # **************************
+       
+        < code here >
+
