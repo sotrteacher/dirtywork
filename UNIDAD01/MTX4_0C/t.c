@@ -15,6 +15,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ********************************************************************/
 /************* tc.c file ******************/
 #include "libepc.h"
+#include "monitor.h"
+//#define NOT_USING_ONLY_LIBEPC
 struct multiboot;    /* In order to avoid compiler warning */
 void tswitch(void);  /* In order to avoid compiler warning */
                      /* defined in file tswitch.s */
@@ -37,7 +39,7 @@ int scheduler()
 union offsdgdt {
  char c[4];
  int  offset;
-} OdGDT;  //Offset de GDT - The Offset is the linear address of tehe table itself.
+} OdGDT;  //Offset de GDT - The Offset is the linear address of the table itself.
 union gdtentry {
  char c[8];
  long long d;   /** sizeof(long long) showed 8. */    
@@ -79,7 +81,8 @@ int main(struct multiboot *mboot_ptr)
                                  // deben ser ambos 0.
   PutString("\r\n");
   int *gI = (int*)OdGDT.offset;
-/*  PutUnsigned(*gI,16,0);
+/*
+  PutUnsigned(*gI,16,0);
   PutString("\r\n");
   PutUnsigned(*(gI+1),16,0);
   PutString("\r\n");
@@ -97,7 +100,8 @@ int main(struct multiboot *mboot_ptr)
     if (k%2){
       PutString("\r\n");
     }
-  }*/
+  }*/ /*A continuaci\'on, se usar\'a un apuntador a long long 
+        porque haciendo una prueba, sizeof(long long) devolvi\'o 8 */
   long long *GDT=(long long *)gI;
   union gdtentry GEntry[5];
   for (k = 0;k<5;k++){
@@ -108,7 +112,11 @@ int main(struct multiboot *mboot_ptr)
   for (j = 0;j<5;j++){
     for (k=7;k>=0;k--){
       if(GEntry[j].c[k]==0){PutChar('0');PutChar('0');}else{
+#ifndef NOT_USING_ONLY_LIBEPC
         PutUnsigned(GEntry[j].c[k],16,0);
+#else
+        monitor_write_hex(GEntry[j].c[k]);
+#endif
       }
       PutChar(' ');
     } 
@@ -116,9 +124,9 @@ int main(struct multiboot *mboot_ptr)
   }
 /*Init_CPU();*/
 //DWORD32 tiempo = Now_Plus(1);
-  running = &proc;
+    //running = &proc;
   //printf("call tswitch()\n");
-     tswitch();
+    //tswitch();
   //printf("back to main()\n");
   return 0;
 }/*end main()*/

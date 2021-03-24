@@ -4,7 +4,7 @@
 # rule, as we use nasm instead of GNU as.
 
 SOURCES=boot.o tswitch.o t.o display.o io.o init-idt.o timer.o init-cpu.o \
-init-crt.o init8259.o init8253.o
+init-crt.o init8259.o init8253.o monitor.o common.o
 
 CFLAGS=-m32 -fno-PIC -nostdlib -nostdinc -fno-builtin -fno-stack-protector
 LDFLAGS=-m elf_i386 -Tlink.ld
