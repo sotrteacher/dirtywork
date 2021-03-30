@@ -1,0 +1,12 @@
+Para limpiar:
+make clean
+
+Para construir el kernel:
+make 
+
+Para bootear el kernel:
+make newrun
+
+Esta versi\'on del kernel \'unicamente limpia la patalla.
+
+
