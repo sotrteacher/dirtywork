@@ -1,0 +1,43 @@
+ALL: ../libepc.a
+LIB = ../libepc.a
+OBJS = init-cpu.o init-idt.o init-crt.o \
+	display.o speaker.o timer.o \
+	init8259.o init8253.o heap.o setjmp.o \
+	fixedpt.o cycles.o queue.o window.o \
+	checkcpu.o io.o keyboard.o
+
+AFLAGS = -f coff
+CFLAGS = -Wall -Wno-unused -I../
+
+.SUFFIXES:
+.SUFFIXES:	.a	$(SUFFIXES)
+.SUFFIXES:	.o	$(SUFFIXES)
+.SUFFIXES:	.asm	$(SUFFIXES)
+.SUFFIXES:	.c	$(SUFFIXES)
+
+$(LIB):	$(OBJS)
+	ar rs $(LIB) $(OBJS)
+
+.asm.o:
+	nasm $(AFLAGS) -o $*.o $*.asm
+
+.c.o:
+	gcc -c $(CFLAGS) $*.c
+
+init-cpu.o:	init-cpu.asm
+setjmp.o:	setjmp.asm
+fixedpt.o:	fixedpt.asm
+cycles.o:	cycles.asm
+checkcpu.o:	checkcpu.asm
+io.o:		io.asm
+init-idt.o:	init-idt.c	../libepc.h
+init-crt.o:	init-crt.c	../libepc.h
+init8259.o:	init8259.c	../libepc.h
+init8253.o:	init8253.c	../libepc.h
+display.o:	display.c	../libepc.h
+keyboard.o:	keyboard.c	../libepc.h
+speaker.o:	speaker.c	../libepc.h
+timer.o:	timer.c		../libepc.h
+heap.o:		heap.c		../libepc.h
+queue.o:	queue.c		../libepc.h
+window.o:	window.c	../libepc.h

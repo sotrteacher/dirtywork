@@ -1,0 +1,2 @@
+qemu-system-i386 -fda mFDimage -no-fd-bootchk -monitor tcp:127.0.0.1:55555,server,nowait;
+#echo info\ registers | nc -n 127.0.0.1 55555
