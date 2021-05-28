@@ -1,0 +1,39 @@
+########## Path for uCOS-II core source files #################################
+UCOS_SRC=/software/uCOS-II/source
+
+########## Path for uCOS-II WIN32 port source files ###########################
+UCOS_PORT_SRC=/software/uCOS-II/Ports/80x86/Linux/GCC/src
+
+########## Path for uCOS-II WIN32 example source files ########################
+UCOS_PORT_EX=/software/uCOS-II/Ports/80x86/Linux/GCC/templates
+
+########## Name of Example source file ########################################
+EXAMPLE=test_mutex_semaphore
+
+all:
+#	@gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX)  $(EXAMPLE).c $(UCOS_SRC)/uCOS_II.c $(UCOS_PORT_SRC)/pc.c $(UCOS_PORT_SRC)/os_cpu_c.c  -o $(EXAMPLE)
+#	gcc -Xlinker -Map=$(EXAMPLE).map -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX)  $(EXAMPLE).c $(UCOS_SRC)/uCOS_II.c $(UCOS_PORT_SRC)/pc.c $(UCOS_PORT_SRC)/os_cpu_c.c  -o $(EXAMPLE)
+#Preprocessing
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -E $(EXAMPLE).c -o ./$(EXAMPLE).i
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -E $(UCOS_SRC)/uCOS_II.c -o ./uCOS_II.i
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -E $(UCOS_PORT_SRC)/pc.c -o ./pc.i
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -E $(UCOS_PORT_SRC)/os_cpu_c.c  -o ./os_cpu_c.i
+#Getting lists of headers included
+	cpp -MD -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) $(EXAMPLE).c | sed -n '/\.h"/s/.*"\(.*\)".*/\1/p' | sort -u > $(EXAMPLE).headers
+	cpp -MD -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) $(UCOS_SRC)/uCOS_II.c | sed -n '/\.h"/s/.*"\(.*\)".*/\1/p' | sort -u > uCOS_II.headers
+	cpp -MD -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) $(UCOS_PORT_SRC)/pc.c | sed -n '/\.h"/s/.*"\(.*\)".*/\1/p' | sort -u > pc.headers
+	cpp -MD -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) $(UCOS_PORT_SRC)/os_cpu_c.c | sed -n '/\.h"/s/.*"\(.*\)".*/\1/p' | sort -u > os_cpu_c.headers
+#Compiling
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -c $(EXAMPLE).c -o ./$(EXAMPLE).o
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -c $(UCOS_SRC)/uCOS_II.c -o ./uCOS_II.o
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -c $(UCOS_PORT_SRC)/pc.c -o ./pc.o
+	gcc -D__LINUX__ -I$(UCOS_SRC) -I$(UCOS_PORT_SRC) -I$(UCOS_PORT_EX) -c $(UCOS_PORT_SRC)/os_cpu_c.c  -o ./os_cpu_c.o
+#Linking and getting map file
+	gcc -Xlinker -Map=$(EXAMPLE).map *.o -o $(EXAMPLE)
+
+clean:
+	rm -f *.o
+	rm -f *.bak
+	rm -v $(EXAMPLE) $(EXAMPLE).map *.i *.headers
+
+	
