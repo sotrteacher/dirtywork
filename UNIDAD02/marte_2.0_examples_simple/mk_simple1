@@ -1,0 +1,8 @@
+EXE = periodic_thread_1
+QEMU = qemu-system-i386
+$(EXE): simple_periodic_thread_1.c
+	mgcc $(CFLAGS) $< -o $@
+run:$(EXE)
+	$(QEMU) -kernel $<
+clean:
+	rm -v $(EXE)
