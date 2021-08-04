@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="01_SystemCPrimer" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/01_SystemCPrimer" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+			<Target title="01_Adders">
+				<Option output="01_SystemCPrimer" prefix_auto="1" extension_auto="1" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+			</Target>
+			<Target title="03_TestBench">
+				<Option output="bin/03_TestBench/01_SystemCPrimer" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/03_TestBench/" />
+				<Option object_output="obj/03_TestBench/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="/opt/systemc/include" />
+			<Add directory="02_full_adder" />
+			<Add directory="01_half_adder" />
+		</Compiler>
+		<Linker>
+			<Add library="/opt/systemc/lib/libsystemc.so" />
+			<Add directory="/opt/systemc/lib" />
+		</Linker>
+		<Unit filename="01_half_adder/Figure_2-2_half_adder_circuit.JPG">
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="01_half_adder/half_adder.cpp">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="01_half_adder/half_adder.h">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="02_full_adder/full_adder.cpp">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="02_full_adder/full_adder.h">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="03_TestBench/pulse.cpp">
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="03_TestBench/pulse.h">
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="03_TestBench/pulse_main.cpp">
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="driver.cpp">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="driver.h">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="full_adder_main.cpp">
+			<Option target="01_Adders" />
+		</Unit>
+		<Unit filename="monitor.cpp">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Unit filename="monitor.h">
+			<Option target="01_Adders" />
+			<Option target="03_TestBench" />
+		</Unit>
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>

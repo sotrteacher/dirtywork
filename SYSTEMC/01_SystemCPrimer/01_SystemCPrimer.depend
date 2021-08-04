@@ -1,0 +1,787 @@
+# depslib dependency file v1.0
+1625873748 source:/mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/01_half_adder/half_adder.cpp
+	"half_adder.h"
+
+1625870169 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/01_half_adder/half_adder.h
+	<systemc.h>
+
+1539418748 /opt/systemc/include/systemc.h
+	<cassert>
+	<climits>
+	<cmath>
+	<cstddef>
+	<cstdio>
+	<cstdlib>
+	<cstring>
+	<exception>
+	<fstream>
+	<iostream>
+	<memory>
+	<string>
+	<inttypes.h>
+	<stdint.h>
+	<typeinfo>
+	<utility>
+	<vector>
+	<strstream>
+	"systemc"
+
+1539418748 /opt/systemc/include/systemc
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_externs.h"
+	"sysc/kernel/sc_except.h"
+	"sysc/kernel/sc_module.h"
+	"sysc/kernel/sc_simcontext.h"
+	"sysc/kernel/sc_process_handle.h"
+	"sysc/kernel/sc_ver.h"
+	"sysc/communication/sc_buffer.h"
+	"sysc/communication/sc_clock.h"
+	"sysc/communication/sc_clock_ports.h"
+	"sysc/communication/sc_event_queue.h"
+	"sysc/communication/sc_export.h"
+	"sysc/communication/sc_fifo.h"
+	"sysc/communication/sc_fifo_ports.h"
+	"sysc/communication/sc_mutex.h"
+	"sysc/communication/sc_semaphore.h"
+	"sysc/communication/sc_signal.h"
+	"sysc/communication/sc_signal_ports.h"
+	"sysc/communication/sc_signal_resolved.h"
+	"sysc/communication/sc_signal_resolved_ports.h"
+	"sysc/communication/sc_signal_rv.h"
+	"sysc/communication/sc_signal_rv_ports.h"
+	"sysc/datatypes/bit/sc_bit.h"
+	"sysc/datatypes/bit/sc_logic.h"
+	"sysc/datatypes/bit/sc_bv.h"
+	"sysc/datatypes/bit/sc_lv.h"
+	"sysc/datatypes/int/sc_bigint.h"
+	"sysc/datatypes/int/sc_biguint.h"
+	"sysc/datatypes/int/sc_int.h"
+	"sysc/datatypes/int/sc_uint.h"
+	"sysc/datatypes/misc/sc_concatref.h"
+	"sysc/datatypes/fx/fx.h"
+	"sysc/tracing/sc_trace.h"
+	"sysc/utils/sc_utils_ids.h"
+	"sysc/utils/sc_pvector.h"
+	"sysc/utils/sc_string_view.h"
+	"sysc/utils/sc_vector.h"
+	"sysc/kernel/sc_dynamic_processes.h"
+	"sysc/utils/sc_string.h"
+	<cstring>
+	<sstream>
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_cmnhdr.h
+	<cassert>
+	<cstdio>
+	<cstdlib>
+	<vector>
+	<Windows.h>
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_externs.h
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_except.h
+	<exception>
+	"sysc/kernel/sc_cmnhdr.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_module.h
+	"sysc/kernel/sc_kernel_ids.h"
+	"sysc/kernel/sc_process.h"
+	"sysc/kernel/sc_module_name.h"
+	"sysc/kernel/sc_sensitive.h"
+	"sysc/kernel/sc_time.h"
+	"sysc/kernel/sc_wait.h"
+	"sysc/kernel/sc_wait_cthread.h"
+	"sysc/kernel/sc_process.h"
+	"sysc/kernel/sc_process_handle.h"
+	"sysc/utils/sc_list.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_kernel_ids.h
+	"sysc/utils/sc_report.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_report.h
+	<exception>
+	<string>
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/utils/sc_report_handler.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_report_handler.h
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_process.h
+	"sysc/kernel/sc_constants.h"
+	"sysc/kernel/sc_object.h"
+	"sysc/kernel/sc_kernel_ids.h"
+	"sysc/communication/sc_export.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_constants.h
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_object.h
+	"sysc/kernel/sc_attribute.h"
+	<iostream>
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_attribute.h
+	<string>
+	<vector>
+	"sysc/kernel/sc_cmnhdr.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_export.h
+	<typeinfo>
+	"sysc/communication/sc_communication_ids.h"
+	"sysc/communication/sc_interface.h"
+	"sysc/kernel/sc_object.h"
+	"sysc/utils/sc_typeindex.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_communication_ids.h
+	"sysc/utils/sc_report.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_interface.h
+	"sysc/kernel/sc_cmnhdr.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_typeindex.h
+	"sysc/kernel/sc_cmnhdr.h"
+	<typeinfo>
+	<typeindex>
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_module_name.h
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_sensitive.h
+	"sysc/kernel/sc_process.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_time.h
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/datatypes/fx/scfx_ieee.h"
+	<iostream>
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_nbdefs.h
+	"sysc/kernel/sc_cmnhdr.h"
+	<climits>
+	<inttypes.h>
+	<stdint.h>
+	"sysc/kernel/sc_constants.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_ieee.h
+	"sysc/datatypes/fx/sc_fxdefs.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxdefs.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/utils/sc_machine.h"
+	"sysc/datatypes/fx/sc_fx_ids.h"
+	"sysc/datatypes/int/sc_nbutils.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_machine.h
+	<climits>
+	"sysc/packages/boost/detail/endian.hpp"
+
+1539418748 /opt/systemc/include/sysc/packages/boost/detail/endian.hpp
+	<endian.h>
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fx_ids.h
+	"sysc/utils/sc_report.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_nbutils.h
+	<cmath>
+	<limits>
+	"sysc/datatypes/bit/sc_bit_ids.h"
+	"sysc/datatypes/int/sc_int_ids.h"
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/utils/sc_report.h"
+	<ios>
+	<ostream>
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_bit_ids.h
+	"sysc/utils/sc_report.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_int_ids.h
+	"sysc/utils/sc_report.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_wait.h
+	"sysc/kernel/sc_simcontext.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_simcontext.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_process.h"
+	"sysc/kernel/sc_status.h"
+	"sysc/kernel/sc_time.h"
+	"sysc/utils/sc_hash.h"
+	"sysc/utils/sc_pq.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_status.h
+	<iosfwd>
+	"sysc/kernel/sc_cmnhdr.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_hash.h
+	"sysc/kernel/sc_simcontext.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_pq.h
+	"sysc/kernel/sc_cmnhdr.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_wait_cthread.h
+	"sysc/kernel/sc_simcontext.h"
+	"sysc/datatypes/bit/sc_logic.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_logic.h
+	<cstdio>
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_macros.h"
+	"sysc/utils/sc_mempool.h"
+	"sysc/datatypes/bit/sc_bit.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_macros.h
+	"sysc/kernel/sc_cmnhdr.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_mempool.h
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_bit.h
+	"sysc/datatypes/int/sc_nbdefs.h"
+	<iostream>
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_process_handle.h
+	"sysc/kernel/sc_module.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_list.h
+	<sysc/kernel/sc_cmnhdr.h>
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_ver.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_macros.h"
+	"sysc/communication/sc_writer_policy.h"
+	<string>
+
+1539418748 /opt/systemc/include/sysc/communication/sc_writer_policy.h
+	"sysc/kernel/sc_process_handle.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_buffer.h
+	"sysc/communication/sc_signal.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal.h
+	"sysc/communication/sc_port.h"
+	"sysc/communication/sc_prim_channel.h"
+	"sysc/communication/sc_signal_ifs.h"
+	"sysc/communication/sc_writer_policy.h"
+	"sysc/kernel/sc_event.h"
+	"sysc/kernel/sc_process.h"
+	"sysc/kernel/sc_simcontext.h"
+	"sysc/datatypes/bit/sc_logic.h"
+	"sysc/tracing/sc_trace.h"
+	<typeinfo>
+
+1539418748 /opt/systemc/include/sysc/communication/sc_port.h
+	"sysc/communication/sc_communication_ids.h"
+	"sysc/communication/sc_interface.h"
+	"sysc/kernel/sc_event.h"
+	"sysc/kernel/sc_object.h"
+	"sysc/kernel/sc_process.h"
+	"sysc/utils/sc_typeindex.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_event.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_kernel_ids.h"
+	"sysc/kernel/sc_simcontext.h"
+	"sysc/communication/sc_writer_policy.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_prim_channel.h
+	"sysc/kernel/sc_object.h"
+	"sysc/kernel/sc_wait.h"
+	"sysc/kernel/sc_wait_cthread.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal_ifs.h
+	"sysc/communication/sc_interface.h"
+	"sysc/communication/sc_writer_policy.h"
+
+1539418748 /opt/systemc/include/sysc/tracing/sc_trace.h
+	<cstdio>
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/kernel/sc_time.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_clock.h
+	"sysc/kernel/sc_module.h"
+	"sysc/communication/sc_signal.h"
+	"sysc/tracing/sc_trace.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_clock_ports.h
+	"sysc/communication/sc_signal_ports.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal_ports.h
+	"sysc/communication/sc_event_finder.h"
+	"sysc/communication/sc_port.h"
+	"sysc/communication/sc_signal_ifs.h"
+	"sysc/datatypes/bit/sc_logic.h"
+	"sysc/tracing/sc_trace.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_event_finder.h
+	"sysc/communication/sc_port.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_event_queue.h
+	"sysc/communication/sc_interface.h"
+	"sysc/kernel/sc_module.h"
+	"sysc/kernel/sc_event.h"
+	"sysc/communication/sc_port.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_fifo.h
+	"sysc/communication/sc_communication_ids.h"
+	"sysc/communication/sc_prim_channel.h"
+	"sysc/communication/sc_fifo_ifs.h"
+	"sysc/kernel/sc_event.h"
+	"sysc/kernel/sc_simcontext.h"
+	"sysc/tracing/sc_trace.h"
+	<typeinfo>
+
+1539418748 /opt/systemc/include/sysc/communication/sc_fifo_ifs.h
+	"sysc/communication/sc_interface.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_fifo_ports.h
+	"sysc/communication/sc_port.h"
+	"sysc/communication/sc_fifo_ifs.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_mutex.h
+	"sysc/kernel/sc_event.h"
+	"sysc/kernel/sc_object.h"
+	"sysc/kernel/sc_wait.h"
+	"sysc/communication/sc_mutex_if.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_mutex_if.h
+	"sysc/communication/sc_interface.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_semaphore.h
+	"sysc/kernel/sc_event.h"
+	"sysc/kernel/sc_object.h"
+	"sysc/communication/sc_semaphore_if.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_semaphore_if.h
+	"sysc/communication/sc_interface.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal_resolved.h
+	"sysc/communication/sc_signal.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal_resolved_ports.h
+	"sysc/communication/sc_signal_ports.h"
+	"sysc/datatypes/bit/sc_logic.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal_rv.h
+	"sysc/communication/sc_signal.h"
+	"sysc/datatypes/bit/sc_lv.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_lv.h
+	"sysc/datatypes/bit/sc_lv_base.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_lv_base.h
+	"sysc/datatypes/bit/sc_bit_ids.h"
+	"sysc/datatypes/bit/sc_bv_base.h"
+	"sysc/datatypes/bit/sc_logic.h"
+	"sysc/datatypes/int/sc_length_param.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_bv_base.h
+	"sysc/datatypes/bit/sc_bit_ids.h"
+	"sysc/datatypes/bit/sc_bit_proxies.h"
+	"sysc/datatypes/bit/sc_proxy.h"
+	"sysc/datatypes/int/sc_length_param.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_bit_proxies.h
+	"sysc/datatypes/bit/sc_bit_ids.h"
+	"sysc/datatypes/bit/sc_proxy.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_proxy.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/datatypes/int/sc_signed.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+	"sysc/datatypes/int/sc_int_base.h"
+	"sysc/datatypes/int/sc_uint_base.h"
+	"sysc/datatypes/bit/sc_bit.h"
+	"sysc/datatypes/bit/sc_bit_ids.h"
+	"sysc/datatypes/bit/sc_logic.h"
+	"sysc/kernel/sc_macros.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_signed.h
+	"sysc/kernel/sc_object.h"
+	"sysc/datatypes/misc/sc_value_base.h"
+	"sysc/utils/sc_temporary.h"
+	"sysc/datatypes/int/sc_length_param.h"
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/datatypes/int/sc_nbutils.h"
+	"sysc/datatypes/int/sc_nbexterns.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/misc/sc_value_base.h
+	"sysc/datatypes/int/sc_nbdefs.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_temporary.h
+	"sysc/kernel/sc_cmnhdr.h"
+	<cstddef>
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_length_param.h
+	"sysc/datatypes/fx/sc_context.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_context.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/datatypes/fx/sc_fx_ids.h"
+	"sysc/kernel/sc_simcontext.h"
+	"sysc/utils/sc_hash.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_nbexterns.h
+	"sysc/datatypes/int/sc_nbutils.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_unsigned.h
+	"sysc/kernel/sc_object.h"
+	"sysc/datatypes/misc/sc_value_base.h"
+	"sysc/utils/sc_temporary.h"
+	"sysc/datatypes/int/sc_length_param.h"
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/datatypes/int/sc_nbutils.h"
+	"sysc/datatypes/int/sc_nbexterns.h"
+	"sysc/utils/sc_temporary.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_int_base.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_object.h"
+	"sysc/datatypes/misc/sc_value_base.h"
+	"sysc/datatypes/int/sc_int_ids.h"
+	"sysc/datatypes/int/sc_length_param.h"
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/datatypes/int/sc_uint_base.h"
+	"sysc/utils/sc_temporary.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_uint_base.h
+	"sysc/kernel/sc_object.h"
+	"sysc/datatypes/misc/sc_value_base.h"
+	"sysc/datatypes/int/sc_int_ids.h"
+	"sysc/datatypes/int/sc_length_param.h"
+	"sysc/datatypes/int/sc_nbdefs.h"
+	"sysc/datatypes/fx/scfx_ieee.h"
+	"sysc/utils/sc_temporary.h"
+
+1539418748 /opt/systemc/include/sysc/communication/sc_signal_rv_ports.h
+	<cstdio>
+	"sysc/communication/sc_communication_ids.h"
+	"sysc/communication/sc_signal_ports.h"
+	"sysc/communication/sc_signal_rv.h"
+	"sysc/datatypes/bit/sc_lv.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/bit/sc_bv.h
+	"sysc/datatypes/bit/sc_bv_base.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_bigint.h
+	"sysc/datatypes/int/sc_signed.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_biguint.h
+	"sysc/datatypes/int/sc_signed.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_int.h
+	"sysc/datatypes/int/sc_int_base.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/int/sc_uint.h
+	"sysc/datatypes/int/sc_uint_base.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/misc/sc_concatref.h
+	"sysc/kernel/sc_object.h"
+	"sysc/datatypes/misc/sc_value_base.h"
+	"sysc/utils/sc_temporary.h"
+	"sysc/datatypes/bit/sc_bv.h"
+	"sysc/datatypes/bit/sc_lv.h"
+	"sysc/datatypes/int/sc_int_base.h"
+	"sysc/datatypes/int/sc_uint_base.h"
+	"sysc/datatypes/int/sc_signed.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/fx.h
+	"sysc/datatypes/fx/sc_fixed.h"
+	"sysc/datatypes/fx/sc_fxcast_switch.h"
+	"sysc/datatypes/fx/sc_fxtype_params.h"
+	"sysc/datatypes/fx/sc_ufixed.h"
+	"sysc/datatypes/fx/scfx_other_defs.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fixed.h
+	"sysc/datatypes/fx/sc_fix.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fix.h
+	"sysc/datatypes/fx/sc_fxnum.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxnum.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/datatypes/bit/sc_lv_base.h"
+	"sysc/datatypes/fx/sc_fxval.h"
+	"sysc/datatypes/fx/scfx_params.h"
+	"sysc/datatypes/fx/sc_fxnum_observer.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxval.h
+	"sysc/datatypes/fx/scfx_rep.h"
+	"sysc/datatypes/int/sc_int_base.h"
+	"sysc/datatypes/int/sc_uint_base.h"
+	"sysc/datatypes/int/sc_signed.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+	"sysc/datatypes/fx/sc_fxval_observer.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_rep.h
+	<climits>
+	"sysc/datatypes/fx/scfx_mant.h"
+	"sysc/datatypes/fx/scfx_params.h"
+	"sysc/datatypes/fx/scfx_string.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_mant.h
+	"sysc/datatypes/fx/scfx_ieee.h"
+	"sysc/datatypes/fx/scfx_utils.h"
+	"sysc/kernel/sc_macros.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_utils.h
+	"sysc/datatypes/fx/sc_fxdefs.h"
+	"sysc/datatypes/fx/scfx_params.h"
+	"sysc/datatypes/fx/scfx_string.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_params.h
+	"sysc/datatypes/fx/sc_fx_ids.h"
+	"sysc/datatypes/fx/sc_fxcast_switch.h"
+	"sysc/datatypes/fx/sc_fxtype_params.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxcast_switch.h
+	"sysc/datatypes/fx/sc_context.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxtype_params.h
+	"sysc/datatypes/fx/sc_context.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_string.h
+	<cstdio>
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxval_observer.h
+	"sysc/datatypes/fx/sc_fxdefs.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_fxnum_observer.h
+	"sysc/datatypes/fx/sc_fxdefs.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_ufixed.h
+	"sysc/datatypes/fx/sc_ufix.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/sc_ufix.h
+	"sysc/datatypes/fx/sc_fxnum.h"
+
+1539418748 /opt/systemc/include/sysc/datatypes/fx/scfx_other_defs.h
+	"sysc/datatypes/fx/sc_fx_ids.h"
+	"sysc/datatypes/int/sc_signed.h"
+	"sysc/datatypes/int/sc_unsigned.h"
+	"sysc/datatypes/int/sc_int_base.h"
+	"sysc/datatypes/int/sc_uint_base.h"
+	"sysc/tracing/sc_trace.h"
+
+1539418748 /opt/systemc/include/sysc/utils/sc_utils_ids.h
+
+1539418748 /opt/systemc/include/sysc/utils/sc_pvector.h
+	<vector>
+
+1539418748 /opt/systemc/include/sysc/utils/sc_string_view.h
+	<sysc/kernel/sc_cmnhdr.h>
+	<string_view>
+	<experimental/string_view>
+	<sysc/packages/boost/utility/string_view.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/utility/string_view.hpp
+	<sysc/packages/boost/config.hpp>
+	<sysc/packages/boost/utility/string_view_fwd.hpp>
+	<cstddef>
+	<stdexcept>
+	<algorithm>
+	<iterator>
+	<string>
+	<cstring>
+	<iosfwd>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/config.hpp
+	<sysc/packages/boost/config/select_compiler_config.hpp>
+	<sysc/packages/boost/config/select_stdlib_config.hpp>
+	<sysc/packages/boost/config/select_platform_config.hpp>
+	<sysc/packages/boost/config/suffix.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/config/select_compiler_config.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/config/select_stdlib_config.hpp
+	<utility>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/config/select_platform_config.hpp
+	<sysc/packages/boost/config/posix_features.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/config/posix_features.hpp
+	<unistd.h>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/config/suffix.hpp
+	<limits.h>
+	<cstddef>
+	"sysc/packages/boost/type.hpp"
+	"sysc/packages/boost/non_type.hpp"
+
+1539418748 /opt/systemc/include/sysc/packages/boost/type.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/non_type.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/utility/string_view_fwd.hpp
+	<sysc/packages/boost/config.hpp>
+	<string>
+
+1539418748 /opt/systemc/include/sysc/utils/sc_vector.h
+	<vector>
+	<iterator>
+	<string>
+	<algorithm>
+	"sysc/kernel/sc_object.h"
+	<type_traits>
+	"sysc/packages/boost/config.hpp"
+	"sysc/packages/boost/utility/enable_if.hpp"
+
+1539418748 /opt/systemc/include/sysc/packages/boost/utility/enable_if.hpp
+	"sysc/packages/boost/config.hpp"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_dynamic_processes.h
+	"sysc/kernel/sc_cmnhdr.h"
+	"sysc/kernel/sc_except.h"
+	"sysc/kernel/sc_spawn.h"
+	"sysc/kernel/sc_join.h"
+	<functional>
+	"sysc/packages/boost/bind.hpp"
+	"sysc/packages/boost/ref.hpp"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_spawn.h
+	"sysc/kernel/sc_process_handle.h"
+	"sysc/kernel/sc_spawn_options.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_spawn_options.h
+	<vector>
+	"sysc/communication/sc_export.h"
+	"sysc/communication/sc_signal_ports.h"
+
+1539418748 /opt/systemc/include/sysc/kernel/sc_join.h
+	"sysc/kernel/sc_process.h"
+	"sysc/kernel/sc_wait.h"
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind.hpp
+	<sysc/packages/boost/config.hpp>
+	<sysc/packages/boost/ref.hpp>
+	<sysc/packages/boost/mem_fn.hpp>
+	<sysc/packages/boost/type.hpp>
+	<sysc/packages/boost/bind/arg.hpp>
+	<sysc/packages/boost/detail/workaround.hpp>
+	<sysc/packages/boost/bind/bind_template.hpp>
+	<sysc/packages/boost/bind/bind_template.hpp>
+	<sysc/packages/boost/bind/bind_template.hpp>
+	<sysc/packages/boost/bind/bind_cc.hpp>
+	<sysc/packages/boost/bind/bind_cc.hpp>
+	<sysc/packages/boost/bind/bind_cc.hpp>
+	<sysc/packages/boost/bind/bind_cc.hpp>
+	<sysc/packages/boost/bind/bind_mf_cc.hpp>
+	<sysc/packages/boost/bind/bind_mf_cc.hpp>
+	<sysc/packages/boost/bind/bind_mf_cc.hpp>
+	<sysc/packages/boost/bind/bind_mf_cc.hpp>
+	<sysc/packages/boost/bind/placeholders.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/ref.hpp
+	<sysc/packages/boost/config.hpp>
+	<sysc/packages/boost/utility/addressof.hpp>
+	<sysc/packages/boost/mpl/bool.hpp>
+	<sysc/packages/boost/type.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/utility/addressof.hpp
+	<sysc/packages/boost/config.hpp>
+	<sysc/packages/boost/detail/workaround.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/detail/workaround.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/bool.hpp
+	<sysc/packages/boost/mpl/bool_fwd.hpp>
+	<sysc/packages/boost/mpl/integral_c_tag.hpp>
+	<sysc/packages/boost/mpl/aux_/config/static_constant.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/bool_fwd.hpp
+	<sysc/packages/boost/mpl/aux_/adl_barrier.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/adl_barrier.hpp
+	<sysc/packages/boost/mpl/aux_/config/adl.hpp>
+	<sysc/packages/boost/mpl/aux_/config/gcc.hpp>
+	<sysc/packages/boost/mpl/aux_/config/workaround.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/config/adl.hpp
+	<sysc/packages/boost/mpl/aux_/config/msvc.hpp>
+	<sysc/packages/boost/mpl/aux_/config/intel.hpp>
+	<sysc/packages/boost/mpl/aux_/config/gcc.hpp>
+	<sysc/packages/boost/mpl/aux_/config/workaround.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/config/msvc.hpp
+	<sysc/packages/boost/config.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/config/intel.hpp
+	<sysc/packages/boost/config.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/config/gcc.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/config/workaround.hpp
+	<sysc/packages/boost/detail/workaround.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/integral_c_tag.hpp
+	<sysc/packages/boost/mpl/aux_/adl_barrier.hpp>
+	<sysc/packages/boost/mpl/aux_/config/static_constant.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mpl/aux_/config/static_constant.hpp
+	<sysc/packages/boost/config.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/mem_fn.hpp
+	<sysc/packages/boost/config.hpp>
+	<sysc/packages/boost/get_pointer.hpp>
+	<sysc/packages/boost/detail/workaround.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_vw.hpp>
+	<sysc/packages/boost/bind/mem_fn_vw.hpp>
+	<sysc/packages/boost/bind/mem_fn_vw.hpp>
+	<sysc/packages/boost/bind/mem_fn_vw.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_template.hpp>
+	<sysc/packages/boost/bind/mem_fn_cc.hpp>
+	<sysc/packages/boost/bind/mem_fn_cc.hpp>
+	<sysc/packages/boost/bind/mem_fn_cc.hpp>
+	<sysc/packages/boost/bind/mem_fn_cc.hpp>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/get_pointer.hpp
+	<memory>
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/mem_fn_template.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/mem_fn_vw.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/mem_fn_cc.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/arg.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/bind_template.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/bind_cc.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/bind_mf_cc.hpp
+
+1539418748 /opt/systemc/include/sysc/packages/boost/bind/placeholders.hpp
+	<sysc/packages/boost/bind/arg.hpp>
+	<sysc/packages/boost/config.hpp>
+
+1539418748 /opt/systemc/include/sysc/utils/sc_string.h
+	"sysc/utils/sc_report.h"
+	<iostream>
+
+1625878677 source:/mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/02_full_adder/full_adder.cpp
+	"full_adder.h"
+
+1625879379 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/02_full_adder/full_adder.h
+	"half_adder.h"
+
+1625879628 source:/mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/driver.cpp
+	"driver.h"
+
+1625879562 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/driver.h
+	<systemc.h>
+
+1625875773 source:/mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/monitor.cpp
+	"monitor.h"
+
+1625875430 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/SYSTEMC/01_SystemCPrimer/monitor.h
+	<systemc.h>
+

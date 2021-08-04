@@ -1,0 +1,152 @@
+ARCHITETTURA DI BASSO LIVELLO:
+
+1]
+	- Extender in memoria lineare compatibile GRUB
+	- Libreria per programmazione in modo protetto
+	- Parte della LIBC standard indipendente dal SO
+( Gia' la parte 1] puo' bastare per eseguire 
+semplici applicazioni monoprogrammate )
+
+2]
+	- Supporto al Kernel
+  Deve permettere di:	a) Implementare protezione temporale
+  			b) Implementare protezione spaziale
+			c) Effettuare operazioni di basso livello (boot, 
+				context switch, irq handling, ...)
+
+		EXTENDER
+L'unica visibilita' che il programmatore di sistema ne ha e' che l'extender
+passa in qualche modo tutte le info sul sistema e sui moduli caricati.
+l'idea e' avere qualcosa tipo
+	mbi_get()
+che ritorna l'indirizzo di una struttura multiboot-compliant contenente tutto
+quello che ci serve...
+Essendo multiboot-compliant, l'extender fa partire il tutto con memoria
+lineare (un unico segmento che vede tutta la mem) non paginata.
+
+		LIBRERIA PER MODO PROTETTO
+Definisce i tipi di base (controllare compatibilita' con Linux e FreeBSD,
+anche a livello di file di inclusione...) e le funzioni per:
+			a) Gestire segmenti e gates (GDT_place/read, IDT_*)
+			b) Gestire registri selettore e vari 
+				(get/set_regs)
+			c) Gestire la memoria (qualcosa tipo 
+				appl2linear/linear2appl --> mero cast
+				addr2linear --> converte da (segmento,offset)
+					a void *lineare)
+			d) I/O sulle porte (da Linux?)
+
+		PARTE DI LIBC INDIPENDENTE DAL KERN
+long int rand(void);
+double modf (double x, double *iptr);
+double fmod (double __x, double __y)
+/* String conversion functions */
+char _toupper(char c);
+char _tolower(char c);
+int _tonumber(char c);
+char _todigit(int c);
+int _isnumber(char c,int base);
+int _isspace(char c);
+int _isspecial(double d,char *bufp);
+	/* String management functions */
+long strtoi(char *s,int base,char **scan_end);
+unsigned long strtou(char *s,int base,char **scan_end);
+double strtod(char *s,char **scan_end);
+unsigned ucvt(unsigned long v,char buffer[],int base,int prec,int flag);
+unsigned dcvt(long v,char *buffer,int base,int prec,int flag);
+unsigned fcvt(double v,char *buffer,int width,int prec,int flag);
+int vsprintf(char *buf,char *fmt,va_list parms);
+int sprintf(char *buf,char *fmt,...);
+int vsscanf(char *buf,char *fmt,va_list parms);
+int sscanf(char *buf,char *fmt,...);
+atof(s);
+atoi(s);
+atou(s);
+abs(x);
+__max(a,b)
+max(a,b)
+__min(a,b)
+min(a,b)
+str*
+mem*
+Le printf, scanf & C sarebbero dipendenti dall'SO... per questo diamo le
+void cputc(char c);
+void cputs(char *s);
+int  cprintf(char *fmt,...);
+
+Manca qualcosa? Man mano che funzioni della libreria standard saranno
+necessarie, verra' deciso se metterle qui o nel resto della LIBC che sta sopra
+al Kernel...
+
+	SUPPORTO AL KERNEL
+init(timermode, tick)
+	inizializza il basso livello. Timermode puo' essere ONE_SHOT o PERIODIC
+	
+event_post(time, handler, parameters)
+	fissa un evento al tempo <time>. Quando l'evento scatta, chiama 
+	<handler> con parametro <parameters>, di tipo void*
+	
+irq_bind(irq, handler)
+	lega <handler> all'interrupt <irq>. L'arrivo di un int e' visto come
+	lo scatto di un evento, con parametro *p = &intn.
+
+context_create(task, stack, arg, killer, ctrl)
+	crea il contesto per il thread con corpo <task>, stack <stack>,
+	argomento <arg> (di tipo void *), funzione di uscita <killer>. 
+	<ctrl> e' il campo di controllo del descrittore di thread.
+
+context_delete(c)
+	libera il contesto <c> (fine del thread).
+
+get_time()
+	ritorna il tempo di sistema (previsti vari livelli di precisione:
+		Pentium,
+		one shot,
+		tick + lettura timer
+		tick)
+
+context_save()
+	salva il contesto del task
+
+context_load(c)
+	riattiva il contesto <c>
+
+le primitive devono fare una roba del tipo:
+	primitiva {
+	context_save()
+
+		< BOIATE VARIE >
+
+	context_load(newcontext)
+	}
+
+Domanda: ma non e' meglio fare una 
+				context_switchto() (che salva e ricarica...)
+			????
+
+Memoria: e' tutto da capire...
+Il kernel vede tutta la memoria con corrispondenza 1->1; ogni applicazione ha
+un suo Address Space (AS) che e' un segmento che parte da indirizzo logico 0
+Cosi' le applicazioni possono coesistere senza essere rilocate...
+Notare che per un'unica applicazione il tutto rimarrebbe come al solito...
+as_create()
+	Trova un segmento libero e lo inizializza in modo che non corrisponda
+	ad alcuna memoria fisica.
+
+as_bind(as, ph_addr, l_addr, size)
+	Associa la zona di memoria fisica da <ph_addr> a <ph_addr> + <size>
+	alla zona di mem logica del segmento (address space) <as> che inizia da
+	<l_addr>
+
+con 'ste robe dovrebbe essere possibile creare dei task...
+	1) creo un AS
+	2) mi prendo la mem fisica che serve e ci piazzo dentro codice e 
+		dati del task
+	3) faccio la bind...
+Funziona il tutto?
+
+Dovrei aver ricordato tutto...
+La memoria fisica e' gestita a carico del kernel (o di chi per lui ---> leggi
+gestore della memoria). La memoria libera e' ritornata dalla init in una 
+apposita struttura assieme magari ad altre robe...
+

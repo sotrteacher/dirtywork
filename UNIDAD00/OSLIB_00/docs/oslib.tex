@@ -1,0 +1,668 @@
+\documentclass[a4paper]{report}
+\usepackage{epsfig}
+\usepackage{latexsym}
+\usepackage[english]{babel}
+\selectlanguage{english}
+\textheight=8.4 truein
+\textwidth=6.1 truein
+\oddsidemargin=0.2 truein
+
+\newenvironment{proof}
+	{\vspace{12pt} \noindent {\bf Proof.} \\
+	\noindent}{$\Box$ \vspace{12pt}}
+
+\title{LowLevel code for OS development}
+
+\author{Luca Abeni\\
+	Scuola Superiore S. Anna, Pisa \\
+	luca@hartik.sssup.it
+\and
+	Gerardo Lamastra\\
+	...}
+\date{}
+
+\begin{document}
+\setlength{\baselineskip}{1.5\baselineskip}
+\maketitle
+\begin{abstract}
+This is the manual of the OSLib library, an environment to develop OS
+kernels....
+\end{abstract}
+
+\chapter{Introduction}
+The OSLib is a collection of routines and data structures developed to
+help system programmers in implementing an OS or an application that
+directly accesses the hardware. In this sense it is
+similar to the Windows NT Hardware Abstraction Layer (HAL), the
+$\mu$choices NanoKernel, or the HARTIK Virtual Machine (VM) Layer. On
+the other hand, the aim of the OSLib is not to abstract the
+hardware resources (like the cited works do).  In fact, hardware
+resources abstraction can result in poor efficiency and flexibility,
+as stated by Engler et others (ExoKernel). The OSLib code, instead of
+abstracting hardware, provides a secure and easy access to it hiding
+implementation details (for example, the PIC programming, or ...)
+and leaving to the OS developers the hi-level and conceptual part of
+the work.
+%%%%% RIVEDERE!!!! CHIARIRE UN PO'
+%%% Add reference to Flux and ExoKernels...
+% These are the ideas: Flux is too complex (COM... What an orror!!!),
+% ExoKernel exterminates too much abstractions :) ... And bound to a specific
+% system structure (vertical structured system)!!!
+
+\section{Library Structure}
+OSLib is composed of some libraries, that can be compiled using
+the standard GNU tools (gcc, GNU binutils and GNU make) either under
+MSDOS or Linux (DJGPP for DOS and
+gcc for Linux have been successfully tested; gcc for other Unix
+systems or Cygnus gcc for Windows have not been tested yet, but
+will probably work too). The resulting GNUCoff or ELF MultiBoot compliant
+images can be loaded using a custom provided DOS eXtender (X) or,
+if they are ELF (produced by gcc for Linux), using the GNU Grand
+Unified Boot Loader (GRUB).
+
+The code is organized in three parts: \begin{itemize}
+\item the hardware support library ({\tt xlib}), used to access the PC
+	hardware;
+\item a subset of the OS independent part of the standard C library
+	({\tt libc1});
+\item the Kernel support library ({\tt kl}), that is the component to
+	use for writing OS code.
+\end{itemize}
+
+The hardware support library contains the boot code for starting up
+the system when a Multiboot compliant loader is used, the code to
+access hardware structures such as the GDT, IDT, the interrupt
+controller, the code to detect the CPU, and some data structures
+containing informations about the system.
+%%%% ALLUNGARE LA DESCRIZIONE, SPIEGARE BENE... FARE RIFERIMENTO AI FILE .h
+
+The OS independent part of the C library provides all the functions
+from libc that can be implemented without invoking system calls
+(typically the string management functions, the memory
+copy/move/compare, the math functions and similar). An important
+exception to this rule is represented by the {\tt cprintf} function:
+it is similar to the standard {\tt printf} function (with the
+difference that {\tt cprintf} directly writes to the screen), and,
+since it needs to access the video memory, it depends by the OS (in
+particular, {\tt cprintf} depends on how the OS remaps the video
+memory). In any case, since the OS code needs to output some
+informations for debugging or other purposes, this function is
+provided by {\tt libc1}. {\tt libc1} does not provide any input
+function.
+
+The Kernel support library provides: \begin{itemize}
+\item the code for interrupt/exception handling;
+\item the code for thread management (thread creation/deletion,
+	context switch...);
+\item the code for address space management
+\item the code for time management
+\end{itemize}
+
+\section{Compiling and Using}
+The OSLib code is distributed as source code in a ZIP or tarball
+archive. The tarball contains the source to be compiled in a Unix
+system (only  {\tt chr(10)} at the end of each line), while the ZIP
+archive can be decompressed in MSDOS ({\tt chr(13)+chr(10)}) or Unix
+source using the -a option of UNZIP.
+
+In order to decompress the source tree, use {\tt tar -xvzf llxxx.tgz}
+or {\tt unzip -La llxxx.zip}; this command will create the following
+tree:
+
+\begin{minipage}[t]{10cm}
+\begin{tt}
+\begin{tabbing}
+oslib--\=------ll--\=------i386		\\
+\>	| \>		|			\\
+\>	| \>		|			\\
+\>	|---lib	\>	|----sys----ll		\\
+\>	|					\\
+\>	|---xlib \>				\\
+\>	| \>					\\
+\>	|---libc \>				\\
+\>	| \>					\\
+\>	|---libm \>				\\
+\>	|					\\
+\>	|---kl					\\
+\>	|					\\
+\>	|---test				\\
+\>	|					\\
+\>	|---examples				\\
+\>	|					\\
+\>	|---mk					\\
+\end{tabbing}
+\end{tt}
+\end{minipage}
+
+The {\tt ll} directory contains the header files with the
+definitions of the OSLib structures and the prototypes for the OSLib calls.
+It is organized in two subdirectories: the {\tt i386} directory,
+containing the include files for the hardware support library, and
+the {\tt sys/ll} directory, containing the headers for the OS support
+library.
+
+The {\tt lib} directory is the place where all the libraries
+containing the LL code will be put once compiled. Depending on the
+distribution, the {\tt lib} directory is in the archive or will be
+created at building time by the {\tt make} command.
+
+The {\tt xlib} directory contains the sources for the hardware
+support  library; the {\tt libm} directory is used to compile a
+modified version of the FreeBSD math library provided by OSLib; the 
+{\tt libc} directory contains the sources for the minimal C library, 
+while the {\tt kl} directory is the place where the Kernel support library
+source code resides.
+
+The {\tt test} directory contains some programs used to test the
+libraries, while the {\tt examples} directory contains some examples
+showing how to use all the functionalities provided by the LL code.
+
+The {\tt mk} library contains some configuration files, used to
+compile the libraries in different host OSs: currently, the files
+to compile under MDSOS (using DJGPP V1 \& V2) and the file to compile
+under Linux are provided. Moreover, a file to compile the H4 kernel is
+provided.
+
+In order to compile the system, proceed as follows.
+\begin{itemize}
+	\item Configure the compiling system, installing the 
+		correct configuration file: copy the correct {\tt mk/*.mk}
+		file in {\tt config.mk}
+	\item make all the libraries, from directories {\tt xlib}, 
+		{\tt libc}, {\tt libm}, and {\tt kl}:
+		
+		\begin{minipage}[t]{10cm}
+		\begin{tt}
+		\begin{tabbing}
+		cd xlib					\\
+		make install				\\
+		cd ..					\\
+		cd libc					\\
+		make install				\\
+		cd ..					\\
+		cd libm					\\
+		$\ldots$
+		\end{tabbing}
+		\end{tt}
+		\end{minipage}
+	\item now the LL libraries are installed, and you are ready to
+		use them. In order to test the LL, you can compile
+		the programs in the {\tt examples} directory:
+
+		\begin{minipage}[t]{10cm}
+		\begin{tt}
+		\begin{tabbing}
+		cd examples				\\
+		make
+		\end{tabbing}
+		\end{tt}
+		\end{minipage}
+\end{itemize}
+
+A program compiled using the OSLib code can be run using the DOS
+eXtender, or using GRUB. In order to use the extender, boot MSDOS (or
+a 16 bit DOS compatible OS, such as FreeDOS), then copy {\tt X.EXE}
+in the path, and finally use it: {\tt X <program name>} (for example,
+try {\tt X schedtest.xtn}). In order to run a
+program through GRUB, put it in a partition accessible by GRUB, then
+boot GRUB and enter the command prompt pressing {\tt `c'}. Now,
+specify the compiled program as a kernel: assuming that you want to run
+{\tt schedtest.xtn}, residing in the {\tt /oslib/examples} directory on
+the first partition of your first hard drive, you have to type
+{\tt kernel=(hd0,0)/oslib/examples/schedtest.xtn}. Finally, you can
+run the program typing {\tt boot}. Once the program finishes, the
+system is halted and you must reboot it.
+
+The OSLib code can be used including the adequate headers
+from the {\tt include} directory, and linking the libraries from the
+{\tt lib} directory. The compiler and linker options are set in the
+{\tt config.mk} file: look at the makefile in the {\tt examples} directory
+to see how to use it. The {\tt examples} directory contains
+some simple programs to be browsed in order to learn how to use OSLib.
+
+\chapter{The libraries}
+\section{The header files}
+The {\tt ll} directory contains the header files to be included for
+using OSLib. In particular, the directory structure tries to reflect the
+standard POSIX include directory. Hence, the include files of the minimal
+C library use the POSIX names and are distributed in {\tt ll} and
+{\tt ll/sys}.
+
+The {\tt xlib} headers are in the {\tt ll/i386} directory.
+...Describe them...
+
+The {\tt kl} headers are in the {\tt ll/sys/ll} directory; in particular,
+they are:
+\begin{itemize}
+	\item {\tt ll/sys/ll/ll-func.h}: this header has to be included for
+		using the {\tt ll\_context\_create()},
+		{\tt ll\_context\_setspace()}, and {\tt ll\_context\_delete()},
+		{\tt ll\_init()}, {\tt ll\_end()}, and {\tt ll\_abort()}
+		{\tt ll\_context\_save()}, {\tt ll\_context\_change()},
+		{\tt ll\_context\_load()}, {\tt ll\_context\_from()}, and
+		{\tt ll\_context\_to} functions
+	\item {\tt ll/sys/ll/event.h}: this header has to be included for
+		using the event related functions, that are 
+		{\tt event\_init()}, {\tt event\_post()},
+		{\tt event\_delete()}, {\tt irq\_bind()}, and
+		{\tt ll\_ActiveInt()}
+	\item {\tt ll/sys/ll/time.h}: this header has to be included for
+		using the {\tt gettime()} function. Moreover, it provides
+		some macros for manipulating timespecs.
+	\item {\tt ll/sys/ll/event.h}: this header has to be included for
+		using Address Spaces. In particular, it provides prototypes
+		and data definitions for the {\tt as\_init()},
+		{\tt as\_create()}, and {\tt as\_bind()} functions.
+\end{itemize}
+
+\section{The Hardware Support Library}
+To be written...
+
+Some other functions directly remap the corresponding ASM
+instructions (these functions are implemented by the {\tt xlib}):
+\begin{itemize}
+\item {\tt cli()}
+\item {\tt sti()}
+\item {\tt halt()}
+\end{itemize}
+
+\section{The Kernel Support Library}
+The Kernel support library allows an OS developer to write interrupt
+handlers, binding them to hardware interrupts, to create threads and
+perform context switches, to crate address spaces and assign them to
+threads, and to manage the time.
+
+Time management consists in reading time, and assigning execution
+time to threads through an event-based model. Hence, time management
+is performed using {\em events}: an event permits to execute some code
+(the event handler) at a specified time (the event rising time).
+When an event raises the event handler is called (with interrupt disabled).
+
+Interrupts are managed in a similar way, allowing the programmer to
+specify the event handler for a special event that will raise when the
+hardware interrupt arrives.
+
+Using the event mechanism it is easy to implement {\em temporal protection}
+(enforcing that a thread will never require too much execution time), while
+spatial protection is provided by OSLib through {\em Address Spaces}. An
+address space is a very basic abstraction encapsulating user data and code.
+Address Spaces are implemented using x86 segments: each Address Space is a
+different segment. If the user code uses only the default data and code
+selectors, the code running in an address space can not access other address
+spaces. As a default, OSLib provides a ``flat'' address space, mapping
+$1 \rightarrow 1$ all the physical memory.
+
+Here is a list of the functions provided by {\tt kl}:
+
+\noindent {\tt void *ll\_init(void)}
+
+This library function is used to initialize the Kernel Library: it
+detects the CPU, initializes the FPU, and sets the interrupt and
+exception handlers to default values.
+
+As output, {\tt ll\_init} returns informations about the environment
+through a modified version of the MultiBoot Information (MBI)
+structure (the returned value is a pointer to such a structure). The
+MultiBoot Info structure is defined as follows:
+
+\begin{minipage}[t]{15cm}
+\begin{tt}
+\begin{tabbing}
+struct multiboot\_info \= \{                                            \\
+/* MultiBoot info version number */                                     \\
+\>      unsigned long flags;                                            \\
+									\\
+/* Available memory from BIOS */                                        \\
+\>      unsigned long mem\_lower;                                       \\
+\>      unsigned long mem\_upper;                                       \\
+/* "root" partition */                                                  \\
+\>      unsigned long boot\_device;                                     \\
+									\\
+/* Kernel command line */                                               \\
+\>      unsigned long cmdline;                                          \\
+									\\
+/* Boot-Module list */                                                  \\
+\>      unsigned long mods\_count;                                      \\
+\>      unsigned long mods\_addr;                                       \\
+									\\
+\>      union \= \{                                                     \\
+\>      \>      struct \= \{                                            \\
+/* (a.out) Kernel symbol table info */                                  \\
+\>      \>      \>      unsigned long tabsize;                          \\
+\>      \>      \>      unsigned long strsize;                          \\
+\>      \>      \>      unsigned long addr;                             \\
+\>      \>      \>      unsigned long pad;                              \\
+\>      \>      \} a;                                                   \\
+\>      \>      struct \{                                               \\
+/* (ELF) Kernel section header table */                                 \\
+\>      \>      \>      unsigned long num;                              \\
+\>      \>      \>      unsigned long size;                             \\
+\>      \>      \>      unsigned long addr;                             \\
+\>      \>      \>      unsigned long shndx;                            \\
+\>      \>      \} e;                                                   \\
+\>      \} syms;                                                        \\
+/* Memory Mapping buffer */                                             \\
+\>      unsigned long mmap\_length;                                     \\
+\>      unsigned long mmap\_addr;                                       \\
+/*                                                                      \\
+Gerardo: I need to add also the physical address base for               \\
+both low ( < 1MB) \& upper ( > 1MB) memory, as X starts from DOS        \\
+which could have preallocated some of this memory...                    \\
+For example, GRUB assumes that mem\_lowbase = 0x0 \&                    \\
+mem\_upbase = 0x100000                                                  \\
+ */                                                                      \\
+\>      unsigned long mem\_lowbase;                                     \\
+\>      unsigned long mem\_upbase;                                      \\
+\};                                                                     \\
+\end{tabbing}
+\end{tt}
+\end{minipage}
+
+Refer to the MultiBoot documentation for more informations about the
+fields behaviour. The only difference with the standard MultiBoot
+Info structure is that a new flag {\tt MB\_INFO\_USEGDT} in the
+{\tt flags} field is provided for informing that the program has been
+loaded through a DOS Extender, and two new fields are added. If the
+{\tt MB\_INFO\_USEGDT} is set, the two new fields {\tt mem\_lowbase}
+and {\tt mem\_upbase} indicates the low memory and high memory
+starting addresses, otherwise the standard values (respectively
+$0x00$ and $0x100000$) have to be assumed.
+
+\noindent{\tt CONTEXT ll\_context\_create(void (*entrypoint)(void *p),
+				BYTE *stack, void *parm, void (*killer)(void),
+				WORD control)}
+
+This library function is used to create a new thread, allocating a
+CPU context for it. A thread is defined as an independent flow of
+execution and is characterized by the register set values, a private
+stack (used to initialize the {\tt SS} and {\tt ESP} registers), and
+an address space in which it executes. The code executed by a thread
+is defined by a function called {\em thread body} that takes as input
+a void pointer (passed at thread creation time).
+
+The {\tt entrypoint} parameter is a pointer to the thread body, the
+{\tt stack} parameter is a pointer to a preallocated chunk of memory
+to be used as a stack for the new thread, while the {\tt parm}
+parameter is a void pointer passed as parameter to the thread body
+when the thread is created. The {\tt killer} parameter is a pointer
+to a function that will be called on thread correct termination (a
+thread terminates correctly when the execution arrives to the end of
+the body function). The {\tt control} parameters defines some control
+flags associated to the thread.
+
+The function allocates a free CPU context and initializes the
+register values using the passed parameters. The {\tt EIP} register
+is initialized to {\tt entrypoint}, and {\tt ESP} is initialized
+to {\tt stack}, whereas {\tt DS}, {\tt GS}, and {\tt FS} are
+initialized to the default data segment and {\tt CS} is initialized to
+the default code segment. As explained introducing Address Spaces, the
+default code and data segments remap one-to-one all the system memory
+(``flat'' Address Space). All the other registers are initialized to
+standard values.
+
+The return value is the  identifier of the initialized CPU context.
+
+\noindent {\tt void ll\_context\_delete(CONTEXT c);}
+
+This library function is used to free a CPU context when a thread is
+terminated. The {\tt c} parameter is the identifier of the context to
+be freed. Note that the stack memory has to be explicitly freed, since
+{\tt ll\_context\_delete()} does not free it.
+
+\noindent {\tt CONTEXT ll\_context\_save(void);}
+
+This library function saves the CPU registers' values in the current
+CPU context and returns its identifier. In other words, the context
+associated to the thread executing when {\tt ll\_context\_save()} is
+called is saved and its identifier is returned. It can be used to
+implement context switches in OS primitives, as shown in the
+following code:
+
+\begin{minipage}[t]{15cm}
+\begin{tt}
+\begin{tabbing}
+SYSCALL(mysyscall(...)) \=\                             \\
+\{                                                      \\
+\>      CONTEXT oldContext, newContext;                 \\
+\>      $\ldots$                                        \\
+							\\
+/* This must be the first primitive instruction */      \\
+\>      oldContext = ll\_context\_save();               \\
+\>      $\ldots$                                        \\
+\>	OS primitive code				\\
+							\\
+/* This must be the last primitive instruction */       \\
+\>      ll\_context\_load(newContext);                  \\
+\};                                                     \\
+\end{tabbing}
+\end{tt}
+\end{minipage}
+
+{\bf Warning:} if the virtual context switch mechanism is used, this
+function cannot be used (use {\tt ll\_context\_from()} instead).
+
+\noindent {\tt void ll\_context\_load(CONTEXT c);}
+
+This library call is used to load a new CPU context in the CPU, for
+performing context switches, as shown in the example above (see
+{\tt ll\_context\_save()}). Note that {\tt ll\_context\_load()} must
+be called {\bf at the end} of a system call (immediately before re-enabling
+interrupts); if a system programmer needs to perform a context switch
+with interrupt disabled (in an event handler or in the middle of a
+system call), the {\em virtual context switch} mechanism have to be used.
+When virtual context switch is used, the context switch function only
+stores the new context ID in a temporary variable and performs the
+real context switch only when interrupts are enabled (see {\tt
+ll\_context\_from()} and {\tt ll\_context\_to())}.
+
+\noindent {\tt CONTEXT ll\_context\_from(void);}
+
+This library function is similar to {\tt ll\_context\_save()}, but
+can be called when the virtual context switch mechanism is used. In
+this case it returns the ID of the last context that have been
+selected to be loaded in the CPU.
+
+\noindent {\tt void ll\_context\_to(CONTEXT c);}
+
+This library selects a thread to be dispatched: if interrupts are
+disabled and the context switch cannot be performed immediately, the
+real context switch will happen as soon as possible (when interrupts
+will be re-enabled). This is the {\tt virtual context switch}
+mechanism.
+
+{\tt ll\_context\_to()} is similar to {\tt ll\_context\_load()}, but
+uses the virtual context switch mechanism; if interrupts are enabled,
+they behave in the same manner.
+
+\noindent {\tt void ll\_end(void);}
+
+This function can be used in the shutdown code: if the application
+was started through the DOS Extender, {\tt ll\_end()} resets the PIT
+(and the rest of the hardware) to the standard DOS settings and
+prepares the system to return to MSDOS, otherwise it simply halts the
+system.
+
+\noindent {\tt void ll\_abort(int code);}
+
+This functions acts as safety place to go when any error occurs and
+the OS does not know which context is active. The function loads a
+safe context (with a safe stack), displays an error identified by
+the {\tt code} parameter, and exits the OS support code
+(see also {\tt ll\_end}).
+
+\noindent {\tt void event\_init(struct ll\_initparms *l)}
+
+This function sets the time management services up, by initializing
+the event queue and programming the Programmable Interval Timer (PIT)
+in a proper way. The PIT can be programmed in two
+different modes: the periodic mode and the one-shot mode. In periodic
+mode, the PIT is programmed to generate a timer interrupt each {\tt tick}
+of $T$ $\mu$seconds, specified by the user through the {\tt l}
+parameter. In one shot mode, the PIT is dynamically programmed to
+generate an interrupt only when it is necessary to raise a
+programmed event. It is worth noting that the PIT mode only
+influences the error with which an event raises, but is invisible to
+the OS (the PIT mode can be changed simply changing the {\tt event\_init()}
+parameter, without any modify to the OS code).
+
+The function takes as input a pointer {\tt l} to a {\tt ll\_initparms}
+structure defined as follows:
+
+\begin{minipage}[t]{15cm}
+\begin{tt}
+\begin{tabbing}
+struct ll\_initparms \= \{      \\
+\>      DWORD mode;             \\
+\>      TIME tick;              \\
+\}; 
+\end{tabbing}
+\end{tt}
+\end{minipage}
+
+The {\tt mode} field indicates the PIT mode ({\tt LL\_PERIODIC} or
+{\tt LL\_ONESHOT}), while the {\tt tick} field indicates the tick size
+(for periodic mode only) in $\mu$seconds.
+
+\noindent {\tt TIME gettime(int mode, struct timespec *val)}
+
+This function can be used to read the current system time. The system
+time can be read using different levels of precision (and different
+levels of overhead): currently only the {\tt TIME\_PTICK} and
+{\tt TIME\_EXACT} modes are implemented. The {\tt TIME\_PTICK} mode
+works only if the system timer is programmed in periodic mode, and
+returns the system time in ticks. It is characterized by a low
+overhead (small execution time). The {\tt TIME\_EXACT} mode reads the
+exact system time and returns it measured in $\mu$seconds.
+
+The {\tt mode} parameter can be {\tt TIME\_PTICK} or {\tt TIME\_EXACT} 
+and specifies the time reading mode; the {\tt val} parameter can 
+point to a {\tt timespec} structure that will be filled
+with the current time ( if {\tt val != NULL}) .
+
+This function returns the read time in $\mu$seconds, or $0$ if the
+reading fails.
+
+\noindent {\tt int event\_post(struct timespec *time,
+			void (*handler)(void *p), void *par)}
+
+This function is used to create a new event, selecting an handler to
+be called at the specified time passing an user provided parameter to
+it. The {\tt handler} parameter specifies the event handler (the
+function to be called when the event will raise), the {\tt time}
+parameter indicates the time at which the event will raise, while
+{\tt par} is a void pointer that will be passed as parameter to
+the event handler.
+
+The function returns the identifier of the created event, or -1 if an
+error occurs (it can be due to the lack of free event
+descriptors,  or to some other internal error). The event identifier
+is used to refer the event for modifying or deleting it (see
+{\tt event\_delete()}).
+
+The OS support code programs the interrupt controller in a periodic
+or one-shot mode (see {\tt event\_init()}) so that an interrupt will be
+generated near to time {\tt time} to call the event handler. The
+event handler is called as a response to the timer interrupt, with
+interrupts disabled, hence it {\bf must} execute for not too much time
+(otherwise, interrupts will be left disabled for a long time). The
+timer mode can affect the error  with which the event handler is
+called, but the code must be independent  from the timer mode.
+% CHIARIRE IL CONCETTO!!!!
+% -- GLI EVENT HANDLER NON DEVONO PRENDERE TEMPO!!!
+% -- IL MODO DI FUNZIONAMENTO DEL TIMER E' ``TRASPARENTE''!!!
+
+\noindent {\tt int event\_delete(int index)}
+
+This library function is used to delete a posted event, identified by
+the {\tt index} parameter. It returns 1 in case of success, -1 in
+case of failure.
+
+\noindent {\tt int irq\_bind(int irq, void (*handler)(void *p), DWORD flags)}
+
+This function can be used to associate an handler to an hardware
+interrupt; each interrupt is converted by the support code in an
+event, so the interrupt handler is identical to an event handler. The
+function checks if the requested interrupt is free, and in this case
+allocates it and assigns the handler to it. If the interrupt is
+already allocated (is not free), that is, a handler has been already
+associated to it, {\tt irq\_bind} returns an error and does nothing.
+
+The {\tt irq} parameter specifies the interrupt number, while {\tt
+handler} is a pointer to the interrupt event handler, and the {\tt
+flags} parameter defines some flags associated to the interrupt. In
+particular, the {\tt FORCE} flag can be used to set a handler for an
+already allocated interrupt, and the {\tt PREEMPTABLE} flag specifies
+that the handler can be called with interrupts enabled (interruptible
+handler).
+
+FLAGS: \begin{itemize}
+		\item the {\tt PREEMPTABLE} flag permits to specify 
+				that the handler can be called with 
+				interrupts enabled (interruptible handler).
+		\item the {\tt FORCE} flag can be used to set a handler for
+				an already allocated interrupt.
+\end{itemize}
+
+Interruptible handlers are useful to enhance system responsiveness,
+reducing the time in which interrupts are disabled and allowing to
+develop a preemptable OS. On the other hand, they must be used with
+caution, since mutual exclusion is not guaranteed in an interruptible
+handler.
+
+The {\tt FORCE} flag can be useful for removing an interrupt handler
+(use this flag with the {\tt handler} parameter set to {\tt NULL}.
+
+\noindent {\tt int ll\_ActiveInt(void)}
+
+This function returns the number of pending interrupts or event handlers.
+
+\noindent {\tt void as\_init(void)}
+
+This function initializes the Address Space management code. It must be
+called before using Address Spaces ({\tt as\_create()} or
+{\tt as\_bind()}).
+
+\noindent {\tt AS as\_create(void)}
+
+This library function can be used to create a new Address Space: it
+searches for a free Address Space descriptor and initializes it to an
+empty Address Space returning its identifier. The return value is the
+created Address Space ID in case of success, or 0 in case of failure.
+
+\noindent {\tt int as\_bind(AS as, DWORD ph\_addr, DWORD l\_addr, DWORD size)}
+
+This library function binds a chunk of physical memory to an Address
+Space. The {\tt as} parameter is the Address Space identifier,
+{\tt ph\_addr} is the physical chunk start address, {\tt l\_addr} is the
+logical address in the {\tt as} address space where the memory chunk
+has to be mapped, and {\tt size} indicate the size of the memory
+chunk expressed in bytes.
+
+{\bf Warning:} currently, this function has been only partially implemented.
+In particular, since paging is not enabled, a single chunk of memory can be
+bound to an Address Space, starting from logical address 0.
+
+\noindent {\tt void ll\_context\_setspace(CONTEXT c, AS as)}
+
+This library functions changes the Address Space in which a thread runs.
+Basically, {ll\_context\_setspace()} sets all the context {\tt c} segment
+registers to the segment of the {\tt as} address space.
+This function can be usefull to create a new task: \begin{enumerate}
+\item Create a new context
+\item Create a new Address Space
+\item Set the context Address Space to the created one...
+\end{enumerate}
+{\em We need an example...} Look at {\tt examples/aspacedemo.c}.
+
+\section{Miscellaneous}
+Two functions {\tt void *ll\_alloc(DWORD size)} and
+{\tt void ll\_free(void *base, DWORD size)} are provided to
+allocate and free physical memory. They are provided only for
+convenience, but they should not be used: the memory allocator
+should be implemented in an upper level, using the informations
+returned by {\tt ll\_init()}.
+
+Two functions {\tt char *ll\_context\_sprintf(char *str, CONTEXT c)} and
+{\tt void dump\_TSS(WORD sel)} are provided for debugging purpouse.
+
+\end{document}

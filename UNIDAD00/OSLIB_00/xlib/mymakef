@@ -1,0 +1,2 @@
+fpu.i:
+	gcc -m32 -Wall -O -finline-functions -fno-builtin -nostdinc -D__LINUX__ -I.. -D__VIRCSW__ -D__NOH4__ -DPROFILE  -E fpu.c -o $@

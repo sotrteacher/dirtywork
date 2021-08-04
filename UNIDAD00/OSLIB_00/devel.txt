@@ -1,0 +1,6 @@
+- Check all the dependencies...
+	- Check who need who
+	- Check which files are linked
+		.
+		.
+		.

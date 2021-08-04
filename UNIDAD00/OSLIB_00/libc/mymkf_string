@@ -1,0 +1,2 @@
+string.i:
+	gcc -m32 -Wall -O -finline-functions -fno-builtin -nostdinc -D__LINUX__ -I..  -E string/string.c -o $@
