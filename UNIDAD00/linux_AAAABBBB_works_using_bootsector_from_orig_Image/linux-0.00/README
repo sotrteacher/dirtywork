@@ -1,0 +1,27 @@
+/*
+ *  Linux 0.00 - a fake version :)
+ */
+ 
+"it switched between two processes that printed AAAA...  and BBBB...  
+respectively by using the timer-interrupt - Gods I was proud over that"
+
+                                                 --Linus Torvalds
+
+---
+I built it under Linux 0.11. Just for fun and for learning something.
+Two tasks multtasking in level 3, but they are coded in 'kernel' code
+same as Linux kernel's task0 & task1.
+
+The source has no or little comments, SORRY! If you want to understand
+what the hell they are meant, please look into the kernel 0.11 source
+code.
+
+
+
+Jiong Zhao (gohigh@sh163.net)
+
+www.oldlinux.org
+
+2004-12-17
+ 
+

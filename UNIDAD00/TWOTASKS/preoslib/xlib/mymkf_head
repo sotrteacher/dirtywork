@@ -1,0 +1,2 @@
+head.i:
+	gcc -m32 -x assembler-with-cpp -D__LINUX__ -D__DEBUG__ -I.. -E head.s -o $@
