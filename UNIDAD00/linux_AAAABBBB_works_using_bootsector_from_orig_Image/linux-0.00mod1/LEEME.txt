@@ -1,0 +1,36 @@
+                               Lunes 6 de septiembre de 2021
+En Windows, adem\'as de tener instalada la app Debian, se 
+debe tener instalado y corriendo el servidor Xming.
+(exportar la variable DISPLAY: $ export DISPLAY=:0)
+
+Se deben tener previamente instalados los paquetes
+bcc, gcc, binutils, genext2fs, qemu-system-i386
+
+Se deben tener los archivos
+boot/boot.s
+boot/head.s
+mov_bx_gs.raw
+nop_nop_nop_nop.raw   <-- Este ya no se necesita (2021.09.06)
+nop_nop.raw           <-- Este ya no se necesita (2021.09.06)
+nop.raw               <-- Este ya no se necesita (2021.09.06)
+zmagic_header.raw     <-- Este ya no se necesita (2021.09.06)
+test1.lds
+filename.rtd
+Makefile
+mount_point/emptyfile  (debe existir el directorio mount_point)
+tools/emptyfile        (debe existir el directorio tools) 
+
+Una forma de construir y ejecutar linux-0.00 es la siguiente:
+
+Construir el bootloader
+make boot/boot
+
+Construir el sistema
+make tools/system
+
+Construir la imagen de disco floppy
+make Image
+
+Ejecutar el sistema
+make run
+
