@@ -18,6 +18,19 @@ booter:mtxFS/bs.s mtxFS/bc.c
 	$(CC) -o bc.o -c -ansi mtxFS/bc.c
 	@echo "linking booter ....."
 	$(LD) -d -o booter bs.o bc.o /usr/lib/bcc/libc.a
+loader:loader_mtx.s
+	@echo "compiling loader_mtx.s ..."
+	as86 -o loader_mtx.o loader_mtx.s
+	@echo "linking loader ....."
+	ld86 -d -o $@ loader_mtx.o 
+rwl: loader mtx  # run with loader
+#	fallocate -xv -l 1440k mFDimage
+#	mkfs.ext2 -v -T floppy -d FDI mFD
+	fallocate -v -l 1440k mFDimage
+	mkfs.ext2 -v -T floppy  mFDimage
+	dd if=loader of=mFDimage bs=512 count=1 conv=notrunc
+	dd if=mtx of=mFDimage seek=1 bs=512 conv=notrunc
+	qemu-system-i386 -fda mFDimage -no-fd-bootchk
 
 clean:
 	rm -v *.o mtx ./mount_point/boot/mtx booter mFDimage

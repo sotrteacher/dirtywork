@@ -35,7 +35,11 @@ loader:loader_mtx.s
 	as86 -o loader_mtx.o loader_mtx.s
 	@echo "linking loader ....."
 	ld86 -d -o $@ loader_mtx.o 
-rwl:
+rwl: loader   # run with loader
+#	fallocate -xv -l 1440k mFDimage
+#	mkfs.ext2 -v -T floppy -d FDI mFD
+	fallocate -v -l 1440k mFDimage
+	mkfs.ext2 -v -T floppy  mFDimage
 	dd if=loader of=mFDimage bs=512 count=1 conv=notrunc
 	dd if=mtx of=mFDimage seek=1 bs=512 conv=notrunc
 	qemu-system-i386 -fda mFDimage -no-fd-bootchk
