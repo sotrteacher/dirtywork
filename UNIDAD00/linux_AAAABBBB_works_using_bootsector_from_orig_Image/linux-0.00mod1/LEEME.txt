@@ -1,4 +1,4 @@
-                               Lunes 6 de septiembre de 2021
+                               Martes 7 de septiembre de 2021
 En Windows, adem\'as de tener instalada la app Debian, se 
 debe tener instalado y corriendo el servidor Xming.
 (exportar la variable DISPLAY: $ export DISPLAY=:0)
@@ -17,7 +17,20 @@ zmagic_header.raw     <-- Este ya no se necesita (2021.09.06)
 test1.lds
 filename.rtd
 Makefile
-mount_point/emptyfile  (debe existir el directorio mount_point)
+mount_point/emptyfile <-- Utilizando fallocate y mkfs.ext en lugar 
+                          de genext2fs, como se muestra en el archivo 
+                          Makefile\footnote{1}, este directorio 
+                          mount_point y el archivo vac\'io emptyfile
+                          ya no se necesitan (Agradecimiento al 
+                          discente Juan Manuel Rodriguez, 2021.09.07). 
+                          M\'as aun, hoy 2021.09.07 por accidente 
+                          descubr\'i que aparentemente ni siquiera 
+                          se necesita crear, previamente al uso de los
+                          comandos dd\footnote{2}, es decir, al parecer 
+                          qemu-system-i386\footnote{3} acepta como 
+                          imagen de floppy disk el archivo creado con 
+                          los comandos dd (al menos cuando este es de
+                          tama\~{n}o inferior a 1.44MB).
 tools/emptyfile        (debe existir el directorio tools) 
 
 Una forma de construir y ejecutar linux-0.00 es la siguiente:
@@ -34,3 +47,21 @@ make Image
 Ejecutar el sistema
 make run
 
+\footnote{1} 
+En lugar del comando (que requiere que exista el directorio mount_point/ 
+con al menos un archivo vacio para que sea incluido en el archivo tar y
+en github al ejecutar git push)
+genext2fs -v -b 1440 -d ./mount_point/  Image
+se utilizar\'an los comandos (que no necesitan que exista el directorio
+mount_point)
+fallocate -v -l 1440k Image
+mkfs.ext2 -v -T floppy  Image
+
+\footnote{2} 
+dd if=boot/boot of=Image bs=512 count=1 conv=notrunc
+dd if=tools/system of=mFDimage seek=1 bs=512 conv=notrunc
+
+\footnote{3}
+qemu-system-i386 -fda Image -no-fd-bootchk
+o tmb:
+qemu-system-x86_64 -fda Image -no-fd-bootchk
