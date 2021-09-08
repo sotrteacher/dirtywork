@@ -55,7 +55,7 @@ genext2fs -v -b 1440 -d ./mount_point/  Image
 se utilizar\'an los comandos (que no necesitan que exista el directorio
 mount_point)
 fallocate -v -l 1440k Image
-mkfs.ext2 -v -T floppy  Image
+mkfs.ext2 -v -b 1024 -T floppy  Image
 
 \footnote{2} 
 dd if=boot/boot of=Image bs=512 count=1 conv=notrunc

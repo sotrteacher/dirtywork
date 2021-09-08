@@ -34,14 +34,18 @@
 .globl end_gdt
 .globl stack0_krn_ptr
 .globl stack1_krn_ptr
+.globl stack2_krn_ptr
 .globl task1
 .globl stack1_ptr
+.globl stack2_ptr
 #endif
 KRN_BASE 	= 0x10000
 TSS0_SEL	= 0x20
 LDT0_SEL	= 0x28
 TSS1_SEL	= 0X30
 LDT1_SEL	= 0x38
+TSS2_SEL	= 0X40
+LDT2_SEL	= 0x48
 //#if 1 //LMC 2021.08.25
 //.section .rawdata
 //.incbin "zmagic_header.raw"
@@ -59,18 +63,27 @@ startup_32:
 # setup base fields of descriptors.
 	movl $KRN_BASE, %ebx
 	movl $gdt, %ecx
+
 	lea tss0, %eax
 	movl $TSS0_SEL, %edi	
 	call set_base
 	lea ldt0, %eax
 	movl $LDT0_SEL, %edi
 	call set_base
+
 	lea tss1, %eax
 	movl $TSS1_SEL, %edi 
 	call set_base
 	lea ldt1, %eax
 	movl $LDT1_SEL, %edi
 	call set_base
+
+        lea tss2, %eax
+        movl $TSS2_SEL, %edi
+        call set_base
+        lea ldt2, %eax
+        movl %LDT2_SEL, %edi
+        call set_base
 
 	call setup_idt
 	call setup_gdt
@@ -230,6 +243,10 @@ timer_interrupt:
 	mov %ax, %ds
 	movb $0x20, %al
 	outb %al, $0x20
+     #if 1 //LMC 2021.09.08
+      //  movb $0, cent0
+      //  movb $0, cent1
+     #endif
 	movl $1, %eax
 	cmpl %eax, current
 	je 1f
@@ -238,7 +255,7 @@ timer_interrupt:
 	jmp 2f
 1:	movl $0, current
 	ljmp $TSS0_SEL, $0
-2:	popl %eax
+2://	popl %eax
 	popl %ebx
 	popl %ecx
 	popl %edx
@@ -277,6 +294,8 @@ system_interrupt:
 //#endif
 current:.long 0
 scr_loc:.long 0
+//cent0:.byte 0
+//cent1:.byte 0
 //scr_loc:.long 0
 //current:.long 0
 #endif
@@ -308,6 +327,8 @@ gdt:	.quad 0x0000000000000000	/* NULL descriptor */
 	.quad 0x0000e20100000040	# LDT0 descr 0x28
 	.quad 0x0000e90100000068	# TSS1 descr 0x30
 	.quad 0x0000e20100000040	# LDT1 descr 0x38
+	.quad 0x0000e90100000068	# TSS2 descr 0x40
+	.quad 0x0000e20100000040	# LDT2 descr 0x48
 end_gdt:
 	.fill 128,4,0
 stack_ptr:
@@ -369,6 +390,29 @@ stack1_krn_ptr:
 	.long 0
 
 /************************************/
+.align 8
+ldt2:	.quad 0x0000000000000000
+	.quad 0x00c0fa01000003ff	# 0x0f, base = 0x10000
+	.quad 0x00c0f201000003ff	# 0x17
+tss2:
+	.long 0 			/* back link */
+	.long stack2_krn_ptr, 0x10	/* esp0, ss0 */
+	.long 0, 0			/* esp1, ss1 */
+	.long 0, 0			/* esp2, ss2 */
+	.long 0				/* cr3 */
+	.long task2			/* eip */
+	.long 0x200			/* eflags */
+	.long 0, 0, 0, 0		/* eax, ecx, edx, ebx */
+	.long stack2_ptr, 0, 0, 0	/* esp, ebp, esi, edi */
+	.long 0x17,0x0f,0x17,0x17,0x17,0x17 /* es, cs, ss, ds, fs, gs */
+	.long LDT2_SEL			/* ldt */
+	.long 0x8000000			/* trace bitmap */
+
+	.fill 128,4,0
+stack2_krn_ptr:
+	.long 0
+
+/************************************/
 task0:
 	movl $0x17, %eax
 	movw %ax, %ds
@@ -413,4 +457,19 @@ stack1_ptr:
 //.section .rawdata
 //.incbin "zmagic_header.raw"
 //#endif
+task2:
+	movl $0x17, %eax
+	movw %ax, %ds
+	/*movl $66, %al*/              /* print 'B' */
+	movb $67, %al               /* print 'C' */
+	int $0x80
+	movl $0xfff, %ecx
+1:	loop 1b
+	jmp task2
+
+	.fill 128,4,0 
+stack2_ptr:
+	.long 0
+
+
 /*** end ***/

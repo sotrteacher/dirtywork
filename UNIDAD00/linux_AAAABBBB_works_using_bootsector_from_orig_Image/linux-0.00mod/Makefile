@@ -35,7 +35,9 @@ all:	Image
 #	tools/build boot/boot tools/system  > Image
 #	sync
 Image: boot/boot tools/system
-	genext2fs -b 1440 -d ./mount_point/  Image
+#	genext2fs -b 1440 -d ./mount_point/  Image
+	fallocate  -l 1440k Image
+	mkfs.ext2  -b 1024 -T floppy  Image
 	dd if=boot/boot of=Image bs=512 count=1 conv=notrunc
 	dd if=tools/system of=Image seek=1 bs=512 conv=notrunc
 	sync

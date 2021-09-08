@@ -1,0 +1,6 @@
+Start a new line of text inside a cell in Excel
+
+Double-click the cell in which you want to insert a line break.
+Click the location inside the selected cell where you want to break the line.
+Press Alt+Enter to insert the line break.
+
