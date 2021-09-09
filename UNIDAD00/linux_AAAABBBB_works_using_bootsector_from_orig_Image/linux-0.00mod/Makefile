@@ -79,8 +79,12 @@ boot/boot:	boot/boot.s
 	$(LD86) -d -o boot/boot boot/boot.o
 #	$(LD86) -s -M -o boot/boot boot/boot.o
 
+tools/system_1: boot/head_1.s
+	gcc -g -std=gnu99  -nostdlib -m32 -march=i386 -ffreestanding -x assembler-with-cpp -Wl,--nmagic,--oformat=binary -o boot/head_1.o -c $<  
+	gcc -std=gnu99  -nostdlib -m32 -march=i386 -ffreestanding  -o $@ -Wl,--nmagic,--script=test1bis.lds,-Map=System_1.map,--retain-symbols-file=filename.rtd boot/head_1.o  
+
 
 clean:
-	rm -vf Image System.map tmp_make core boot/boot 
-	rm -vf init/*.o tools/system tools/build boot/*.o
+	rm -vf Image System.map tmp_make core boot/boot System_1.map
+	rm -vf init/*.o tools/system tools/build boot/*.o tools/system_1
 
