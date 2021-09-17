@@ -1,0 +1,2 @@
+isr.i:
+	as --E -Iinclude -a isr.s -o isr.i 

@@ -1,0 +1,484 @@
+Script started on Thu 16 Sep 2021 01:53:38 AM CDT
+/mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+/mnt/c/Users/LMC/2020/15_Testing_SDL/03_Figuras_Geometricas_SDL ~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+/mnt/c/Users/LMC/2020/16_kentdlee_githubRepos_and_ML_studying /mnt/c/Users/LMC/2020/15_Testing_SDL/03_Figuras_Geometricas_SDL ~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+/mnt/c/Users/LMC/00_EMI/2021_2/REPO/org_probyest/PyE-2021-2 /mnt/c/Users/LMC/2020/16_kentdlee_githubRepos_and_ML_studying /mnt/c/Users/LMC/2020/15_Testing_SDL/03_Figuras_Geometricas_SDL ~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+/mnt/c/Users/LMC/2020/24_MTX_Operating_System/chapter05 /mnt/c/Users/LMC/00_EMI/2021_2/REPO/org_probyest/PyE-2021-2 /mnt/c/Users/LMC/2020/16_kentdlee_githubRepos_and_ML_studying /mnt/c/Users/LMC/2020/15_Testing_SDL/03_Figuras_Geometricas_SDL ~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+/mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2020/24_MTX_Operating_System/chapter05 /mnt/c/Users/LMC/00_EMI/2021_2/REPO/org_probyest/PyE-2021-2 /mnt/c/Users/LMC/2020/16_kentdlee_githubRepos_and_ML_studying /mnt/c/Users/LMC/2020/15_Testing_SDL/03_Figuras_Geometricas_SDL ~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+~ /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2020/24_MTX_Operating_System/chapter05 /mnt/c/Users/LMC/00_EMI/2021_2/REPO/org_probyest/PyE-2021-2 /mnt/c/Users/LMC/2020/16_kentdlee_githubRepos_and_ML_studying /mnt/c/Users/LMC/2020/15_Testing_SDL/03_Figuras_Geometricas_SDL ~/04_Sand_box_for_MaRTE_OS/marte_2.0_22Feb2017 /mnt/c/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06
+[3J[H[2J]0;usuario1@DESKTOP-9EAUVS9: /mnt/c/Users/LMC[01;32musuario1@DESKTOP-9EAUVS9[00m:[01;34m/mnt/c/Users/LMC[00m$ pu[K[Kcd 2021/REPOS_2021/2021[K2_1_SOTR__________3MM21/SKELIX/Tutorial_006-MultiTasking/06
+]0;usuario1@DESKTOP-9EAUVS9: /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06[01;32musuario1@DESKTOP-9EAUVS9[00m:[01;34m/mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MuultiTasking/06[00m$ make clean
+rm -f *.img kernel bootsect *.o
+]0;usuario1@DESKTOP-9EAUVS9: /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06[01;32musuario1@DESKTOP-9EAUVS9[00m:[01;34m/mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MuultiTasking/06[00m$ make
+as -Iinclude -a bootsect.s -o bootsect.o >bootsect.map
+ld --oformat binary -N -e start -Ttext 0x7c00 -o bootsect bootsect.o
+as -Iinclude --32 -a load.s -o load.o 
+GAS LISTING load.s 			page 1
+
+
+   1              	# Skelix by Xiaoming Mo (skelixos@gmail.com)
+   2              	# Licence: GPLv2
+   3              			.text
+   4              			.globl	pm_mode
+   5              			.include "kernel.inc"
+   1              	# Skelix by Xiaoming Mo (skelixos@gmail.com)
+   2              	# Licence: GPLv2
+   3              	.set CODE_SEL, 0x08	# code segment selector in kernel mode 
+   4              	.set DATA_SEL, 0x10 # data segment selector in kernel mode
+   5              	.set IDT_ADDR, 0x80000	# IDT start address
+   6              	.set IDT_SIZE, (256*8)	# IDT has fixed length
+   7              	.set GDT_ADDR, (IDT_ADDR+IDT_SIZE)
+   8              				# GDT starts after IDT
+   9              	.set GDT_ENTRIES, 5	# GDT has 5 descriptors
+  10              				# null descriptor
+  11              				# cs segment descriptor for kernel
+  12              				# ds segment descriptor for kernel
+  13              				# current process tss
+  14              				# current process ldt
+  15              	.set GDT_SIZE, (8*GDT_ENTRIES)
+  16              				# GDT length
+  17              	.set KERNEL_SECT, 72	# Kernel lenght, counted by sectors
+  18              	.set STACK_BOT, 0xa0000	# stack starts at 640K
+  19              	
+   6              			.org 0
+   7              	pm_mode:
+   8 0000 B8100000 			movl	$DATA_SEL,%eax
+   8      00
+   9 0005 8ED8     			movw	%ax,	%ds
+  10 0007 8EC0     			movw	%ax,	%es
+  11 0009 8EE0     			movw	%ax,	%fs
+  12 000b 8EE8     			movw	%ax,	%gs
+  13 000d 8ED0     			movw	%ax,	%ss
+  14 000f BC00000A 			movl	$STACK_BOT,%esp
+  14      00
+  15              	
+  16 0014 FC       			cld
+  17 0015 BE000201 			movl	$0x10200,%esi
+  17      00
+  18 001a BF000200 			movl	$0x200,	%edi
+  18      00
+  19 001f B9802300 			movl	$(KERNEL_SECT-1)<<7,%ecx
+  19      00
+  20 0024 F3       			rep
+  21 0025 A5       			movsl
+  22              	
+  23 0026 E8FCFFFF 			call	init
+  23      FF
+  24              	
+GAS LISTING load.s 			page 2
+
+
+DEFINED SYMBOLS
+              load.s:7      .text:0000000000000000 pm_mode
+  include/kernel.inc:3      *ABS*:0000000000000008 CODE_SEL
+  include/kernel.inc:4      *ABS*:0000000000000010 DATA_SEL
+  include/kernel.inc:5      *ABS*:0000000000080000 IDT_ADDR
+  include/kernel.inc:6      *ABS*:0000000000000800 IDT_SIZE
+  include/kernel.inc:7      *ABS*:0000000000080800 GDT_ADDR
+  include/kernel.inc:9      *ABS*:0000000000000005 GDT_ENTRIES
+  include/kernel.inc:15     *ABS*:0000000000000028 GDT_SIZE
+  include/kernel.inc:17     *ABS*:0000000000000048 KERNEL_SECT
+  include/kernel.inc:18     *ABS*:00000000000a0000 STACK_BOT
+
+UNDEFINED SYMBOLS
+init
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o init.o init.c
+[01m[Kinit.c:[m[K In function ‘[01m[Kinit[m[K’:
+[01m[Kinit.c:99:10:[m[K [01;35m[Kwarning: [m[Kcast from pointer to integer of different size [[01;35m[K-Wpointer-to-int-cast[m[K]
+  set_tss([01;35m[K([m[Kunsigned long long)&TASK0.tss);
+          [01;35m[K^[m[K
+[01m[Kinit.c:100:10:[m[K [01;35m[Kwarning: [m[Kcast from pointer to integer of different size [[01;35m[K-Wpointer-to-int-cast[m[K]
+  set_ldt([01;35m[K([m[Kunsigned long long)&TASK0.ldt);
+          [01;35m[K^[m[K
+[01m[Kinit.c:112:1:[m[K [01;35m[Kwarning: [m[Kmulti-line comment [[01;35m[K-Wcomment[m[K]
+ [01;35m[K/[m[K/ __asm__ ("movl %%esp,%%eax\n\t" \
+ [01;35m[K^[m[K
+as -Iinclude --32 -a isr.s -o isr.o 
+GAS LISTING isr.s 			page 1
+
+
+   1              	# Skelix by Xiaoming Mo (skelixos@gmail.com)
+   2              	# Licence: GPLv2
+   3              			.text
+   4              			.include "kernel.inc"
+   1              	# Skelix by Xiaoming Mo (skelixos@gmail.com)
+   2              	# Licence: GPLv2
+   3              	.set CODE_SEL, 0x08	# code segment selector in kernel mode 
+   4              	.set DATA_SEL, 0x10 # data segment selector in kernel mode
+   5              	.set IDT_ADDR, 0x80000	# IDT start address
+   6              	.set IDT_SIZE, (256*8)	# IDT has fixed length
+   7              	.set GDT_ADDR, (IDT_ADDR+IDT_SIZE)
+   8              				# GDT starts after IDT
+   9              	.set GDT_ENTRIES, 5	# GDT has 5 descriptors
+  10              				# null descriptor
+  11              				# cs segment descriptor for kernel
+  12              				# ds segment descriptor for kernel
+  13              				# current process tss
+  14              				# current process ldt
+  15              	.set GDT_SIZE, (8*GDT_ENTRIES)
+  16              				# GDT length
+  17              	.set KERNEL_SECT, 72	# Kernel lenght, counted by sectors
+  18              	.set STACK_BOT, 0xa0000	# stack starts at 640K
+  19              	
+   5              			.globl	default_isr, isr, task1_run, task2_run
+   6              	task1_run:
+   7 0000 E8FCFFFF 			call	do_task1
+   7      FF
+   8 0005 EBF9     			jmp		task1_run
+   9              	task2_run:
+  10 0007 E8FCFFFF 			call	do_task2
+  10      FF
+  11 000c EBF9     			jmp		task2_run
+  12              	
+  13              			.macro	isrnoerror		nr
+  14              			isr\nr:
+  15              			pushl	$0
+  16              			pushl	$\nr
+  17              			jmp		isr_comm
+  18              			.endm
+  19              	#		.macro	isrnoerror		nr
+  20              	#		isr\nr:
+  21              	#		push	$0
+  22              	#		push	$\nr
+  23              	#		jmp		isr_comm
+  24              	#		.endm
+  25              	
+  26              			.macro	isrerror		nr
+  27              			isr\nr:
+  28              			pushl	$\nr
+  29              			jmp		isr_comm
+  30              			.endm
+  31              			
+  32 000e 00000000 	isr:	.long	divide_error, isr0x00, debug_exception, isr0x01
+  32      4B010000 
+  32      00000000 
+  32      51010000 
+  33 001e 00000000 			.long	breakpoint, isr0x02, nmi, isr0x03
+GAS LISTING isr.s 			page 2
+
+
+  33      57010000 
+  33      00000000 
+  33      5D010000 
+  34 002e 00000000 			.long	overflow, isr0x04, bounds_check, isr0x05
+  34      63010000 
+  34      00000000 
+  34      69010000 
+  35 003e 00000000 			.long	invalid_opcode, isr0x06, cop_not_avalid, isr0x07
+  35      6F010000 
+  35      00000000 
+  35      75010000 
+  36 004e 00000000 			.long	double_fault, isr0x08, overrun, isr0x09
+  36      7B010000 
+  36      00000000 
+  36      7F010000 
+  37 005e 00000000 			.long	invalid_tss, isr0x0a, seg_not_present, isr0x0b
+  37      85010000 
+  37      00000000 
+  37      89010000 
+  38 006e 00000000 			.long	stack_exception, isr0x0c, general_protection, isr0x0d
+  38      8D010000 
+  38      00000000 
+  38      91010000 
+  39 007e 00000000 			.long	page_fault, isr0x0e, reversed, isr0x0f
+  39      95010000 
+  39      00000000 
+  39      99010000 
+  40 008e 00000000 			.long	coprocessor_error, isr0x10, reversed, isr0x11
+  40      A2010000 
+  40      00000000 
+  40      A9010000 
+  41 009e 00000000 			.long	reversed, isr0x12, reversed, isr0x13
+  41      B2010000 
+  41      00000000 
+  41      BB010000 
+  42 00ae 00000000 			.long	reversed, isr0x14, reversed, isr0x15
+  42      C4010000 
+  42      00000000 
+  42      CD010000 
+  43 00be 00000000 			.long	reversed, isr0x16, reversed, isr0x17
+  43      D6010000 
+  43      00000000 
+  43      DF010000 
+  44 00ce 00000000 			.long	reversed, isr0x18, reversed, isr0x19
+  44      E8010000 
+  44      00000000 
+  44      F1010000 
+  45 00de 00000000 			.long	reversed, isr0x1a, reversed, isr0x1b
+  45      FA010000 
+  45      00000000 
+  45      03020000 
+  46 00ee 00000000 			.long	reversed, isr0x1c, reversed, isr0x1d
+  46      0C020000 
+  46      00000000 
+  46      15020000 
+  47 00fe 00000000 			.long	reversed, isr0x1e, reversed, isr0x1f
+  47      1E020000 
+GAS LISTING isr.s 			page 3
+
+
+  47      00000000 
+  47      27020000 
+  48 010e 00000000 			.long	do_timer, isr0x20, do_kb, isr0x21
+  48      30020000 
+  48      00000000 
+  48      39020000 
+  49              	/*
+  50              			+-----------+
+  51              			|  old  ss  |	76
+  52              			+-----------+
+  53              			|  old esp  |	72
+  54              			+-----------+
+  55              			|  eflags   |	68
+  56              			+-----------+
+  57              			|    cs     |	64
+  58              			+-----------+
+  59              			|   eip     |	60
+  60              			+-----------+
+  61              			|  0/err    |	56
+  62              			+-----------+
+  63              			|  isr_nr   | tmp = esp
+  64              			+-----------+
+  65              			|   eax     |	48
+  66              			+-----------+
+  67              			|   ecx     |	44
+  68              			+-----------+
+  69              			|   edx     |	40
+  70              			+-----------+
+  71              			|   ebx     |	36
+  72              			+-----------+
+  73              			|   tmp     |	32
+  74              			+-----------+
+  75              			|   ebp     |	28
+  76              			+-----------+
+  77              			|   esi     |	24
+  78              			+-----------+
+  79              			|   edi     |	20
+  80              			+-----------+
+  81              			|    ds     |	16
+  82              			+-----------+
+  83              			|    es     |	12
+  84              			+-----------+
+  85              			|    fs     |	8
+  86              			+-----------+
+  87              			|    gs     |	4
+  88              			+-----------+
+  89              			|    ss     |	0
+  90              			+-----------+
+  91              	*/
+  92              	isr_comm:
+  93 011e 60       			pushal
+  94 011f 1E       			pushl	%ds
+  95 0120 06       			pushl	%es
+  96 0121 0FA0     			pushl	%fs
+  97 0123 0FA8     			pushl	%gs
+  98 0125 16       			pushl	%ss
+  99 0126 66B81000 			movw	$DATA_SEL,%ax
+GAS LISTING isr.s 			page 4
+
+
+ 100 012a 8ED8     			movw	%ax,	%ds
+ 101 012c 8EC0     			movw	%ax,	%es
+ 102 012e 8EE0     			movw	%ax,	%fs
+ 103 0130 8EE8     			movw	%ax,	%gs
+ 104 0132 8B4C2434 			movl	52(%esp),%ecx
+ 105 0136 FF14CD00 			call	*isr(, %ecx, 8)
+ 105      000000
+ 106 013d 83C404   			addl	$4,		%esp	# for %ss
+ 107 0140 0FA9     			popl	%gs
+ 108 0142 0FA1     			popl	%fs
+ 109 0144 07       			popl	%es
+ 110 0145 1F       			popl	%ds
+ 111 0146 61       			popal
+ 112 0147 83C408   			addl	$8,		%esp	# for isr_nr and err_code
+ 113 014a CF       			iret
+ 114              	
+ 115 014b 6A006A00 			isrNoError		0x00
+ 115      EBCD
+ 116 0151 6A006A01 			isrNoError		0x01
+ 116      EBC7
+ 117 0157 6A006A02 			isrNoError		0x02
+ 117      EBC1
+ 118 015d 6A006A03 			isrNoError		0x03
+ 118      EBBB
+ 119 0163 6A006A04 			isrNoError		0x04
+ 119      EBB5
+ 120 0169 6A006A05 			isrNoError		0x05
+ 120      EBAF
+ 121 016f 6A006A06 			isrNoError		0x06
+ 121      EBA9
+ 122 0175 6A006A07 			isrNoError		0x07
+ 122      EBA3
+ 123 017b 6A08EB9F 			isrError		0x08
+ 124 017f 6A006A09 			isrNoError		0x09
+ 124      EB99
+ 125 0185 6A0AEB95 			isrError		0x0a
+ 126 0189 6A0BEB91 			isrError		0x0b
+ 127 018d 6A0CEB8D 			isrError		0x0c
+ 128 0191 6A0DEB89 			isrError		0x0d
+ 129 0195 6A0EEB85 			isrError		0x0e
+ 130 0199 6A006A0F 			isrNoError		0x0f
+ 130      E97CFFFF 
+ 130      FF
+ 131 01a2 6A10E975 			isrError		0x10
+ 131      FFFFFF
+ 132 01a9 6A006A11 			isrNoError		0x11
+ 132      E96CFFFF 
+ 132      FF
+ 133 01b2 6A006A12 			isrNoError		0x12
+ 133      E963FFFF 
+ 133      FF
+ 134 01bb 6A006A13 			isrNoError		0x13
+ 134      E95AFFFF 
+ 134      FF
+ 135 01c4 6A006A14 			isrNoError		0x14
+ 135      E951FFFF 
+ 135      FF
+GAS LISTING isr.s 			page 5
+
+
+ 136 01cd 6A006A15 			isrNoError		0x15
+ 136      E948FFFF 
+ 136      FF
+ 137 01d6 6A006A16 			isrNoError		0x16
+ 137      E93FFFFF 
+ 137      FF
+ 138 01df 6A006A17 			isrNoError		0x17
+ 138      E936FFFF 
+ 138      FF
+ 139 01e8 6A006A18 			isrNoError		0x18
+ 139      E92DFFFF 
+ 139      FF
+ 140 01f1 6A006A19 			isrNoError		0x19
+ 140      E924FFFF 
+ 140      FF
+ 141 01fa 6A006A1A 			isrNoError		0x1a
+ 141      E91BFFFF 
+ 141      FF
+ 142 0203 6A006A1B 			isrNoError		0x1b
+ 142      E912FFFF 
+ 142      FF
+ 143 020c 6A006A1C 			isrNoError		0x1c
+ 143      E909FFFF 
+ 143      FF
+ 144 0215 6A006A1D 			isrNoError		0x1d
+ 144      E900FFFF 
+ 144      FF
+ 145 021e 6A006A1E 			isrNoError		0x1e
+ 145      E9F7FEFF 
+ 145      FF
+ 146 0227 6A006A1F 			isrNoError		0x1f
+ 146      E9EEFEFF 
+ 146      FF
+ 147 0230 6A006A20 			isrNoError		0x20
+ 147      E9E5FEFF 
+ 147      FF
+ 148 0239 6A006A21 			isrNoError		0x21
+ 148      E9DCFEFF 
+ 148      FF
+ 149              	default_isr:
+ 150 0242 FE050080 			incb	0xb8000
+ 150      0B00
+ 151 0248 C6050180 			movb	$2,		0xb8001
+ 151      0B0002
+ 152 024f B020     			movb	$0x20,	%al
+ 153 0251 E620     			outb	%al,	$0x20
+ 154 0253 E6A0     			outb	%al,	$0xa0
+ 155 0255 CF       			iret
+ 156              			
+GAS LISTING isr.s 			page 6
+
+
+DEFINED SYMBOLS
+  include/kernel.inc:3      *ABS*:0000000000000008 CODE_SEL
+  include/kernel.inc:4      *ABS*:0000000000000010 DATA_SEL
+  include/kernel.inc:5      *ABS*:0000000000080000 IDT_ADDR
+  include/kernel.inc:6      *ABS*:0000000000000800 IDT_SIZE
+  include/kernel.inc:7      *ABS*:0000000000080800 GDT_ADDR
+  include/kernel.inc:9      *ABS*:0000000000000005 GDT_ENTRIES
+  include/kernel.inc:15     *ABS*:0000000000000028 GDT_SIZE
+  include/kernel.inc:17     *ABS*:0000000000000048 KERNEL_SECT
+  include/kernel.inc:18     *ABS*:00000000000a0000 STACK_BOT
+               isr.s:149    .text:0000000000000242 default_isr
+               isr.s:32     .text:000000000000000e isr
+               isr.s:6      .text:0000000000000000 task1_run
+               isr.s:9      .text:0000000000000007 task2_run
+               isr.s:115    .text:000000000000014b isr0x00
+               isr.s:116    .text:0000000000000151 isr0x01
+               isr.s:117    .text:0000000000000157 isr0x02
+               isr.s:118    .text:000000000000015d isr0x03
+               isr.s:119    .text:0000000000000163 isr0x04
+               isr.s:120    .text:0000000000000169 isr0x05
+               isr.s:121    .text:000000000000016f isr0x06
+               isr.s:122    .text:0000000000000175 isr0x07
+               isr.s:123    .text:000000000000017b isr0x08
+               isr.s:124    .text:000000000000017f isr0x09
+               isr.s:125    .text:0000000000000185 isr0x0a
+               isr.s:126    .text:0000000000000189 isr0x0b
+               isr.s:127    .text:000000000000018d isr0x0c
+               isr.s:128    .text:0000000000000191 isr0x0d
+               isr.s:129    .text:0000000000000195 isr0x0e
+               isr.s:130    .text:0000000000000199 isr0x0f
+               isr.s:131    .text:00000000000001a2 isr0x10
+               isr.s:132    .text:00000000000001a9 isr0x11
+               isr.s:133    .text:00000000000001b2 isr0x12
+               isr.s:134    .text:00000000000001bb isr0x13
+               isr.s:135    .text:00000000000001c4 isr0x14
+               isr.s:136    .text:00000000000001cd isr0x15
+               isr.s:137    .text:00000000000001d6 isr0x16
+               isr.s:138    .text:00000000000001df isr0x17
+               isr.s:139    .text:00000000000001e8 isr0x18
+               isr.s:140    .text:00000000000001f1 isr0x19
+               isr.s:141    .text:00000000000001fa isr0x1a
+               isr.s:142    .text:0000000000000203 isr0x1b
+               isr.s:143    .text:000000000000020c isr0x1c
+               isr.s:144    .text:0000000000000215 isr0x1d
+               isr.s:145    .text:000000000000021e isr0x1e
+               isr.s:146    .text:0000000000000227 isr0x1f
+               isr.s:147    .text:0000000000000230 isr0x20
+               isr.s:148    .text:0000000000000239 isr0x21
+               isr.s:92     .text:000000000000011e isr_comm
+
+UNDEFINED SYMBOLS
+do_task1
+do_task2
+divide_error
+debug_exception
+breakpoint
+nmi
+GAS LISTING isr.s 			page 7
+
+
+overflow
+bounds_check
+invalid_opcode
+cop_not_avalid
+double_fault
+overrun
+invalid_tss
+seg_not_present
+stack_exception
+general_protection
+page_fault
+reversed
+coprocessor_error
+do_timer
+do_kb
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o timer.o timer.c
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o libcc.o libcc.c
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o scr.o scr.c
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o kb.o kb.c
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o task.o task.c
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o kprintf.o kprintf.c
+gcc -m32 -fno-PIC -Wall -pedantic -W -nostdlib -nostdinc -Wno-long-long -I include -fomit-frame-pointer   -c -o exceptions.o exceptions.c
+[01m[Kexceptions.c:111:1:[m[K [01;35m[Kwarning: [m[K‘[01m[Kprint_task[m[K’ defined but not used [[01;35m[K-Wunused-function[m[K]
+ [01;35m[Kprint_task[m[K(struct TASK_STRUCT *task) {
+ [01;35m[K^~~~~~~~~~[m[K
+ld -m elf_i386 --oformat binary -N -e pm_mode -Ttext 0x0000 -o kernel load.o init.o isr.o timer.o libcc.o scr.o kb.o task.o kprintf.o exceptions.o
+29316 kernel
+cat bootsect kernel > final.img
+29828 final.img
+]0;usuario1@DESKTOP-9EAUVS9: /mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MultiTasking/06[01;32musuario1@DESKTOP-9EAUVS9[00m:[01;34m/mnt/c/Users/LMC/2021/REPOS_2021/2022_1_SOTR__________3MM21/SKELIX/Tutorial_06-MuultiTasking/06[00m$ exit
+
+Script done on Thu 16 Sep 2021 01:54:35 AM CDT

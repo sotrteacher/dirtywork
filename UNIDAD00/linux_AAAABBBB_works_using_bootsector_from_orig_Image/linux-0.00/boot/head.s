@@ -165,10 +165,10 @@ write_char:
 	pushl %ebx
 	pushl %eax
 	mov $0x18, %ebx
-        #if 0 //LMC 2021.08.28
-	//mov %bx, %gs
+        #if 1 //LMC 2021.08.28
+	mov %bx, %gs
         #else
-        .incbin "mov_bx_gs.raw"
+        #.incbin "mov_bx_gs.raw"
         #endif
 	#if 0 //LMC 2021.08.26
 	//movl scr_loc, %bx

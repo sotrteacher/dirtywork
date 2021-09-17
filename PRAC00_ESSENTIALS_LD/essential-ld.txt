@@ -1,0 +1,419 @@
+======Essential GNU Linker Concepts for Embedded Systems Programmers======
+
+Keep this link open while reading the rest of this document: 
+
+[[http://www.redhat.com/docs/manuals/enterprise/RHEL-4-Manual/gnu-linker/|Using ld, the GNU Linker]].
+
+
+====="Section" Basics=====
+
+Application programmers usually don’t have to bother about low level stuff like say where in the virtual address space the data section of their program begins. In the embedded systems world - you have no such luxuries. Often, your code will be running on the bare metal and you will have to precisely lay out things at specific memory locations. The GNU linker provides you this flexibility through linker scripts.
+
+Let’s start with a simple assembly language program, a1.s:
+
+<code asm>
+.section abc, "a"
+i:
+        .byte 1
+        .byte 2
+        .byte 3
+
+.section def, "a"
+k:
+        .byte 7
+        .byte 8
+        .byte 9
+</code>
+
+This program can be assembled by invoking //as//:
+
+  as a1.s -o a1.o
+
+Our program is divided into two //sections// - a section is simply a logical chunk of data/code which the linker will combine with other sections in order to create a single output file. Let’s view the output produced by the assembler by invoking //objdump// with the //-D// option:
+[Note: the "a" after the section name is a //flag// which says that the section is //allocatable//]
+
+<code asm>
+
+a1.o:     file format elf32-i386
+
+Disassembly of section abc:
+
+00000000 <i>:
+   0:   01 02          add    %eax,(%edx)
+   2:   03             byte 0x3
+Disassembly of section def:
+
+00000000 <k>:
+   0:   07              pop    %es
+   1:   08 09           or     %cl,(%ecx)
+
+</code>
+
+The very first field of each line is the memory address - this is followed by actual data and then an assembly language statement which is meaningful only if the data bytes were actually meant to be instructions - in this case, we can simply ignore these assembly language statements. Our section //abc// has three 1 byte constants in it, and it starts at address 0 - that is what the objdump output also tells us. What about section //def//? It too starts at address 0, and has 3 bytes in it. Now, this is not really possible - when this program is actually loaded into memory, its impossible to have both these sections at the same address!
+
+Let’s make the problem a bit more difficult by writing yet another assembly language program, a2.s:
+
+<code asm>
+
+.section    abc
+j:
+        .byte 4
+        .byte 5
+        .byte 6
+
+.section    def
+l:
+        .byte 10
+        .byte 11
+        .byte 12
+</code>
+
+And this is the listing produced by //objdump//:
+
+
+<code asm>
+a2.o:     file format elf32-i386
+
+Disassembly of section abc:
+
+00000000 <j>:
+   0:   04 05          add    $0x5,%al
+   2:   06               push   %es
+Disassembly of section def:
+
+00000000 <l>:
+   0:   0a 0b         or     (%ebx),%cl
+   2:   0c              .byte 0xc
+
+</code>
+
+We see that again there are two sections //abc// and //def//, both containing 3 bytes of data and both starting at address 0.
+
+Combining these two object files into a single executable in such a way that the sections have non-overlapping addresses is the job of the linker - many aspects of this merging process can be precisely controlled by text files called “linker scripts”.
+
+Let’s say we want both sections //abc// to be merged into a single section in the output file and mapped to location 0×0; the two sections //def// should also be merged and mapped to the location immediately below the merged abc’s. Here is a linker script which will do this job (let’s call it //test.lds//):
+
+<code>
+
+SECTIONS
+{
+        . = 0x0;
+        abc : {
+                *(abc)
+        }
+        def : {
+                *(def)
+        }
+
+}
+
+</code>
+
+Many linker scripts have just this command within them - SECTION, which tells the linker how to map input sections to output and where to place the output sections. The special symbol “.” (a single dot) stands for the //location counter//. The linker finds out sections labelled //abc// in ALL the input object files and merges them into a single section in the output file, also called //abc//, which will be mapped to the current value of the location counter (which is 0×0). The location counter gets incremented by the size of the combined section - the linker then reads the next part in the SECTIONS command which instructs it to combine sections labelled //def// in all the input object files into a single section also called //def// in the output file. Here is how you tell //ld// (the linker) to use this //linker script// during the linking process:
+
+  ld a1.o a2.o -o a.out   -T   test.lds
+
+And here is the output from objdump:
+
+<code asm>
+
+Disassembly of section abc:
+
+00000000 <i>:
+    0:       01 02          add    %eax,(%edx)
+    2:       03            .byte 0x3
+
+00000003 <j>:
+    3:       04 05          add    $0x5,%al
+    5:       06               push   %es
+Disassembly of section def:
+
+00000006 <k>:
+    6:       07               pop    %es
+    7:       08 09          or     %cl,(%ecx)
+
+00000009 <l>:
+    9:       0a 0b           or     (%ebx),%cl
+    b:       0c            .byte 0xc
+</code>
+
+=====Generating raw binary files=====
+
+When writing code for embedded microcontrollers, we often convert the //a.out// produced by the linker into some simpler format (say Intel Hex, Motorola S-record or even plain binary). The //objcopy// command is used for performing this coversion. Let's try to applying it to our //a.out//:
+
+  objcopy -j abc -j def -O binary a.out a.bin
+
+The //-j// option instructs //objcopy// to copy that particular section into the output file (a.bin) - the //-O binary// option says that the output format is plain //binary//.
+
+Let's check out the contents of //a.bin// using //od//:
+
+  od -t x1 a.bin
+
+Here is the output:
+
+  0000000 01 02 03 04 05 06 07 08 09 0a 0b 0c
+  0000014
+
+We have a simple memory dump of the two sections!
+
+Just to check whether the order in which we specify the //-j// options has any impact, let's try:
+
+  objcopy -j def -j abc -O binary a.out a.bin
+
+The content of //a.bin//, as displayed by //od//, looks like this:
+
+  0000000 01 02 03 04 05 06 07 08 09 0a 0b 0c
+  0000014
+
+This shows that //objcopy// goes by the ordering specified in the input file.
+
+=====Understanding VMA and LMA=====
+
+Let's modify the linker script a little bit:
+
+<code>
+
+SECTIONS
+{
+        . = 0x0;
+        abc : {
+                *(abc)
+        }
+        . = 100;
+        def : {
+                *(def)
+        }
+
+}
+</code>
+Now, section def will be at address 100 (hex 64). This is verified by looking at the //objdump// output:
+
+<code asm>
+
+Disassembly of section def:
+
+00000064 <k>:
+  64:	07                   	pop    %es
+  65:	08 09                	or     %cl,(%ecx)
+
+00000067 <l>:
+  67:	0a 0b                	or     (%ebx),%cl
+  69:	0c                   	.byte 0xc
+</code>
+
+Let's also check out the output from //objcopy//:
+
+  0000000 01 02 03 04 05 06 00 00 00 00 00 00 00 00 00 00
+  0000020 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+  *
+  0000140 00 00 00 00 07 08 09 0a 0b 0c
+  0000152
+
+After the first six bytes (section abc), the next section (def) starts at offset octal 144 (decimal 100). 
+
+We now have a small problem. Let's say we are programming a flash memory based microcontroller. Say memory locations from 0 to 99 represent flash and locations from 100 and upwards represent locations in static RAM. We wish to store section //abc// in flash and section //def// in RAM in such a way that everytime the system powers up, it will find contents of section //def// in RAM at location 100. The only way to do this is to store section //def// in flash (maybe after section //abc//) and make sure that we have some code in section //abc// which will copy the data from flash to RAM (at location 100) every time the system restarts.
+
+Let's modify the linker script a little bit:
+
+<code>
+
+SECTIONS
+{
+        . = 0x0;
+        abc : {
+                *(abc)
+        }
+        . = 100;
+        def : AT (ADDR(abc) + SIZEOF(abc)) {
+                *(def)
+        }
+
+}
+</code>
+
+The output from //objdump -D// does not look different, but if we examine the binary file //a.bin// produced by //objcopy//, we will find:
+
+  0000000 01 02 03 04 05 06 07 08 09 0a 0b 0c
+  0000014
+
+Section //def// has been placed immediately after //abc//!
+
+The idea is that every section has a VMA (virtual memory address) as well as an LMA (load memory address) - by default, both will be identical. By using the AT keyword, we can change a section's LMA - that is what we did in the above instance. We changed the LMA of section //def// to be the address of the byte immediately after the last byte of section //abc//.
+
+//objdump// has an option //-h// which shows information about sections like its VMA and LMA; here is what we get when we try it on our //a.out//:
+
+  a.out:     file format elf32-i386
+
+  Sections:
+  Idx Name          Size      VMA       LMA       File off  Algn
+  0 abc           00000006  00000000  00000000  00001000  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+  1 def           00000006  00000064  00000006  00001064  2**0
+                  CONTENTS, ALLOC, LOAD, READONLY, DATA
+ 
+Section //abc// has identical LMA and VMA (both 0) while section 1 has VMA hex 64 and LMA 6.
+
+**Note that other than providing information as to where the section should be copied to initially, the LMA has no role to play in the working of the linker. All the addresses that we deal with in linker scripts are VMA's.**
+
+Let's do one more experiment. Say we wish to store address of symbol //k// as value of the third byte starting from //i// in section //abc//. Here is the modified assembly language file //a1.s//:
+
+<code asm>
+.section abc, "a"
+i:
+        .byte 1
+        .byte 2
+        .byte k
+
+.section def, "a"
+k:
+        .byte 7
+        .byte 8
+        .byte 9
+</code>
+ 
+Here is what //objdump -D// shows, when applied to the //a.out// obtained by linking a1.o and a2.o:
+
+<code>
+Disassembly of section abc:
+
+00000000 <i>:
+   0:	01 02                	add    %eax,(%edx)
+   2:	64                   	fs
+
+00000003 <j>:
+   3:	04 05                	add    $0x5,%al
+   5:	06                   	push   %es
+
+Disassembly of section def:
+
+00000064 <k>:
+  64:	07                   	pop    %es
+  65:	08 09                	or     %cl,(%ecx)
+
+00000067 <l>:
+  67:	0a 0b                	or     (%ebx),%cl
+  69:	0c                   	.byte 0xc
+</code>
+
+Note that third byte in section //abc// has value  0x64 which is the VMA of symbol //k// in section //def//.
+
+=====Defining memory regions=====
+
+In a typical flash memory based microcontroller, there are at least two distinct //regions// of memory - program text (machine code) is stored in //flash// and run-time variables are stored in //static RAM//. Linker scripts have a simple notation to make it clear that different sections are to be mapped to distinct regions. 
+
+  MEMORY
+  {
+        flash (rx) : ORIGIN = 0, LENGTH = 100
+        ram (rwx) : ORIGIN = 100, LENGTH = 50
+  }
+  SECTIONS
+  {
+        abc : {
+                *(abc)
+        } >flash
+        def : AT (ADDR(abc) + SIZEOF(abc)) {
+                *(def)
+        } >ram
+  }
+
+When the linker assigns addresses for section //abc//, it uses the region //flash// (that is what the //>flash// at the end of the section definition does) and when it assigns addresses for section //def//, it uses the region //ram//.
+
+=====Alignment restrictions=====
+
+Many processors have restrictions (enforced by the architecture) like: reading a 4 byte object from a memory location whose address is not a multiple of 4 will generate a fault. We can instruct the linker to place sections at addresses which are multiples of 2, 4, 8, 16 etc by using the ALIGN directive.
+
+  SECTIONS
+  {
+        abc : {
+                *(abc)
+        }
+        def : {
+                . = ALIGN(8);
+                *(def)
+        }
+  }
+
+The above linker script will result in the first symbol of section //def// starting at a memory location whose address is a multiple of 8. ALIGN returns the current location counter aligned upwards to meet the specific requirement. [Note: ALIGN only performs arithmetic on the current location counter - if the current location counter is to be changed, we have to do an explicit assignment as shown above].
+
+=====Defining symbols within linker scripts=====
+
+When writing low level startup code, it is sometime necessary for our C/assembly language code to know where a particular section starts/ends. We can define symbols within our linker script to hold these values; these symbols can later be accessed in C code by declaring them as //extern// variables and taking their addresses.
+
+  SECTIONS
+  {
+        abc : {
+                _sabc = .;
+                *(abc)
+                _eabc = .;
+        }
+        def :  {
+                *(def)
+        }
+  }
+
+The symbols //_sabc// (start abc) and //_eabc// (end abc) hold the starting and ending addresses of section //abc//. 
+
+=====Standard section names for C programs=====
+
+The C compiler translates C code into assembly language.
+
+Different logical //sections// in our C code are mapped to specifically named sections in the resulting assembly language program. Consider the C program given below:
+
+<code c>
+int j, k;
+int m = 23;
+main()
+{
+        int i = 12;
+        char *s = "abcd";
+}
+</code>
+
+And the equivalent assembly language code (generated by running // cc -S //):
+
+<code asm>
+
+.file   "a.c"
+.globl m
+        .data
+        .align 4
+        .type   m, @object
+        .size   m, 4
+m:
+        .long   23
+        .section        .rodata
+.LC0:
+        .string "abcd"
+        .text
+.globl main
+        .type   main, @function
+main:
+        leal    4(%esp), %ecx
+        andl    $-16, %esp
+        pushl   -4(%ecx)
+        pushl   %ebp
+        movl    %esp, %ebp
+        pushl   %ecx
+        subl    $20, %esp
+        movl    $12, -12(%ebp)
+        movl    $.LC0, -8(%ebp)
+        addl    $20, %esp
+        popl    %ecx
+        popl    %ebp
+        leal    -4(%ecx), %esp
+        ret
+        .size   main, .-main
+        .comm   j,4,4
+        .comm   k,4,4
+        .ident  "GCC: (GNU) 4.3.2 20081105 (Red Hat 4.3.2-7)"
+        .section        .note.GNU-stack,"",@progbits
+                                                                        
+</code>
+
+The actual code of the program is stored in a section called //.text//, the initialized global variables are stored in the //.data// section, string constants are stored in the //.rodata// section.
+
+The uninitialized globals are stored in what is called a "COMMON" area (check out the .comm directives in the assembly code shown above). In a linked executable file, the COMMON objects will be placed in the //bss// section.
+
+
+
+

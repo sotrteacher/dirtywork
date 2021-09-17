@@ -1,0 +1,1000 @@
+ 1050  cd source/
+ 1051  nasm -O0 -w+orphan-labels -f bin -o kernel.bin kernel.asm
+ 1052  ls -hgotr
+ 1053  pushd 
+ 1054  nasm -O0 -w+orphan-labels -f bin -o kernel.bin kernel.asm
+ 1055  vim ../Prueba00/mikeos-4.5/source/kernel.asm 
+ 1056  pushd 
+ 1057  vim kernel.asm 
+ 1058  pushd 
+ 1059  diff -n kernel.asm ../Prueba00/mikeos-4.5/source/kernel.asm 
+ 1060  vim ../Prueba00/mikeos-4.5/source/kernel.asm 
+ 1061  make
+ 1062  make clean 
+ 1063  make
+ 1064  make clean 
+ 1065  make
+ 1066  make clean 
+ 1067  make
+ 1068  make clean 
+ 1069  make
+ 1070  make clean 
+ 1071  make
+ 1072  make clean 
+ 1073  make
+ 1074  make clean 
+ 1075  make
+ 1076  make clean 
+ 1077  make
+ 1078  make run
+ 1079  make clean 
+ 1080  make
+ 1081  make run
+ 1082  make clean 
+ 1083  make
+ 1084  make run
+ 1085  make clean 
+ 1086  make
+ 1087  make clean 
+ 1088  make
+ 1089  make run
+ 1090  make clean 
+ 1091  make
+ 1092  make clean 
+ 1093  make
+ 1094  make clean 
+ 1095  make
+ 1096  make clean 
+ 1097  make
+ 1098  make clean 
+ 1099  make
+ 1100  make clean 
+ 1101  make
+ 1102  make clean 
+ 1103  make
+ 1104  wc -l keyboard.asm 
+ 1105  vim keyboard.asm 
+ 1106  make
+ 1107  pushd 
+ 1108  grep -r os_int_to_string 
+ 1109  wc -l features/string.asm 
+ 1110  pushd 
+ 1111  cp -vi ../Prueba00/mikeos-4.5/source/features/string.asm ./ 
+ 1112  vim kernel.asm 
+ 1113  pushd 
+ 1114  grep -r os_speaker_tone
+ 1115  wc -l features/sound.asm 
+ 1116  pushd 
+ 1117  cp -vi ../Prueba00/mikeos-4.5/source/features/sound.asm .
+ 1118  vim kernel.asm 
+ 1119  vim disk.asm 
+ 1120  pushd 
+ 1121  grep -r os_pause
+ 1122  wc -l features/misc.asm 
+ 1123  pushd 
+ 1124  cp -vi ../Prueba00/mikeos-4.5/source/features/misc.asm .
+ 1125  vim kernel.asm 
+ 1126  pushd 
+ 1127  vim screen.asm 
+ 1128  vim ../Prueba00/mikeos-4.5/source/kernel.asm 
+ 1129  pushd 
+ 1130  grep -r os_command_line
+ 1131  wc -l features/cli.asm 
+ 1132  pushd 
+ 1133  cp -vi ../Prueba00/mikeos-4.5/source/features/cli.asm . 
+ 1134  vim kernel.asm 
+ 1135  pushd 
+ 1136  grep -r os_file_selector
+ 1137  pushd 
+ 1138  grep -r os_file_selector
+ 1139  vim screen.asm 
+ 1140  pushd 
+ 1141  grep -r os_run_basic 
+ 1142  wc -l features/basic.asm 
+ 1143  pushd 
+ 1144  cp -vi ../Prueba00/mikeos-4.5/source/features/basic.asm .
+ 1145  pushd 
+ 1146  vim kernel.asm 
+ 1147  pushd 
+ 1148  vim kernel.asm 
+ 1149  pushd 
+ 1150  grep -r os_input_string 
+ 1151  pushd 
+ 1152  vim screen.asm 
+ 1153  vim cli.asm 
+ 1154  pushd 
+ 1155  grep -r os_file_exist
+ 1156  pushd 
+ 1157  vim disk.asm 
+ 1158  pushd 
+ 1159  grep -r os_get_cursor_pos
+ 1160  pushd 
+ 1161  vim screen.asm 
+ 1162  vim disk.asm 
+ 1163  vim cli.asm 
+ 1164  vim disk.asm 
+ 1165  pushd 
+ 1166  grep -r os_list_dialog *
+ 1167  pushd 
+ 1168  vim screen.asm 
+ 1169  pushd 
+ 1170  grep -r os_hide_cursor
+ 1171  pushd 
+ 1172  vim screen.asm 
+ 1173  vim kernel.asm 
+ 1174  tree
+ 1175  pushd 
+ 1176  tree|wc -l
+ 1177  pushd 
+ 1178  tree|wc -l
+ 1179  vim kernel.asm 
+ 1180  dmesg 
+ 1181  df -hT
+ 1182  ls -hgo /media/root/9C0D-48A8/
+ 1183  pushd 
+ 1184  ls -hgotr
+ 1185  df -hT
+ 1186  umount -v /dev/sdb1
+ 1187  dd if=floppyimage.flp of=/dev/sdb
+ 1188  df -hT
+ 1189  make clean 
+ 1190  make
+ 1191  make run
+ 1192  ls -hgo
+ 1193  make clean 
+ 1194  vim Makefile 
+ 1195  make
+ 1196  make clean 
+ 1197  vim Makefile 
+ 1198  make
+ 1199  vim Makefile 
+ 1200  make clean 
+ 1201  vim Makefile 
+ 1202  make clean 
+ 1203  make
+ 1204  vim Makefile 
+ 1205  make clean 
+ 1206  df -hT
+ 1207  umount -v /dev/loop0
+ 1208  make clean 
+ 1209  make
+ 1210  make run
+ 1211  make clean 
+ 1212  make
+ 1213  pushd ../Prueba00/
+ 1214  ls
+ 1215  cd mikeos-4.5/
+ 1216  ls
+ 1217  cd source/
+ 1218  ls
+ 1219  grep -r bootdev *
+ 1220  cd ../
+ 1221  grep -r bootdev *
+ 1222  vim ../../Prueba_1/disk.asm 
+ 1223  dirs -v
+ 1224  pushd 
+ 1225  cp -vi ../Prueba_1/disk.asm ./
+ 1226  make clean 
+ 1227  make
+ 1228  make clean 
+ 1229  make
+ 1230  make clean 
+ 1231  make
+ 1232  vim Makefile 
+ 1233  make clean 
+ 1234  make
+ 1235  nasm -O0 -w+orphan-labels -f bin -o kernel.bin kernel.asm
+ 1236  make clean 
+ 1237  make
+ 1238  make clean 
+ 1239  make
+ 1240  pushd 
+ 1241  ls source/
+ 1242  ./build-linux.sh 
+ 1243  vim build-linux.sh 
+ 1244  pushd 
+ 1245  vim features/disk.asm 
+ 1246  mv features/disk.asm ./
+ 1247  rm -rv features/
+ 1248  vim kernel.asm 
+ 1249  vim disk.asm 
+ 1250  vim kernel.asm 
+ 1251  vim ../Prueba00/mikeos-4.5/source/kernel.asm 
+ 1252  pushd 
+ 1253  grep -r os_seed_random
+ 1254  wc -l source/features/math.asm 
+ 1255  pushd 
+ 1256  cp -vi ../Prueba00/mikeos-4.5/source/features/math.asm ./
+ 1257  vim math.asm 
+ 1258  vim ../Prueba00/mikeos-4.5/source/kernel.asm 
+ 1259  pushd 
+ 1260  grep -r os_move_cursor 
+ 1261  pushd 
+ 1262  vim screen.asm 
+ 1263  pushd 
+ 1264  grep -r os_wait_for_key
+ 1265  pushd 
+ 1266  cp -v ../Prueba00/mikeos-4.5/source/features/keyboard.asm ./
+ 1267  vim kernel.asm 
+ 1268  make
+ 1269  make clean 
+ 1270  make
+ 1271  make clean 
+ 1272  make
+ 1273  make clean 
+ 1274  make
+ 1275  make clean 
+ 1276  make
+ 1277  make clean 
+ 1278  make
+ 1279  make clean 
+ 1280  make
+ 1281  make clean 
+ 1282  make
+ 1283  vim screen.asm 
+ 1284  make clean 
+ 1285  make
+ 1286  make clean 
+ 1287  make
+ 1288  make clean 
+ 1289  make
+ 1290  make clean 
+ 1291  make
+ 1292  make clean 
+ 1293  make
+ 1294  make clean 
+ 1295  make
+ 1296  make clean 
+ 1297  make
+ 1298  make clean 
+ 1299  make
+ 1300  make clean 
+ 1301  make
+ 1302  make clean 
+ 1303  make
+ 1304  make clean 
+ 1305  make
+ 1306  make clean 
+ 1307  make
+ 1308  make clean 
+ 1309  make
+ 1310  make clean 
+ 1311  make
+ 1312  make clean 
+ 1313  make
+ 1314  make clean 
+ 1315  make
+ 1316  make clean 
+ 1317  make
+ 1318  make run
+ 1319  make
+ 1320  make run
+ 1321  make
+ 1322  make run
+ 1323  make
+ 1324  make run
+ 1325  shutdown -h now
+ 1326  ./0_montar_particiones_de_windows7.sh 
+ 1327  pushd /home/lamberto/2017_08_A_2017_12/SOTR/
+ 1328  ls
+ 1329  pushd /mnt/sda3/Usuario/2015_08_A_2015_12_bisToCompareWithFrom_linux/
+ 1330  ls
+ 1331  alias ls=ls --color=never
+ 1332  ls 
+ 1333  cd ABOUT_xv6_kernel/
+ 1334  ls
+ 1335  apvlv book-rev8.pdf &
+ 1336  CD ../
+ 1337  cd ../
+ 1338  ls
+ 1339  cd ISO_test_xv6_on_bochs/
+ 1340  ls
+ 1341  cd iso/
+ 1342  ls
+ 1343  ls -hgo
+ 1344  cd boot/
+ 1345  ls-hgotr
+ 1346  ls -hgo
+ 1347  file kernel 
+ 1348  cd ../../
+ 1349  cd ../
+ 1350  ls -hgo
+ 1351  cd GITHUB_downloaded/
+ 1352  ls -hgo
+ 1353  cd xv6-public/
+ 1354  ls
+ 1355  make
+ 1356  file bootblock
+ 1357  file xv6.img 
+ 1358  vim Makefile 
+ 1359  make qemu
+ 1360  vim Makefile 
+ 1361  make qemu
+ 1362  vim Makefile 
+ 1363  make clean 
+ 1364  ls 
+ 1365  cd ../
+ 1366  ls
+ 1367  cd xv6-mit-pdos/
+ 1368  ls
+ 1369  cd mit-pdos/
+ 1370  ls
+ 1371  mamke qemu
+ 1372  make qemu
+ 1373  vim Makefile 
+ 1374  shutdown -h now
+ 1375  ./0_montar_particiones_de_windows7.sh 
+ 1376  pushd /home/lamberto/2015_08_A_2015_12/
+ 1377  ls
+ 1378  cd xv6
+ 1379  ls
+ 1380  make
+ 1381  ls -hgo
+ 1382  chmod u+x sign.pl 
+ 1383  make
+ 1384  vim mkfs.c 
+ 1385  make clean 
+ 1386  make
+ 1387  ls -hgo|less
+ 1388  ls
+ 1389  file bootblock
+ 1390  ./sign.pl bootblock
+ 1391  ls -hgo /usr/bin/|grep perl
+ 1392  vim sign.pl 
+ 1393  make clean 
+ 1394  make
+ 1395  ./sign.pl bootblock
+ 1396  whereis perl
+ 1397  ls -hgo /usr/bin/|grep perl
+ 1398  ls -hgo /usr/bin
+ 1399  ls -hgo /usr/bin|less
+ 1400  whereis bash
+ 1401  ls -hgo /bin/
+ 1402  pushd /bin/
+ 1403  rm -v sh
+ 1404  ln -s dash sh
+ 1405  ls -hgo /bin/
+ 1406  pushd 
+ 1407  make
+ 1408  make clean 
+ 1409  make
+ 1410  dirs -v
+ 1411  make
+ 1412  make clean 
+ 1413  make
+ 1414  dirs -v
+ 1415  pushd 
+ 1416  rm -v sh
+ 1417  ln -s bash sh
+ 1418  ls -hgo
+ 1419  pushd 
+ 1420  make clean 
+ 1421  make
+ 1422  ls -hgotr
+ 1423  ls 
+ 1424  make qemu
+ 1425  vim Makefile 
+ 1426  make qemu
+ 1427  vim Makefile 
+ 1428  make qemu-nox
+ 1429  bvi floppyImaDespDAgregar_bootsect.flp 
+ 1430  bvi floppyImaDeMIKEos.flp 
+ 1431  vim boot_sect.asm 
+ 1432  bvi floppyImaDeMIKEos.flp 
+ 1433  ls
+ 1434  vim boot_sect.asm 
+ 1435  vim boot_sect_primeras28.asm 
+ 1436  dirs -v
+ 1437  nasm -hf
+ 1438  pushd /home/lamberto/2015_08_A_2015_12/
+ 1439  ls
+ 1440  cd xv6
+ 1441  vim Makefile 
+ 1442  make qemu
+ 1443  vim Makefile 
+ 1444  make clean 
+ 1445  cd ../
+ 1446  ls -hgotr
+ 1447  ls -hgo
+ 1448  cd xv6-mit/mit-pdos/
+ 1449  ls -hgotr
+ 1450  make clean 
+ 1451  make
+ 1452  ls -hgotr
+ 1453  vim Makefile
+ 1454  make qemu
+ 1455  make clean 
+ 1456  cd ../
+ 1457  ls .hgo
+ 1458  ls -hgo
+ 1459  cat url_descargar.txt 
+ 1460  cd mit-pdos/
+ 1461  make
+ 1462  vim Makefile 
+ 1463  make qemu
+ 1464  vim Makefile 
+ 1465  make qemu
+ 1466  file fs.img 
+ 1467  file xv6.img 
+ 1468  vim Makefile 
+ 1469  make clean 
+ 1470  cd ../../
+ 1471  ls -hgotr
+ 1472  cd xv6-para_procfs/
+ 1473  ls
+ 1474  cd xv6_4/
+ 1475  ls
+ 1476  make
+ 1477  vim mkfs.c 
+ 1478  make
+ 1479  vim Makefile 
+ 1480  make qemu
+ 1481  make clean 
+ 1482  cd ../../
+ 1483  ls -hgo
+ 1484  cd xv6-public
+ 1485  ls
+ 1486  make
+ 1487  ls -hgotr
+ 1488  file xv6.img 
+ 1489  make qemu
+ 1490  vim Makefile 
+ 1491  make qemu
+ 1492  make clean 
+ 1493  cd ../
+ 1494  ls -hgo
+ 1495  cd xv6-permissions/
+ 1496  ls
+ 1497  make qemu
+ 1498  file kernel
+ 1499  cp -v kernel /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Prueba_4/
+ 1500  pushd /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Prueba_4/
+ 1501  ls
+ 1502  ./kernel 
+ 1503  cat Makefile 
+ 1504  cp -vi kernel kernel.bin 
+ 1505  make floppyimage.flp 
+ 1506  ls
+ 1507  make clean 
+ 1508  cp -v kernel kernel.bin
+ 1509  make floppyimage.flp 
+ 1510  make run
+ 1511  pushd 
+ 1512  cd ../
+ 1513  ls -hgo
+ 1514  cd xv6-mit/mit-pdos/
+ 1515  ls -hgo
+ 1516  make 
+ 1517  qemu-system-i386 -fda xv6.img 
+ 1518  make qemu
+ 1519  qemu-system-i386 -fda xv6.img 
+ 1520  pushd ../../ABOUT_xv6_kernel/
+ 1521  ls
+ 1522  ls -hgo
+ 1523  apvlv boot.pdf &
+ 1524  pushd 
+ 1525  vim bootmain.c 
+ 1526  vim Makefile 
+ 1527  make kernelmemfs 
+ 1528  file kernelmemfs
+ 1529  cp -vi kernelmemfs /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Prueba_4/
+ 1530  dirs -v
+ 1531  pushd +2
+ 1532  ls -hgo
+ 1533  make clean 
+ 1534  make
+ 1535  make clean 
+ 1536  ls -hgo
+ 1537  make 
+ 1538  cp -vi kernelmemfs kernel.bin
+ 1539  make floppyimage.flp 
+ 1540  rm -v floppyimage.flp 
+ 1541  make floppyimage.flp 
+ 1542  make run
+ 1543  make clean 
+ 1544  ls -hgotr
+ 1545  pushd 
+ 1546  dirs -v
+ 1547  cd ../
+ 1548  mkdir Prueba_5
+ 1549  cp -v Prueba_4/* Prueba_5/
+ 1550  cd Prueba_5/
+ 1551  ls -hgotr
+ 1552  dirs -v
+ 1553  pushd +2
+ 1554  ls
+ 1555  vim Makefile 
+ 1556  dirs -v
+ 1557  cp -vi bootblock `dirs -l +2`
+ 1558  pushd +2
+ 1559  ls
+ 1560  make
+ 1561  rm -v floppyimage.flp 
+ 1562  cp -vi bootblock boot_sect.bin 
+ 1563  cp -vi kernelmemfs kernel.bin 
+ 1564  make floppyimage.flp 
+ 1565  file floppyimage.flp 
+ 1566  dmesg |tail
+ 1567  bvi floppyimage.flp 
+ 1568  make
+ 1569  make run
+ 1570  make clean 
+ 1571  make
+ 1572  make run
+ 1573  pushd ../Prueba_4/
+ 1574  ls
+ 1575  make clean 
+ 1576  make 
+ 1577  make run
+ 1578  ls -hgotr
+ 1579  rm -v kernel
+ 1580  make clean 
+ 1581  make
+ 1582  make run
+ 1583  ls -hgo
+ 1584  make clean 
+ 1585  ls -hgo
+ 1586  make
+ 1587  make run
+ 1588  ls -hgotr
+ 1589  make clean 
+ 1590  vim Makefile 
+ 1591  make clean 
+ 1592  make
+ 1593  make run
+ 1594  dirs -v
+ 1595  pushd 
+ 1596  vim Makefile 
+ 1597  make clean 
+ 1598  make
+ 1599  make run
+ 1600  ls -hgo
+ 1601  rm -v kernel
+ 1602  ls -hgo
+ 1603  file kernelmemfs 
+ 1604  make run
+ 1605  bvi floppyimage.flp 
+ 1606  ls -hgo
+ 1607  bvi floppyImaDeMIKEos.flp 
+ 1608  cp -vi bootblock boot_sect.bin 
+ 1609  cp -vi kernelmemfs kernel.bin 
+ 1610  rm -v floppyimage.flp 
+ 1611  make floppyimage.flp 
+ 1612  bvi floppyimage.flp 
+ 1613  man mount
+ 1614  mount -f -v -o loop -t vfat floppyimage.flp tmp-loop/
+ 1615  mount  -v -o loop -t vfat floppyimage.flp tmp-loop/
+ 1616  dmesg 
+ 1617  make floppyimage.flp 
+ 1618  rm -v floppyimage.flp 
+ 1619  make floppyimage.flp 
+ 1620  rm -rv tmp-loop/
+ 1621  make floppyimage.flp 
+ 1622  rm -v floppyimage.flp 
+ 1623  make floppyimage.flp 
+ 1624  dmesg 
+ 1625  bvi floppyimage.flp 
+ 1626  ls
+ 1627  bvi floppyImaDeMIKEos.flp 
+ 1628  vim boot_sect.asm 
+ 1629  bvi floppyImaDeMIKEos.flp 
+ 1630  :q
+ 1631  pushd 
+ 1632  dirss -v
+ 1633  dirs -v
+ 1634  pushd +3
+ 1635  ls -hgotr
+ 1636  vim bootblock.asm 
+ 1637  vim bootasm.S 
+ 1638  cd ../
+ 1639  dirs-v
+ 1640  dirs -v
+ 1641  cp -rv mit-pdos/ `dirs -l +3`
+ 1642  pushd +3
+ 1643  ls -hgo
+ 1644  mv mit-pdos/ ../
+ 1645  cp -vi boot_sect_primeras28.asm ../mit-pdos/
+ 1646  pushd ../mit-pdos/
+ 1647  ls -hgotr
+ 1648  vim Makefile 
+ 1649  make clean 
+ 1650  make
+ 1651  ls -hgo
+ 1652  ls
+ 1653  ls -hgo
+ 1654  ls -hgo ..
+ 1655  cp -vi ../Prueba_5/boot_sect_primeras28.asm ./bootblock28.asm
+ 1656  make clean 
+ 1657  make
+ 1658  vim Makefile 
+ 1659  make clean 
+ 1660  make
+ 1661  ls -hgo
+ 1662  ls
+ 1663  cp -vi ../Prueba_5/boot_sect_primeras28.asm ./
+ 1664  mv boot_sect_primeras28.asm bootblock28.asm
+ 1665  ls
+ 1666  make clean 
+ 1667  make
+ 1668  ls
+ 1669  cp -vi ../Prueba_5/boot_sect_primeras28.asm ./
+ 1670  mv boot_sect_primeras28.asm bootblock28.S
+ 1671  vim Makefile 
+ 1672  make clean 
+ 1673  ls
+ 1674  make
+ 1675  vim bootblock28.S 
+ 1676  make
+ 1677  vim bootasm.S 
+ 1678  make clean 
+ 1679  make
+ 1680  man nasm
+ 1681  nasm -hf
+ 1682  vim bootblock28.S 
+ 1683  make clean 
+ 1684  make
+ 1685  vim bootblock28.S 
+ 1686  make clean 
+ 1687  make
+ 1688  vim Makefile 
+ 1689  make clean 
+ 1690  make
+ 1691  vim bootblock.asm 
+ 1692  ls -hgo
+ 1693  vim bootblock28.S 
+ 1694  make clean 
+ 1695  make
+ 1696  vim bootblock28.S 
+ 1697  ls -hgo
+ 1698  vim bootblock28.S 
+ 1699  make clean 
+ 1700  make
+ 1701  vim bootblock28.S 
+ 1702  make clean 
+ 1703  make
+ 1704  make clean 
+ 1705  vim bootblock28.S 
+ 1706  make clean 
+ 1707  make
+ 1708  vim bootblock28.S 
+ 1709  make clean 
+ 1710  vim bootblock28.S 
+ 1711  make
+ 1712  ls
+ 1713  cp -vi bootblock ../Prueba_5/
+ 1714  dirs -v
+ 1715  pushd 
+ 1716  make
+ 1717  rm -v floppyimage.flp 
+ 1718  cp -vi bootblock boot_sect.bin 
+ 1719  make floppyimage.flp 
+ 1720  rm -v floppyimage.flp 
+ 1721  cp -vi kernelmemfs kernel.bin
+ 1722  make floppyimage.flp 
+ 1723  make run 
+ 1724  shutdown -h now
+ 1725  pushd /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/
+ 1726  ls
+ 1727  xpdf os-dev.pdf &
+ 1728  dirs -v
+ 1729  cd mit-pdos/
+ 1730  ls
+ 1731  make clean 
+ 1732  grep SEG_KCODE *
+ 1733  file gdb_util
+ 1734  file gdbutil
+ 1735  vim gdbutil 
+ 1736  make 
+ 1737  make qemu
+ 1738  mkae
+ 1739  make
+ 1740  make qemu
+ 1741  make
+ 1742  make qemu
+ 1743  make clean 
+ 1744  make
+ 1745  make qemu
+ 1746  make
+ 1747  make qemu
+ 1748  make
+ 1749  make qemu
+ 1750  make
+ 1751  make qemu
+ 1752  make
+ 1753  make qemu
+ 1754  cp -vi bootblock ../Prueba_5/
+ 1755  pushd 
+ 1756  rm-v floppyimage.flp 
+ 1757  rm -v floppyimage.flp 
+ 1758  cp -vi bootblock boot_sect.bin 
+ 1759  make floppyimage.flp 
+ 1760  make run
+ 1761  ls -gotr
+ 1762  pushd 
+ 1763  ls
+ 1764  make
+ 1765  make qemu
+ 1766  cp -vi bootblock ../Prueba_5/
+ 1767  pushd 
+ 1768  rm -v floppyimage.flp 
+ 1769  cp -vi bootblock boot_sect.bin 
+ 1770  make floppyimage.flp 
+ 1771  make run
+ 1772  vim LEEME.txt
+ 1773  cd ../
+ 1774  amake
+ 1775  make
+ 1776  dirs -v
+ 1777  pushd /mnt/sda3/Usuario/2017/15_SistemasOperativosEnTiempoReal/YuanXinyu/
+ 1778  ls
+ 1779  alias ls=ls --color=never
+ 1780  ls
+ 1781  cd Linux-0.11-master
+ 1782  ls -hgo
+ 1783  grep -r outb *
+ 1784  make
+ 1785  make qemu
+ 1786  make run
+ 1787  vim Makefile
+ 1788  make help
+ 1789  make start
+ 1790  cd ../
+ 1791  ls -hgotr
+ 1792  cp -rv Linux-0.11-master Linux-0.11-master_backup_2018_02_22_05_32
+ 1793  ls
+ 1794  cd Linux-0.11-master_modificado_para_ROOT_DEV_igual_a_0x000/
+ 1795  make
+ 1796  make start
+ 1797  vim boot/bootsect.s 
+ 1798  ls -hgotr
+ 1799  file hdc-0.11.img 
+ 1800  file Image 
+ 1801  qemu -fda Image
+ 1802  qemu-system-i386 -fda Image
+ 1803  vim boot/bootsect.s 
+ 1804  make clean 
+ 1805  grep -r ROOT_DEV 
+ 1806  vim Makefile
+ 1807  make clean 
+ 1808  make
+ 1809  make start
+ 1810  cd ../
+ 1811  ls -hgotr
+ 1812  cp -rv Linux-0.11-master Linux-0.11-master_para_Modificar
+ 1813  cd Linux-0.11-master_para_Modificar/
+ 1814  vim Makefile
+ 1815  vim boot/bootsect.s 
+ 1816  make
+ 1817  make clean 
+ 1818  make
+ 1819  ls -hgotr
+ 1820  file Image 
+ 1821  make start
+ 1822  make clean 
+ 1823  grep -r nonexis *
+ 1824  ./cscope
+ 1825  cd cscope/
+ 1826  ls
+ 1827  ls -hgotr
+ 1828  cscope 
+ 1829  ls -hgo
+ 1830  cd ../
+ 1831  vim Makefile
+ 1832  cat Makefile|grep qemu-system
+ 1833  qemu-system-i386 -fda Imake
+ 1834  qemu-system-i386 -fda Image
+ 1835  make
+ 1836  qemu-system-i386 -fda Image
+ 1837  grep -r nonexisten *
+ 1838  vim kernel/blk_drv/ll_rw_blk.c 
+ 1839  grep -r ll_rw_blo 
+ 1840  make clean 
+ 1841  grep -r ll_rw_block 
+ 1842  vim fs/buffer.c 
+ 1843  grep -r bread *
+ 1844  pushd /home/lamberto/2017_08_A_2017_12/SO
+ 1845  pushd /home/lamberto/2017_08_A_2017_12/SOTR/LIBROS/
+ 1846  xpdf \[Lixiang_Yang\]_The_Art_of_Linux_Kernel_Design_Ill\(BookZZ.org\).pdf &
+ 1847  pushd /mnt/sda3/Usuario/2017/15_SistemasOperativosEnTiempoReal/YuanXinyu/Linux-0.11-master/
+ 1848  vim boot/bootsect.s 
+ 1849  pushd 
+ 1850  cd ..
+ 1851  cd ../Prueba_6/mit-pdos/
+ 1852  vim bootmain.c
+ 1853  cd ../
+ 1854  gedit notas_so.txt&
+ 1855  gedit notas_so.txt &
+ 1856  ls
+ 1857  mkdir linux-2.4.2
+ 1858  cp -v linux-2.4.2.tar.gz linux-2.4.2/
+ 1859  cd linux-2.4.2/
+ 1860  ls
+ 1861  tar xvzf linux-2.4.2.tar.gz 
+ 1862  ls -hgotr
+ 1863  cd linux/
+ 1864  ls -hgo
+ 1865  cd arch/i386/
+ 1866  ls -hgotr
+ 1867  cd boot/
+ 1868  ls -hgo
+ 1869  vim bootsect.S 
+ 1870  vim setup.S 
+ 1871  cd ../../../
+ 1872  ls
+ 1873  less README 
+ 1874  grep -r floppy 
+ 1875  vim Documentation/Configure.help 
+ 1876  ls -hgo
+ 1877  cd arch/
+ 1878  ls -hgotr
+ 1879  cd i386/
+ 1880  ls
+ 1881  grep -r main
+ 1882  vim boot/video.S 
+ 1883  vim boot/setup.S 
+ 1884  mkdir /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Yianyiu_with_boot_bootsect_Replaced_with the_2.4.2
+ 1885  cp -rv /mnt/sda3/Usuario/2017/15_SistemasOperativosEnTiempoReal/YuanXinyu/Linux-0.11-master /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Yianyiu_with_boot_bootsect_Replaced_with/
+ 1886  pushd /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Yianyiu_with_boot_bootsect_Replaced_with/
+ 1887  cd Linux-0.11-master/
+ 1888  ls
+ 1889  make clean 
+ 1890  make
+ 1891  make start
+ 1892  make clean 
+ 1893  dirs -v
+ 1894  pushd 
+ 1895  ls
+ 1896  cd boot/
+ 1897  ls
+ 1898  pushd 
+ 1899  cd boot/
+ 1900  ls
+ 1901  pushd 
+ 1902  cp -vi bootsect.S $(dirs -l +1)
+ 1903  pushd 
+ 1904  ls -hgo
+ 1905  cp -vi bootsect.S bootsect.s
+ 1906  cd ../
+ 1907  make
+ 1908  vim boot/bootsect.s 
+ 1909  ls -hgo boot/
+ 1910  vim boot/bootsect.s 
+ 1911  make
+ 1912  cd ..
+ 1913  cd ../
+ 1914  ls -hgotr
+ 1915  mv Yianyiu_with_boot_bootsect_Replaced_with/ Yianyiu_with_boot_bootsect_Replaced_with_the_one_of_Linux2.4.2_error_unsolved
+ 1916  ls -hgotr
+ 1917  ls -hgo Prueba_7_boot_sect_de_MikeOS_para_cargar_Linux_0.00_Two_hardwired_Tasks/
+ 1918  mv mv Prueba_5/ Prueba_5_Usa_BootSectorDeXV6_ComplementadoConAlgoDelDeMikOS_llegaAlModoPM_yCorreInicioDeBootmainDeXV6
+ 1919  ls -hgo
+ 1920  mv Prueba_5/ Prueba_5_Usa_BootSectorDeXV6_ComplementadoConAlgoDelDeMikOS_llegaAlModoPM_yCorreInicioDeBootmainDeXV6
+ 1921  ls -hgo
+ 1922  cd Prueba_5_Usa_BootSectorDeXV6_ComplementadoConAlgoDelDeMikOS_llegaAlModoPM_yCorreInicioDeBootmainDeXV6/
+ 1923  ls -hgo
+ 1924  vim LEEME.txt 
+ 1925  ./0_montar_particiones_de_windows7.sh 
+ 1926  pushd /mnt/sda3/Usuario/2017/15_SistemasOperativosEnTiempoReal/
+ 1927  ls -hgo
+ 1928  alias ls=ls --color=never
+ 1929  ls
+ 1930  ls -hgo
+ 1931  pushd /home/lamberto/2017_08_A_2017_12/
+ 1932  cd MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/
+ 1933  ls -hgo
+ 1934  mv Prueba_6/ Prueba_6_crear_kernel_con_bootasm_bootmain_kernel_de_xv6_y_cargarlo_con_boot_sect_de_MikeOS
+ 1935  mkdir Prueba_7_boot_sect_de_MikeOS_para_cargar_Linux_0.00_Two_hardwired_Tasks
+ 1936  pushd 
+ 1937  tree 01_Linux_0.00_Two_hardwired_Tasks/
+ 1938  cat 01_Linux_0.00_Two_hardwired_Tasks/Construccion.txt 
+ 1939  ls -hgo Linux_0.00_Two_hardwired_Tasks/
+ 1940  cd 01_Linux_0.00_Two_hardwired_Tasks/
+ 1941  ls
+ 1942  ls -hgotr
+ 1943  vim bootsect.s 
+ 1944  vim setup.s 
+ 1945  vim head.s 
+ 1946  pushd /mnt/sda3/Usuario/2017/15_SistemasOperativosEnTiempoReal/YuanXinyu/Linux-0.11-master_para_Modificar/
+ 1947  ls
+ 1948  vim boot/bootsect.s 
+ 1949  pushd /home/lamberto/KERNEL_SRC/linux-2.4.2/linux/arch/i386/boot/
+ 1950  ls -hgo
+ 1951  grep DEF_INIT *
+ 1952  grep -r DEF_INITSEG *
+ 1953  cd ../
+ 1954  grep DEF_INIT *
+ 1955  grep -r DEF_INIT *
+ 1956  cd ../
+ 1957  grep DEF_INIT *
+ 1958  grep -r DEF_INIT *
+ 1959  cp -vi include/asm-i386/boot.h /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/Yianyiu_with_boot_bootsect_Replaced_with/Linux-0.11-master/boot/
+ 1960  shutdown -h now
+ 1961  ./0_montar_particiones_de_windows7.sh 
+ 1962  pushd /mnt/sda3/Usuario/EMI_201603-201607/
+ 1963  ls -hgotr
+ 1964  alias ls=ls --color=never
+ 1965  ls
+ 1966  ls -hgo
+ 1967  cd FORMALIDADES/
+ 1968  ls -hgo
+ 1969  cd IN
+ 1970  cd 01_INFORMACION_DOCUMENTACION_REQUERIDA/
+ 1971  ls -hgo
+ 1972  cat nota.txt 
+ 1973  tree
+ 1974  ls -hgo
+ 1975  tree DOCTOS/
+ 1976  shutdown -h now
+ 1977  ls
+ 1978  du -sh LinuxAssembly\ using\ NASM.pdf 
+ 1979  xpdf LinuxAssembly\ using\ NASM.pdf &
+ 1980  ./0_montar_particiones_de_windows7.sh 
+ 1981  pushd /home/lamberto/2017_08_A_2017_12/MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/
+ 1982  ls
+ 1983  cd..
+ 1984  cd ../
+ 1985  cd TO_LEARN_nasm/
+ 1986  ls
+ 1987  ls -hgo
+ 1988  ls -hgo 09_LIBRO/
+ 1989  mv 09_LIBRO/ 09_LIBROS
+ 1990  tree 09_LIBROS/
+ 1991  ls -hgotr
+ 1992  tree 09_LIBROS/
+ 1993  cd 09_LIBROS/
+ 1994  apvlv LinuxAssembly\ using\ NASM.pdf &
+ 1995  cp -vi ../../MIKE_OS_mikeos_dot_sourceforge_dot_net_diag_write-your-own-os_dot_html/os-dev.pdf ./
+ 1996  ls -hgo
+ 1997  apvlv os-dev.pdf &
+ 1998  man ndisasm 
+ 1999  shutdown -h now
+ 2000  pushd /home/lamberto/2017_08_A_2017_12/SO
+ 2001  pushd /home/lamberto/2017_08_A_2017_12/SOTR/META_PRACTICAS/
+ 2002  ls
+ 2003  cd PRAC00_ESSENTIALS_LD/
+ 2004  libreoffice Practica_0_1.doc &
+ 2005  ls
+ 2006  cd test1/
+ 2007  ls
+ 2008  pushd ../test
+ 2009  ls
+ 2010  vim a1.s a2.s
+ 2011  gvim a1.s a2.s&
+ 2012  clear
+ 2013  as --32 a1.s -o a1.o
+ 2014  objdump -D a1.o
+ 2015  vim Makefile 
+ 2016  make
+ 2017  vim Makefile 
+ 2018  make
+ 2019  make clean 
+ 2020  make
+ 2021  vim Makefile 
+ 2022  make
+ 2023  vim Makefile 
+ 2024  make
+ 2025  make clean 
+ 2026  make
+ 2027  file a.out
+ 2028  ls -hgo
+ 2029  ./a.out
+ 2030  ld -m elf_i386 a2.o a1.o -T link1.ld -o b.out
+ 2031  objcopy -j abc -j def -O binary b.out b.bin
+ 2032  od -t x1 b.bin 
+ 2033  od -t x1 a.bin 
+ 2034  ld -m elf_i386 a2.o a1.o -T link.ld -o b.out
+ 2035  vi link.ld 
+ 2036  ld -m elf_i386 a2.o a1.o  -o a.out
+ 2037  vim a1.s 
+ 2038  make clean 
+ 2039  as --32 a1.s -o a1.o
+ 2040  as --32 a2.s -o a2.o
+ 2041  ld -m elf_i386 -e i a2.o a1.o  -o a.out
+ 2042  objcopy -j abc -j def -O binary a.out a.bin
+ 2043  od -t x1 a.bin 
+ 2044  ld -m elf_i386 -e i a1.o a2.o  -o a.out
+ 2045  objcopy -j abc -j def -O binary a.out a.bin
+ 2046  od -t x1 a.bin 
+ 2047  od -t x1 b.bin 
+ 2048  history 
+ 2049  history >salidaDehistory.txt
