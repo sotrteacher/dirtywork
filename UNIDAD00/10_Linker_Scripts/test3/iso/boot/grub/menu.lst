@@ -1,0 +1,5 @@
+default=0
+timeout=25
+
+title xv6 based os 2016.03.01
+kernel /boot/kernel.elf

@@ -1,3 +1,4 @@
+                         Mi\'ercoles 22 de septiembre de 2021
 Para limpiar:
 make clean
 
@@ -7,6 +8,7 @@ make
 Para bootear el kernel:
 make newrun
 
-Esta versi\'on del kernel \'unicamente limpia la patalla.
+Esta versi\'on del kernel imprime en la patalla los descriptores
+de la GDT que se tiene despu\'es del booteo desde grub en qemu.
 
 

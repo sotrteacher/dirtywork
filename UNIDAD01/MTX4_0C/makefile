@@ -2,9 +2,10 @@
 # The C and C++ rules are already setup by default.
 # The only one that needs changing is the assembler 
 # rule, as we use nasm instead of GNU as.
+CC = gcc
 
 SOURCES=boot.o tswitch.o t.o display.o io.o init-idt.o timer.o init-cpu.o \
-init-crt.o init8259.o init8253.o monitor.o common.o
+init-crt.o init8259.o init8253.o monitor.o common.o copy_data_byte.o
 
 CFLAGS=-m32 -fno-PIC -nostdlib -nostdinc -fno-builtin -fno-stack-protector
 LDFLAGS=-m elf_i386 -Tlink.ld
@@ -20,6 +21,8 @@ link:
 
 .s.o:
 	nasm $(ASFLAGS) $<
+copy_data_byte.o: copy_data_byte.s
+	$(CC) $(CFLAGS) -x assembler-with-cpp -c $< -o $@ 
 
 newrun:all
 	qemu-system-i386 -kernel kernel

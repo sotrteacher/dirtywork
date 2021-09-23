@@ -1,2 +1,0 @@
-my_monitor.s: monitor.c
-	cc -m32 -fno-PIC -nostdlib -nostdinc -fno-builtin -fno-stack-protector   -S -o my_monitor.s monitor.c

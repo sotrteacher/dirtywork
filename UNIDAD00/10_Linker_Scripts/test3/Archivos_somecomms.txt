@@ -1,0 +1,12 @@
+ARCHIVOS presentes       REQUERIDO POR:
+no comp o ensamblados
+README                   fs.img
+_init                    fs.img
+
+ARCHIVOS compilados despues del kernel
+init.c                   _init
+ulib.c                   _init
+user.h                   ulib.c
+printf.c                 _init
+usys.c                   _init
+umalloc.c                _init

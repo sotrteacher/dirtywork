@@ -1,0 +1,69 @@
+
+notmain:     formato del fichero elf32-i386
+
+
+Desensamblado de la sección .text:
+
+00000000 <notmain>:
+   0:	55                   	push   %ebp
+   1:	89 e5                	mov    %esp,%ebp
+   3:	a1 5c 00 00 00       	mov    0x5c,%eax ;eax<-(0x0000005c), eax<-0xdeadbeef
+   8:	83 c0 01             	add    $0x1,%eax ;eax<-eax+1, 0xdeadbeef+1=0xdeadbef0 
+   b:	a3 5c 00 00 00       	mov    %eax,0x5c ;(0x0000005c)<-(eax),*(uint*)0x0000005c=0xdeadbef0
+  10:	8b 15 5c 00 00 00    	mov    0x5c,%edx ;se coloca un offset en edx (para eds:edx)
+  16:	b8 01 00 00 00       	mov    $0x1,%eax ;se coloca 1 en eax
+  1b:	89 d3                	mov    %edx,%ebx ;se coloca el valor de X en ebx
+  1d:	cd 80                	int    $0x80     ;se hace una syscall (system call)
+  1f:	5d                   	pop    %ebp
+  20:	c3                   	ret    
+
+Desensamblado de la sección .eh_frame:
+
+00000024 <.eh_frame>:
+  24:	14 00                	adc    $0x0,%al
+  26:	00 00                	add    %al,(%eax)
+  28:	00 00                	add    %al,(%eax)
+  2a:	00 00                	add    %al,(%eax)
+  2c:	01 7a 52             	add    %edi,0x52(%edx)
+  2f:	00 01                	add    %al,(%ecx)
+  31:	7c 08                	jl     3b <notmain+0x3b>
+  33:	01 1b                	add    %ebx,(%ebx)
+  35:	0c 04                	or     $0x4,%al
+  37:	04 88                	add    $0x88,%al
+  39:	01 00                	add    %eax,(%eax)
+  3b:	00 1c 00             	add    %bl,(%eax,%eax,1)
+  3e:	00 00                	add    %al,(%eax)
+  40:	1c 00                	sbb    $0x0,%al
+  42:	00 00                	add    %al,(%eax)
+  44:	bc ff ff ff 21       	mov    $0x21ffffff,%esp
+  49:	00 00                	add    %al,(%eax)
+  4b:	00 00                	add    %al,(%eax)
+  4d:	41                   	inc    %ecx
+  4e:	0e                   	push   %cs
+  4f:	08 85 02 42 0d 05    	or     %al,0x50d4202(%ebp)
+  55:	5d                   	pop    %ebp
+  56:	c5 0c 04             	lds    (%esp,%eax,1),%ecx
+  59:	04 00                	add    $0x0,%al
+	...
+
+Desensamblado de la sección .data:
+
+0000005c <X>:
+  5c:	ef                   	out    %eax,(%dx)
+  5d:	be                   	.byte 0xbe
+  5e:	ad                   	lods   %ds:(%esi),%eax
+  5f:	de                   	.byte 0xde
+
+Desensamblado de la sección .comment:
+
+00000000 <.comment>:
+   0:	47                   	inc    %edi
+   1:	43                   	inc    %ebx
+   2:	43                   	inc    %ebx
+   3:	3a 20                	cmp    (%eax),%ah
+   5:	28 44 65 62          	sub    %al,0x62(%ebp,%eiz,2)
+   9:	69 61 6e 20 34 2e 39 	imul   $0x392e3420,0x6e(%ecx),%esp
+  10:	2e 32 2d 31 30 29 20 	xor    %cs:0x20293031,%ch
+  17:	34 2e                	xor    $0x2e,%al
+  19:	39 2e                	cmp    %ebp,(%esi)
+  1b:	32 00                	xor    (%eax),%al
