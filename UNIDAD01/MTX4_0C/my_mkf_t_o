@@ -1,0 +1,6 @@
+all:t_bis.dis
+t_bis.o:t_bis.c
+	gcc -m32 -fno-PIC -nostdlib -nostdinc -fno-builtin -fno-stack-protector   -c -o t_bis.o t_bis.c
+t_bis.dis:t_bis.o
+	objdump -D $< > $@
+

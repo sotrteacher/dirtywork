@@ -1,0 +1,233 @@
+GAS LISTING bootsect.s 			page 1
+
+
+   1              	# Skelix by Xiaoming Mo (skelixos@gmail.com)
+   2              	# Licence: GPLv2
+   3              			.text
+   4              			.globl	start
+   5              			.include "kernel.inc"
+   1              	# Skelix by Xiaoming Mo (skelixos@gmail.com)
+   2              	# Licence: GPLv2
+   3              	.set CODE_SEL, 0x08	# code segment selector in kernel mode 
+   4              	.set DATA_SEL, 0x10 	# data segment selector in kernel mode
+   5              	.set IDT_ADDR, 0x80000	# IDT start address
+   6              	.set IDT_SIZE, (256*8)	# IDT has fixed length
+   7              	.set GDT_ADDR, (IDT_ADDR+IDT_SIZE)
+   8              				# GDT starts after IDT
+   9              	#if 0 //LMC 2021.09.16
+  10              	#.set GDT_ENTRIES, 5	# GDT has 5 descriptors
+  11              	#else
+  12              	.set GDT_ENTRIES, 9	# GDT has 9 descriptors
+  13              	#endif
+  14              				# null descriptor
+  15              				# cs segment descriptor for kernel
+  16              				# ds segment descriptor for kernel
+  17              				# current process tss
+  18              				# current process ldt
+  19              				# my segment to write idt
+  20              	.set GDT_SIZE, (8*GDT_ENTRIES)
+  21              				# GDT length
+  22              	.set KERNEL_SECT, 72	# Kernel lenght, counted by sectors
+  23              	#.set KERNEL_SECT, 67	# Kernel lenght, counted by sectors
+  24              	.set STACK_BOT, 0xa0000	# stack starts at 640K
+  25              	
+   6              			.code16
+   7              	start:
+   8 0000 66EA0000 			jmpl    $0x0,   $code
+   8      00000000 
+   9              	gdt:   
+  10 0008 00000000 			.quad	0x0000000000000000 # null descriptor, 0x00
+  10      00000000 
+  11 0010 FFFF0000 			.quad	0x00cf9a000000ffff # cs, 0x08
+  11      009ACF00 
+  12 0018 FFFF0000 			.quad	0x00cf92000000ffff # ds, 0x10
+  12      0092CF00 
+  13 0020 68000000 			.quad	0x0000e90000000068 # reserved for tssd0, TSS_SEL = 0x18 (include/kernel.h)
+  13      00E90000 
+  14 0028 40000000 			.quad	0x0000e20000000040 # reserved for ldtd0, LDT_SEL = 0x20 (include/kernel.h)
+  14      00E20000 
+  15              	#if 1 //LMC 2021.09.16
+  16 0030 68000000 			.quad	0x0000e90000000068 # reserved for tssd1, TSS1_SEL = 0x28 (include/kernel.h)
+  16      00E90000 
+  17 0038 40000000 			.quad	0x0000e20000000040 # reserved for ldtd1, LDT1_SEL = 0x30 (include/kernel.h)
+  17      00E20000 
+  18 0040 FF070000 			.quad	0x00409208000007ff # descriptor de IDT, MIDT_SEL = 0x38
+  18      08924000 
+  19              	                                           # Don't forget to update GDT_ENTRIES at 
+  20              	                                           # include/kernel.inc [I missed this at 
+  21              	                                           # first. Didn't work :-)] and the value of
+  22              	                                           # MIDT_SEL at the begining of load.s 
+  23              	                                           # GDT_ENTRIES also must be updated at 
+GAS LISTING bootsect.s 			page 2
+
+
+  24              	                                           # include/kernel.h
+  25 0048 FF070008 			.quad	0x00409208080007ff # descriptor de GDT, MGDT_SEL = 0x40
+  25      08924000 
+  26              	#		.fill 256-GDT_ENTRIES,8,0  # /* space for LDT's and TSS's etc */
+  27              	#                             /*There is no space in the boot sector for this */
+  28              	#endif
+  29              	gdt_48:
+  30 0050 4700     			.word	.-gdt-1
+  31 0052 00080800 			.long	GDT_ADDR
+  32              	
+  33              	code:
+  34 0056 31C0     			xorw	%ax,	%ax
+  35 0058 8ED8     			movw	%ax,	%ds	# ds = 0x0000
+  36 005a 8ED0     			movw	%ax,	%ss	# stack segment = 0x0000
+  37 005c BC0010   			movw	$0x1000,%sp	# arbitrary value 
+  38              						# used before pmode
+  39              	
+  40              			## read rest of kernel to 0x10000
+  41 005f B80010   			movw	$0x1000,%ax
+  42 0062 8EC0     			movw	%ax,	%es
+  43 0064 31DB     			xorw	%bx,	%bx	# es:bs destination address
+  44 0066 B94800   			movw	$KERNEL_SECT,%cx
+  45 0069 BE0100   			movw	$1,	%si	# 0 is boot sector
+  46              	rd_kern:
+  47 006c E87100   			call	read_sect
+  48 006f 81C30002 			addw	$512,	%bx
+  49 0073 46       			incw	%si
+  50 0074 E2F6     			loop	rd_kern
+  51              	
+  52 0076 FA       			cli
+  53              			
+  54              			## move first 512 bytes of kernel to 0x0000
+  55              			## it will move rest of kernel to 0x0200,
+  56              			## that is, next to this sector
+  57 0077 FC       			cld
+  58 0078 B80010   			movw	$0x1000,%ax
+  59 007b 8ED8     			movw	%ax,	%ds
+  60 007d B80000   			movw	$0x0000,%ax
+  61 0080 8EC0     			movw	%ax,	%es
+  62 0082 31F6     			xorw	%si,	%si
+  63 0084 31FF     			xorw	%di,	%di
+  64 0086 B98000   			movw	$512>>2,%cx
+  65 0089 F3       			rep
+  66 008a 66A5     			movsl
+  67              	
+  68 008c 31C0     			xorw	%ax,	%ax
+  69 008e 8ED8     			movw	%ax,	%ds	# reset ds to 0x0000
+  70              			## move	gdt 
+  71 0090 B88080   			movw	$GDT_ADDR>>4,%ax
+  72 0093 8EC0     			movw	%ax,	%es
+  73 0095 BE0000   			movw	$gdt,	%si
+  74 0098 31FF     			xorw	%di,	%di
+  75 009a B91200   			movw	$GDT_SIZE>>2,%cx
+  76 009d F3       			rep
+  77 009e 66A5     			movsl
+  78              	
+  79              	enable_a20:
+GAS LISTING bootsect.s 			page 3
+
+
+  80              			## The Undocumented PC
+  81 00a0 E464     			inb		$0x64,	%al	
+  82 00a2 A802     			testb	$0x2,	%al
+  83 00a4 75FA     			jnz		enable_a20
+  84 00a6 B0DF     			movb	$0xdf,	%al
+  85 00a8 E664     			outb	%al,	$0x64
+  86              	
+  87 00aa 0F011600 			lgdt	gdt_48
+  87      00
+  88              	######################################################################
+  89              	#if 1 //LMC 2021.09.26           #
+  90 00af B011     		movb	$0x11,%al        #	#! initialization sequence
+  91 00b1 E620     		out	%al,$0x20        #	#! send it to 8259A-1
+  92 00b3 E6A0     		out	%al,$0xA0        #	#! and to 8259A-2
+  93 00b5 B020     		movb	$0x20,%al        #	#! start of hardware int's (0x20)
+  94 00b7 E621     		out	%al,$0x21        #
+  95 00b9 B028     		movb	$0x28,%al        #	#! start of hardware int's 2 (0x28)
+  96 00bb E6A1     		out	%al,$0xA1        #
+  97 00bd B004     		movb	$0x04,%al        #	#! 8259-1 is master
+  98 00bf E621     		out	%al,$0x21        #
+  99 00c1 B002     		movb	$0x02,%al        #	#! 8259-2 is slave
+ 100 00c3 E6A1     		out	%al,$0xA1        #
+ 101 00c5 B001     		movb	$0x01,%al        #	#! 8086 mode for both
+ 102 00c7 E621     		out	%al,$0x21        #
+ 103 00c9 E6A1     		out	%al,$0xA1        #
+ 104 00cb B0FF     		movb	$0xFF,%al        #	#! mask off all interrupts for now
+ 105 00cd E621     		out	%al,$0x21        #
+ 106 00cf E6A1     		out	%al,$0xA1        #
+ 107              	#endif			         #
+ 108              	#####################################################################
+ 109              	
+ 110              			## enter pmode
+ 111 00d1 0F20C0   			movl	%cr0,	%eax
+ 112 00d4 6683C801 			orl		$0x1,	%eax
+ 113 00d8 0F22C0   			movl	%eax,	%cr0
+ 114              	
+ 115 00db EA000008 			ljmp	$CODE_SEL, $0x0		# far? jump to the begining of load.o, because
+ 115      00
+ 116              							# $CODE_SEL is the kernel code selector (in GDT) 
+ 117              							# and load.o is the first object file in the list 
+ 118              							# of object files to be linked in the kernel (see  
+ 119              							# KERNEL_OBJS and target kernel in Makefile). 
+ 120              							# Remember at linking order matters!
+ 121              			## in:	ax:	LBA address, starts from 0
+ 122              			##		es:bx address for reading sector
+ 123              	read_sect:
+ 124 00e0 50       			pushw	%ax
+ 125 00e1 51       			pushw	%cx
+ 126 00e2 52       			pushw	%dx
+ 127 00e3 53       			pushw	%bx
+ 128              	
+ 129 00e4 89F0     			movw	%si,	%ax		
+ 130 00e6 31D2     			xorw	%dx,	%dx
+ 131 00e8 BB1200   			movw	$18,	%bx	# 18 sectors per track 
+ 132              						# for floppy disk
+ 133 00eb F7F3     			divw	%bx
+ 134 00ed 42       			incw	%dx
+GAS LISTING bootsect.s 			page 4
+
+
+ 135 00ee 88D1     			movb	%dl,	%cl	# cl=sector number
+ 136 00f0 31D2     			xorw	%dx,	%dx
+ 137 00f2 BB0200   			movw	$2,		%bx	# 2 headers per track 
+ 138              								# for floppy disk
+ 139 00f5 F7F3     			divw	%bx
+ 140              	
+ 141 00f7 88D6     			movb	%dl,	%dh	# head
+ 142 00f9 30D2     			xorb	%dl,	%dl	# driver
+ 143 00fb 88C5     			movb	%al,	%ch	# cylinder
+ 144 00fd 5B       			popw	%bx		# save to es:bx
+ 145              	rp_read:
+ 146 00fe B001     			movb	$0x1,	%al	# read 1 sector
+ 147 0100 B402     			movb	$0x2,	%ah
+ 148 0102 CD13     			int		$0x13
+ 149 0104 72F8     			jc		rp_read
+ 150 0106 5A       			popw	%dx
+ 151 0107 59       			popw	%cx
+ 152 0108 58       			popw	%ax
+ 153 0109 C3       			ret
+ 154              			
+ 155 010a 90909090 	.org	0x1fe, 0x90
+ 155      90909090 
+ 155      90909090 
+ 155      90909090 
+ 155      90909090 
+ 156 01fe 55AA     	.word	0xaa55
+ 157              	
+GAS LISTING bootsect.s 			page 5
+
+
+DEFINED SYMBOLS
+          bootsect.s:7      .text:0000000000000000 start
+  include/kernel.inc:3      *ABS*:0000000000000008 CODE_SEL
+  include/kernel.inc:4      *ABS*:0000000000000010 DATA_SEL
+  include/kernel.inc:5      *ABS*:0000000000080000 IDT_ADDR
+  include/kernel.inc:6      *ABS*:0000000000000800 IDT_SIZE
+  include/kernel.inc:7      *ABS*:0000000000080800 GDT_ADDR
+  include/kernel.inc:12     *ABS*:0000000000000009 GDT_ENTRIES
+  include/kernel.inc:20     *ABS*:0000000000000048 GDT_SIZE
+  include/kernel.inc:22     *ABS*:0000000000000048 KERNEL_SECT
+  include/kernel.inc:24     *ABS*:00000000000a0000 STACK_BOT
+          bootsect.s:33     .text:0000000000000056 code
+          bootsect.s:9      .text:0000000000000008 gdt
+          bootsect.s:29     .text:0000000000000050 gdt_48
+          bootsect.s:46     .text:000000000000006c rd_kern
+          bootsect.s:123    .text:00000000000000e0 read_sect
+          bootsect.s:79     .text:00000000000000a0 enable_a20
+          bootsect.s:145    .text:00000000000000fe rp_read
+
+NO UNDEFINED SYMBOLS

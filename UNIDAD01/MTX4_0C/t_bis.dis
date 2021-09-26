@@ -1,0 +1,81 @@
+
+t_bis.o:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00000000 <main_bis>:
+   0:	55                   	push   %ebp
+   1:	89 e5                	mov    %esp,%ebp
+   3:	83 ec 08             	sub    $0x8,%esp
+   6:	0f b6 05 00 00 00 00 	movzbl 0x0,%eax
+   d:	0f be d0             	movsbl %al,%edx
+  10:	89 d0                	mov    %edx,%eax
+  12:	c1 e0 02             	shl    $0x2,%eax
+  15:	01 d0                	add    %edx,%eax
+  17:	c1 e0 05             	shl    $0x5,%eax
+  1a:	89 c2                	mov    %eax,%edx
+  1c:	0f b6 05 00 00 00 00 	movzbl 0x0,%eax
+  23:	0f be c0             	movsbl %al,%eax
+  26:	01 c0                	add    %eax,%eax
+  28:	01 d0                	add    %edx,%eax
+  2a:	05 00 80 0b 00       	add    $0xb8000,%eax
+  2f:	83 ec 08             	sub    $0x8,%esp
+  32:	50                   	push   %eax
+  33:	68 00 00 00 00       	push   $0x0
+  38:	e8 fc ff ff ff       	call   39 <main_bis+0x39>
+  3d:	83 c4 10             	add    $0x10,%esp
+  40:	b8 00 00 00 00       	mov    $0x0,%eax
+  45:	c9                   	leave  
+  46:	c3                   	ret    
+
+Disassembly of section .comment:
+
+00000000 <.comment>:
+   0:	00 47 43             	add    %al,0x43(%edi)
+   3:	43                   	inc    %ebx
+   4:	3a 20                	cmp    (%eax),%ah
+   6:	28 44 65 62          	sub    %al,0x62(%ebp,%eiz,2)
+   a:	69 61 6e 20 36 2e 33 	imul   $0x332e3620,0x6e(%ecx),%esp
+  11:	2e 30 2d 31 38 2b 64 	xor    %ch,%cs:0x642b3831
+  18:	65 62 39             	bound  %edi,%gs:(%ecx)
+  1b:	75 31                	jne    4e <main_bis+0x4e>
+  1d:	29 20                	sub    %esp,(%eax)
+  1f:	36 2e 33 2e          	ss xor %cs:(%esi),%ebp
+  23:	30 20                	xor    %ah,(%eax)
+  25:	32 30                	xor    (%eax),%dh
+  27:	31 37                	xor    %esi,(%edi)
+  29:	30                   	.byte 0x30
+  2a:	35                   	.byte 0x35
+  2b:	31 36                	xor    %esi,(%esi)
+	...
+
+Disassembly of section .eh_frame:
+
+00000000 <.eh_frame>:
+   0:	14 00                	adc    $0x0,%al
+   2:	00 00                	add    %al,(%eax)
+   4:	00 00                	add    %al,(%eax)
+   6:	00 00                	add    %al,(%eax)
+   8:	01 7a 52             	add    %edi,0x52(%edx)
+   b:	00 01                	add    %al,(%ecx)
+   d:	7c 08                	jl     17 <.eh_frame+0x17>
+   f:	01 1b                	add    %ebx,(%ebx)
+  11:	0c 04                	or     $0x4,%al
+  13:	04 88                	add    $0x88,%al
+  15:	01 00                	add    %eax,(%eax)
+  17:	00 1c 00             	add    %bl,(%eax,%eax,1)
+  1a:	00 00                	add    %al,(%eax)
+  1c:	1c 00                	sbb    $0x0,%al
+  1e:	00 00                	add    %al,(%eax)
+  20:	00 00                	add    %al,(%eax)
+  22:	00 00                	add    %al,(%eax)
+  24:	47                   	inc    %edi
+  25:	00 00                	add    %al,(%eax)
+  27:	00 00                	add    %al,(%eax)
+  29:	41                   	inc    %ecx
+  2a:	0e                   	push   %cs
+  2b:	08 85 02 42 0d 05    	or     %al,0x50d4202(%ebp)
+  31:	02 43 c5             	add    -0x3b(%ebx),%al
+  34:	0c 04                	or     $0x4,%al
+  36:	04 00                	add    $0x0,%al
