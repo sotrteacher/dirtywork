@@ -106,7 +106,7 @@ static void init_idt()
     outportb(PIC_SLAVE_DATA,  0x01);      // outportb(0xA1, 0x01); /** out_byte(0xA1, 0x01); */
                                           // ICW4: 8086/88 (MCS-80/85) mode
     /**Disabling 
-       If yuo are going to use the processor local APIC and the IOAPIC, you must firt disable 
+       If you are going to use the processor local APIC and the IOAPIC, you must firt disable 
        the PIC. This is done via:
        mov al, 0xff
        out 0xA1, al
