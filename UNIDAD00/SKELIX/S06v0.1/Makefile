@@ -13,7 +13,8 @@ KERNEL_OBJS= load.o init.o isr.o timer.o libcc.o scr.o kb.o task.o kprintf.o exc
 #	${CC} ${CFLAGS} -S -o $*.s $<
 
 .s.o:
-	${AS} -a $< -o $*.o >$*.map
+	${AS} -a $< -o $*.o 
+#	${AS} -a $< -o $*.o >$*.map
 #	${AS} -o $*.o $<               # De esta forma tmb funciona en el Tut 2.
 
 all: final.img
@@ -23,7 +24,8 @@ final.img: bootsect kernel
 	@wc -c final.img
 
 bootsect: bootsect.o
-	${LD} --oformat binary -N -e start -Ttext 0x7c00 -o bootsect $<
+	${LD} --oformat binary -N -e start -Ttext 0x7c00 -Map=$@.map -o bootsect $<
+#	${LD} --oformat binary -N -e start -Ttext 0x7c00 -o bootsect $<
 #bootsect: bootsect.s
 #	as -Iinclude -a $< -o $@.o >$*.map
 #	${LD} --oformat binary -N -e start -Ttext 0x7c00 -o bootsect $@.o

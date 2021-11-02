@@ -1,0 +1,50 @@
+INTERRUPT 655040
+Notando que 655040_{10}=9fec0_{16}
+
+La direcci\'on 0009fec0 se est\'a imprimiendo en la funci\'on 
+bcopy() del archivo libcc.c 
+
+en la l\'inea: 
+	kprintf(KPL_DUMP,"bcopy(): dest=%x,\tsrc=%x\n",dest,src);
+Como en qemu se muestra la l\'inea de salida:
+INTERRUPT 655040
+
+procedo a revisar el archivo exceptions.c
+Lo que est\'a imprimiendo la l\'inea de salida "INTERRUPT 655040" es 
+la funci\'on 
+void general1_protection(void)
+del archivo exceptions.c
+
+Al buscar de donde se llama a la funci\'on general1_protection() con el comando:
+
+grep -r general1_protection
+
+se obtiene: 
+Binary file .exceptions.c.swp matches
+exceptions.c:general_protection(void) {
+Binary file exceptions.o matches
+isr.map:  38 ???? 00000000 			.long	stack_exception, isr0x0c, general_protection, isr0x0d
+isr.map:general_protection
+Binary file isr.o matches
+isr.s:		.long	stack_exception, isr0x0c, general_protection, isr0x0d
+
+Con lo que sabemos que a esta funci\'on no se le llama expl\'icitamente desde 
+ninguna parte. Es decir, a esta funci\'on se le invoca a trav\'es del mecanismo 
+de interrupciones. Pero qu\'e es lo que est\'a generando la interrupci\'on que 
+provoca la invocaci\'on de la funci\'on general_protection() ?
+Una pista es la l\'inea:
+	kprintf(KPL_DUMP,"bcopy(): dest=%x,\tsrc=%x\n",dest,src);
+que imprime: 
+bcopy(): dest=0009fec0, src=00006d20        
+(NOTEMOS que el n\'umero hexadecimal 0009fec0 es el n\'umero decimal 655040)
+As\'i que la l\'inea de código que est\'a provocando el llamado de la funci\'on
+general_protection() debe estar despu\'es de la l\'inea kprintf() mencionada arriba 
+en la funci\'on void bcopy(const void *src, void *dest, unsigned int n) del archivo 
+libcc.c
+
+
+
+
+
+
+

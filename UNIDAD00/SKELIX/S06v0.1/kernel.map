@@ -1,0 +1,545 @@
+
+Allocating common symbols
+Common symbol       size              file
+
+arr                 0x8               timer.o
+My_idt_dscr         0x8               init.o
+My_gdt_dscr         0x8               task.o
+task1               0x30              init.o
+task2               0x30              init.o
+
+Discarded input sections
+
+ .note.GNU-stack
+                0x0000000000000000        0x0 init.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 timer.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 libcc.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 scr.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 kb.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 task.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 kprintf.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 exceptions.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+Address of section .text set to 0x0
+LOAD load.o
+LOAD init.o
+LOAD isr.o
+LOAD timer.o
+LOAD libcc.o
+LOAD scr.o
+LOAD kb.o
+LOAD task.o
+LOAD kprintf.o
+LOAD exceptions.o
+                [!provide]                        PROVIDE (__executable_start, SEGMENT_START ("text-segment", 0x8048000))
+                0x0000000008048000                . = (SEGMENT_START ("text-segment", 0x8048000) + SIZEOF_HEADERS)
+
+.interp
+ *(.interp)
+
+.note.gnu.build-id
+ *(.note.gnu.build-id)
+
+.hash
+ *(.hash)
+
+.gnu.hash
+ *(.gnu.hash)
+
+.dynsym
+ *(.dynsym)
+
+.dynstr
+ *(.dynstr)
+
+.gnu.version
+ *(.gnu.version)
+
+.gnu.version_d
+ *(.gnu.version_d)
+
+.gnu.version_r
+ *(.gnu.version_r)
+
+.rel.init
+ *(.rel.init)
+
+.rel.text
+ *(.rel.text .rel.text.* .rel.gnu.linkonce.t.*)
+
+.rel.fini
+ *(.rel.fini)
+
+.rel.rodata
+ *(.rel.rodata .rel.rodata.* .rel.gnu.linkonce.r.*)
+
+.rel.data.rel.ro
+ *(.rel.data.rel.ro .rel.data.rel.ro.* .rel.gnu.linkonce.d.rel.ro.*)
+
+.rel.data
+ *(.rel.data .rel.data.* .rel.gnu.linkonce.d.*)
+
+.rel.tdata
+ *(.rel.tdata .rel.tdata.* .rel.gnu.linkonce.td.*)
+
+.rel.tbss
+ *(.rel.tbss .rel.tbss.* .rel.gnu.linkonce.tb.*)
+
+.rel.ctors
+ *(.rel.ctors)
+
+.rel.dtors
+ *(.rel.dtors)
+
+.rel.got
+ *(.rel.got)
+
+.rel.bss
+ *(.rel.bss .rel.bss.* .rel.gnu.linkonce.b.*)
+
+.rel.ifunc
+ *(.rel.ifunc)
+
+.rel.plt        0x0000000008048000        0x0
+ *(.rel.plt)
+                [!provide]                        PROVIDE (__rel_iplt_start, .)
+ *(.rel.iplt)
+                [!provide]                        PROVIDE (__rel_iplt_end, .)
+
+.init
+ *(SORT(.init))
+
+.plt
+ *(.plt)
+ *(.iplt)
+
+.plt.got
+ *(.plt.got)
+
+.text           0x0000000000000000     0x3317
+ *(.text.unlikely .text.*_unlikely .text.unlikely.*)
+ *(.text.exit .text.exit.*)
+ *(.text.startup .text.startup.*)
+ *(.text.hot .text.hot.*)
+ *(.text .stub .text.* .gnu.linkonce.t.*)
+ .text          0x0000000000000000     0x1acd load.o
+                0x0000000000000000                pm_mode
+                0x0000000000000198                timer_interrupt
+                0x00000000000001f9                write_byte_at_idt
+                0x0000000000000223                m_ltrw
+                0x0000000000000234                write_byte_at_gdt
+                0x0000000000000255                copy_data_byte
+                0x0000000000000277                go_to_user_mode
+                0x0000000000000296                move_to_user_mode
+                0x0000000000000301                my_do_timer
+                0x0000000000000570                ldt0
+                0x0000000000000588                tss0
+                0x0000000000000df8                ldt1
+                0x0000000000000e10                tss1
+                0x0000000000001aac                idt_loc
+                0x0000000000001ab0                my_idt_entry
+                0x0000000000001ab8                the_gdt_sel
+                0x0000000000001ac5                x_Pt
+                0x0000000000001ac9                y_Pt
+ .text          0x0000000000001acd      0x376 init.o
+                0x0000000000001d09                do_task1
+                0x0000000000001d23                do_task2
+                0x0000000000001d3d                init
+ .text          0x0000000000001e43      0x256 isr.o
+                0x0000000000001e43                task1_run
+                0x0000000000001e4a                task2_run
+                0x0000000000001e51                isr
+                0x0000000000002085                default_isr
+ .text          0x0000000000002099      0x122 timer.o
+                0x0000000000002099                timer_install
+                0x00000000000020ed                do_timer
+ .text          0x00000000000021bb      0x228 libcc.o
+                0x00000000000021bb                bcopy
+                0x000000000000225c                bzero
+                0x0000000000002278                memcpy
+                0x00000000000022ac                memset
+                0x00000000000022d6                memcmp
+                0x000000000000232a                strcmp
+                0x0000000000002389                strcpy
+                0x00000000000023bd                strlen
+ .text          0x00000000000023e3      0x2fe scr.o
+                0x000000000000248b                set_cursor
+                0x00000000000024fe                get_cursor
+                0x000000000000251a                print_c
+ .text          0x00000000000026e1      0x141 kb.o
+                0x0000000000002769                do_kb
+                0x00000000000027fd                kb_install
+ .text          0x0000000000002822      0x2aa task.o
+                0x0000000000002822                set_tss
+                0x00000000000028ea                set_ldt
+                0x00000000000029b2                get_tss
+                0x00000000000029c2                get_ldt
+                0x00000000000029d2                scheduler
+ .text          0x0000000000002acc      0x376 kprintf.o
+                0x0000000000002b8f                kprintf
+ .text          0x0000000000002e42      0x4d5 exceptions.o
+                0x0000000000002e42                divide_error
+                0x0000000000002e55                debug_exception
+                0x0000000000002e68                breakpoint
+                0x0000000000002e7b                nmi
+                0x0000000000002e8e                overflow
+                0x0000000000002ea1                bounds_check
+                0x0000000000002eb4                invalid_opcode
+                0x0000000000002ec7                cop_not_avalid
+                0x0000000000002eda                double_fault
+                0x0000000000002eed                overrun
+                0x0000000000002f00                invalid_tss
+                0x0000000000002f13                seg_not_present
+                0x0000000000002f26                stack_exception
+                0x0000000000002f39                general_protection
+                0x0000000000002f4c                page_fault
+                0x0000000000002f5f                reversed
+                0x0000000000002f72                coprocessor_error
+                0x00000000000031c8                info
+ *(.gnu.warning)
+
+.fini
+ *(SORT(.fini))
+                [!provide]                        PROVIDE (__etext, .)
+                [!provide]                        PROVIDE (_etext, .)
+                [!provide]                        PROVIDE (etext, .)
+
+.rodata         0x0000000000003320      0x86a
+ *(.rodata .rodata.* .gnu.linkonce.r.*)
+ .rodata        0x0000000000003320        0x3 timer.o
+ *fill*         0x0000000000003323        0x1 
+ .rodata        0x0000000000003324       0x44 libcc.o
+ *fill*         0x0000000000003368       0x18 
+ .rodata        0x0000000000003380      0x274 kb.o
+ .rodata        0x00000000000035f4       0x90 kprintf.o
+ .rodata        0x0000000000003684      0x506 exceptions.o
+
+.rodata1
+ *(.rodata1)
+
+.eh_frame_hdr
+ *(.eh_frame_hdr)
+ *(.eh_frame_entry .eh_frame_entry.*)
+
+.eh_frame       0x0000000000003b8c      0x814
+ *(.eh_frame)
+ .eh_frame      0x0000000000003b8c      0x100 init.o
+ .eh_frame      0x0000000000003c8c       0x58 timer.o
+ .eh_frame      0x0000000000003ce4      0x118 libcc.o
+ .eh_frame      0x0000000000003dfc       0x98 scr.o
+ .eh_frame      0x0000000000003e94      0x124 kb.o
+ .eh_frame      0x0000000000003fb8       0xd4 task.o
+ .eh_frame      0x000000000000408c       0x8c kprintf.o
+ .eh_frame      0x0000000000004118      0x288 exceptions.o
+ *(.eh_frame.*)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+
+.gnu_extab
+ *(.gnu_extab*)
+
+.exception_ranges
+ *(.exception_ranges .exception_ranges*)
+                0x00000000000043a0                . = .
+
+.eh_frame
+ *(.eh_frame)
+ *(.eh_frame.*)
+
+.gnu_extab
+ *(.gnu_extab)
+
+.gcc_except_table
+ *(.gcc_except_table .gcc_except_table.*)
+
+.exception_ranges
+ *(.exception_ranges .exception_ranges*)
+
+.tdata
+ *(.tdata .tdata.* .gnu.linkonce.td.*)
+
+.tbss
+ *(.tbss .tbss.* .gnu.linkonce.tb.*)
+ *(.tcommon)
+
+.preinit_array  0x00000000000043a0        0x0
+                [!provide]                        PROVIDE (__preinit_array_start, .)
+ *(.preinit_array)
+                [!provide]                        PROVIDE (__preinit_array_end, .)
+
+.init_array     0x00000000000043a0        0x0
+                [!provide]                        PROVIDE (__init_array_start, .)
+ *(SORT(.init_array.*) SORT(.ctors.*))
+ *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
+                [!provide]                        PROVIDE (__init_array_end, .)
+
+.fini_array     0x00000000000043a0        0x0
+                [!provide]                        PROVIDE (__fini_array_start, .)
+ *(SORT(.fini_array.*) SORT(.dtors.*))
+ *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
+                [!provide]                        PROVIDE (__fini_array_end, .)
+
+.ctors
+ *crtbegin.o(.ctors)
+ *crtbegin?.o(.ctors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .ctors)
+ *(SORT(.ctors.*))
+ *(.ctors)
+
+.dtors
+ *crtbegin.o(.dtors)
+ *crtbegin?.o(.dtors)
+ *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
+ *(SORT(.dtors.*))
+ *(.dtors)
+
+.jcr
+ *(.jcr)
+
+.data.rel.ro
+ *(.data.rel.ro.local* .gnu.linkonce.d.rel.ro.local.*)
+ *(.data.rel.ro .data.rel.ro.* .gnu.linkonce.d.rel.ro.*)
+
+.dynamic
+ *(.dynamic)
+
+.got
+ *(.got)
+ *(.igot)
+
+.got.plt
+ *(.got.plt)
+ *(.igot.plt)
+
+.data           0x00000000000043a0     0x4920
+ *(.data .data.* .gnu.linkonce.d.*)
+ .data          0x00000000000043a0        0x0 load.o
+ .data          0x00000000000043a0     0x4020 init.o
+                0x00000000000043a0                idt
+                0x00000000000043a4                gdt
+ .data          0x00000000000083c0        0x0 isr.o
+ .data          0x00000000000083c0        0x4 timer.o
+                0x00000000000083c0                timer_ticks_Pt
+ .data          0x00000000000083c4        0x0 libcc.o
+ .data          0x00000000000083c4        0x8 scr.o
+                0x00000000000083c4                csr_x_Pt
+                0x00000000000083c8                csr_y_Pt
+ .data          0x00000000000083cc        0x0 kb.o
+ *fill*         0x00000000000083cc       0x14 
+ .data          0x00000000000083e0      0x434 task.o
+                0x00000000000083e0                TASK0_STACK
+                0x00000000000087e0                TASK0
+                0x0000000000008810                current
+ *fill*         0x0000000000008814        0xc 
+ .data          0x0000000000008820      0x404 kprintf.o
+ *fill*         0x0000000000008c24       0x1c 
+ .data          0x0000000000008c40       0x80 exceptions.o
+
+.data1
+ *(.data1)
+                0x0000000000008cc0                _edata = .
+                [!provide]                        PROVIDE (edata, .)
+                0x0000000000008cc0                . = .
+                0x0000000000008cc0                __bss_start = .
+
+.bss            0x0000000000008cc0       0xc0
+ *(.dynbss)
+ *(.bss .bss.* .gnu.linkonce.b.*)
+ .bss           0x0000000000008cc0        0x0 load.o
+ .bss           0x0000000000008cc0        0x0 init.o
+ .bss           0x0000000000008cc0        0x0 isr.o
+ .bss           0x0000000000008cc0        0x4 timer.o
+                0x0000000000008cc0                timer_ticks
+ .bss           0x0000000000008cc4        0x8 libcc.o
+ .bss           0x0000000000008ccc        0x8 scr.o
+                0x0000000000008ccc                csr_x
+                0x0000000000008cd0                csr_y
+ .bss           0x0000000000008cd4        0x4 kb.o
+ .bss           0x0000000000008cd8        0x0 task.o
+ .bss           0x0000000000008cd8        0x0 kprintf.o
+ .bss           0x0000000000008cd8        0x0 exceptions.o
+ *(COMMON)
+ *fill*         0x0000000000008cd8        0x8 
+ COMMON         0x0000000000008ce0       0x90 init.o
+                0x0000000000008ce0                My_idt_dscr
+                0x0000000000008d00                task1
+                0x0000000000008d40                task2
+ COMMON         0x0000000000008d70        0x8 timer.o
+                0x0000000000008d70                arr
+ COMMON         0x0000000000008d78        0x8 task.o
+                0x0000000000008d78                My_gdt_dscr
+                0x0000000000008d80                . = ALIGN ((. != 0x0)?0x4:0x1)
+                0x0000000000008d80                . = ALIGN (0x4)
+                0x0000000000008d80                . = SEGMENT_START ("ldata-segment", .)
+                0x0000000000008d80                . = ALIGN (0x4)
+                0x0000000000008d80                _end = .
+                [!provide]                        PROVIDE (end, .)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x0000000000000000      0x170
+ *(.comment)
+ .comment       0x0000000000000000       0x2e init.o
+ .comment       0x000000000000002e       0x2e timer.o
+ .comment       0x000000000000005c       0x2e libcc.o
+ .comment       0x000000000000008a       0x2e scr.o
+ .comment       0x00000000000000b8       0x2e kb.o
+ .comment       0x00000000000000e6       0x2e task.o
+ .comment       0x0000000000000114       0x2e kprintf.o
+ .comment       0x0000000000000142       0x2e exceptions.o
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x0000000000000000      0x120
+ *(.debug_aranges)
+ .debug_aranges
+                0x0000000000000000       0x20 load.o
+ .debug_aranges
+                0x0000000000000020       0x20 init.o
+ .debug_aranges
+                0x0000000000000040       0x20 timer.o
+ .debug_aranges
+                0x0000000000000060       0x20 libcc.o
+ .debug_aranges
+                0x0000000000000080       0x20 scr.o
+ .debug_aranges
+                0x00000000000000a0       0x20 kb.o
+ .debug_aranges
+                0x00000000000000c0       0x20 task.o
+ .debug_aranges
+                0x00000000000000e0       0x20 kprintf.o
+ .debug_aranges
+                0x0000000000000100       0x20 exceptions.o
+
+.debug_pubnames
+ *(.debug_pubnames)
+
+.debug_info     0x0000000000000000     0x1b66
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x0000000000000000       0x81 load.o
+ .debug_info    0x0000000000000081      0x55d init.o
+ .debug_info    0x00000000000005de      0x346 timer.o
+ .debug_info    0x0000000000000924      0x2b8 libcc.o
+ .debug_info    0x0000000000000bdc      0x225 scr.o
+ .debug_info    0x0000000000000e01      0x246 kb.o
+ .debug_info    0x0000000000001047      0x3c7 task.o
+ .debug_info    0x000000000000140e      0x22e kprintf.o
+ .debug_info    0x000000000000163c      0x52a exceptions.o
+
+.debug_abbrev   0x0000000000000000      0xa2f
+ *(.debug_abbrev)
+ .debug_abbrev  0x0000000000000000       0x14 load.o
+ .debug_abbrev  0x0000000000000014      0x1e3 init.o
+ .debug_abbrev  0x00000000000001f7      0x141 timer.o
+ .debug_abbrev  0x0000000000000338      0x100 libcc.o
+ .debug_abbrev  0x0000000000000438      0x109 scr.o
+ .debug_abbrev  0x0000000000000541      0x10a kb.o
+ .debug_abbrev  0x000000000000064b      0x165 task.o
+ .debug_abbrev  0x00000000000007b0      0x12c kprintf.o
+ .debug_abbrev  0x00000000000008dc      0x153 exceptions.o
+
+.debug_line     0x0000000000000000      0x7e6
+ *(.debug_line .debug_line.* .debug_line_end)
+ .debug_line    0x0000000000000000      0x183 load.o
+ .debug_line    0x0000000000000183       0xf8 init.o
+ .debug_line    0x000000000000027b       0x85 timer.o
+ .debug_line    0x0000000000000300       0xf6 libcc.o
+ .debug_line    0x00000000000003f6       0xce scr.o
+ .debug_line    0x00000000000004c4       0x6d kb.o
+ .debug_line    0x0000000000000531       0xc5 task.o
+ .debug_line    0x00000000000005f6       0xcc kprintf.o
+ .debug_line    0x00000000000006c2      0x124 exceptions.o
+
+.debug_frame
+ *(.debug_frame)
+
+.debug_str      0x0000000000000000      0xf8e
+ *(.debug_str)
+ .debug_str     0x0000000000000000      0x345 init.o
+ .debug_str     0x0000000000000345      0x1c5 timer.o
+ .debug_str     0x000000000000050a      0x113 libcc.o
+ .debug_str     0x000000000000061d      0x1b0 scr.o
+ .debug_str     0x00000000000007cd      0x19b kb.o
+ .debug_str     0x0000000000000968      0x1f0 task.o
+ .debug_str     0x0000000000000b58      0x1a9 kprintf.o
+ .debug_str     0x0000000000000d01      0x28d exceptions.o
+
+.debug_loc
+ *(.debug_loc)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+
+.debug_pubtypes
+ *(.debug_pubtypes)
+
+.debug_ranges
+ *(.debug_ranges)
+
+.debug_macro
+ *(.debug_macro)
+
+.debug_addr
+ *(.debug_addr)
+
+.gnu.attributes
+ *(.gnu.attributes)
+
+/DISCARD/
+ *(.note.GNU-stack)
+ *(.gnu_debuglink)
+ *(.gnu.lto_*)
+OUTPUT(kernel binary)

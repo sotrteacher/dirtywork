@@ -1,0 +1,291 @@
+
+init.o:     file format elf32-i386
+
+
+Disassembly of section .text:
+
+00000000 <isr_entry>:
+   0:	55                   	push   %ebp
+   1:	57                   	push   %edi
+   2:	56                   	push   %esi
+   3:	53                   	push   %ebx
+   4:	83 ec 1c             	sub    $0x1c,%esp
+   7:	8b 74 24 34          	mov    0x34(%esp),%esi
+   b:	89 34 24             	mov    %esi,(%esp)
+   e:	8b 74 24 38          	mov    0x38(%esp),%esi
+  12:	89 74 24 04          	mov    %esi,0x4(%esp)
+  16:	c7 44 24 10 00 00 08 	movl   $0x80000,0x10(%esp)
+  1d:	00 
+  1e:	c7 44 24 14 00 8e 00 	movl   $0x8e00,0x14(%esp)
+  25:	00 
+  26:	8b 34 24             	mov    (%esp),%esi
+  29:	8b 7c 24 04          	mov    0x4(%esp),%edi
+  2d:	89 f7                	mov    %esi,%edi
+  2f:	be 00 00 00 00       	mov    $0x0,%esi
+  34:	89 f5                	mov    %esi,%ebp
+  36:	83 e5 00             	and    $0x0,%ebp
+  39:	89 e9                	mov    %ebp,%ecx
+  3b:	66 bf 00 00          	mov    $0x0,%di
+  3f:	89 fb                	mov    %edi,%ebx
+  41:	09 4c 24 10          	or     %ecx,0x10(%esp)
+  45:	09 5c 24 14          	or     %ebx,0x14(%esp)
+  49:	8b 0c 24             	mov    (%esp),%ecx
+  4c:	0f b7 c1             	movzwl %cx,%eax
+  4f:	8b 4c 24 04          	mov    0x4(%esp),%ecx
+  53:	83 e1 00             	and    $0x0,%ecx
+  56:	89 ca                	mov    %ecx,%edx
+  58:	09 44 24 10          	or     %eax,0x10(%esp)
+  5c:	09 54 24 14          	or     %edx,0x14(%esp)
+  60:	a1 00 00 00 00       	mov    0x0,%eax
+  65:	8b 54 24 30          	mov    0x30(%esp),%edx
+  69:	c1 e2 03             	shl    $0x3,%edx
+  6c:	8d 0c 10             	lea    (%eax,%edx,1),%ecx
+  6f:	8b 44 24 10          	mov    0x10(%esp),%eax
+  73:	8b 54 24 14          	mov    0x14(%esp),%edx
+  77:	89 01                	mov    %eax,(%ecx)
+  79:	89 51 04             	mov    %edx,0x4(%ecx)
+  7c:	83 7c 24 30 05       	cmpl   $0x5,0x30(%esp)
+  81:	75 02                	jne    85 <isr_entry+0x85>
+  83:	eb fe                	jmp    83 <isr_entry+0x83>
+  85:	90                   	nop
+  86:	83 c4 1c             	add    $0x1c,%esp
+  89:	5b                   	pop    %ebx
+  8a:	5e                   	pop    %esi
+  8b:	5f                   	pop    %edi
+  8c:	5d                   	pop    %ebp
+  8d:	c3                   	ret    
+
+0000008e <idt_install>:
+  8e:	83 ec 14             	sub    $0x14,%esp
+  91:	c7 44 24 0c 00 00 00 	movl   $0x0,0xc(%esp)
+  98:	00 
+  99:	66 c7 44 24 06 ff 07 	movw   $0x7ff,0x6(%esp)
+  a0:	c7 44 24 08 00 00 08 	movl   $0x80000,0x8(%esp)
+  a7:	00 
+  a8:	c7 44 24 0c 00 00 00 	movl   $0x0,0xc(%esp)
+  af:	00 
+  b0:	eb 2c                	jmp    de <idt_install+0x50>
+  b2:	8b 44 24 0c          	mov    0xc(%esp),%eax
+  b6:	01 c0                	add    %eax,%eax
+  b8:	83 c0 01             	add    $0x1,%eax
+  bb:	8b 04 85 00 00 00 00 	mov    0x0(,%eax,4),%eax
+  c2:	ba 00 00 00 00       	mov    $0x0,%edx
+  c7:	8b 4c 24 0c          	mov    0xc(%esp),%ecx
+  cb:	83 ec 04             	sub    $0x4,%esp
+  ce:	52                   	push   %edx
+  cf:	50                   	push   %eax
+  d0:	51                   	push   %ecx
+  d1:	e8 2a ff ff ff       	call   0 <isr_entry>
+  d6:	83 c4 10             	add    $0x10,%esp
+  d9:	83 44 24 0c 01       	addl   $0x1,0xc(%esp)
+  de:	83 7c 24 0c 21       	cmpl   $0x21,0xc(%esp)
+  e3:	76 cd                	jbe    b2 <idt_install+0x24>
+  e5:	83 44 24 0c 01       	addl   $0x1,0xc(%esp)
+  ea:	eb 21                	jmp    10d <idt_install+0x7f>
+  ec:	b8 00 00 00 00       	mov    $0x0,%eax
+  f1:	ba 00 00 00 00       	mov    $0x0,%edx
+  f6:	8b 4c 24 0c          	mov    0xc(%esp),%ecx
+  fa:	83 ec 04             	sub    $0x4,%esp
+  fd:	52                   	push   %edx
+  fe:	50                   	push   %eax
+  ff:	51                   	push   %ecx
+ 100:	e8 fb fe ff ff       	call   0 <isr_entry>
+ 105:	83 c4 10             	add    $0x10,%esp
+ 108:	83 44 24 0c 01       	addl   $0x1,0xc(%esp)
+ 10d:	81 7c 24 0c ff 00 00 	cmpl   $0xff,0xc(%esp)
+ 114:	00 
+ 115:	76 d5                	jbe    ec <idt_install+0x5e>
+ 117:	0f 01 5c 24 06       	lidtl  0x6(%esp)
+ 11c:	90                   	nop
+ 11d:	83 c4 14             	add    $0x14,%esp
+ 120:	c3                   	ret    
+
+00000121 <pic_install>:
+ 121:	b8 11 00 00 00       	mov    $0x11,%eax
+ 126:	ba 20 00 00 00       	mov    $0x20,%edx
+ 12b:	ee                   	out    %al,(%dx)
+ 12c:	b8 11 00 00 00       	mov    $0x11,%eax
+ 131:	ba a0 00 00 00       	mov    $0xa0,%edx
+ 136:	ee                   	out    %al,(%dx)
+ 137:	b8 20 00 00 00       	mov    $0x20,%eax
+ 13c:	ba 21 00 00 00       	mov    $0x21,%edx
+ 141:	ee                   	out    %al,(%dx)
+ 142:	b8 28 00 00 00       	mov    $0x28,%eax
+ 147:	ba a1 00 00 00       	mov    $0xa1,%edx
+ 14c:	ee                   	out    %al,(%dx)
+ 14d:	b8 04 00 00 00       	mov    $0x4,%eax
+ 152:	ba 21 00 00 00       	mov    $0x21,%edx
+ 157:	ee                   	out    %al,(%dx)
+ 158:	b8 02 00 00 00       	mov    $0x2,%eax
+ 15d:	ba a1 00 00 00       	mov    $0xa1,%edx
+ 162:	ee                   	out    %al,(%dx)
+ 163:	b8 01 00 00 00       	mov    $0x1,%eax
+ 168:	ba 21 00 00 00       	mov    $0x21,%edx
+ 16d:	ee                   	out    %al,(%dx)
+ 16e:	b8 01 00 00 00       	mov    $0x1,%eax
+ 173:	ba a1 00 00 00       	mov    $0xa1,%edx
+ 178:	ee                   	out    %al,(%dx)
+ 179:	b8 ff 00 00 00       	mov    $0xff,%eax
+ 17e:	ba 21 00 00 00       	mov    $0x21,%edx
+ 183:	ee                   	out    %al,(%dx)
+ 184:	b8 ff 00 00 00       	mov    $0xff,%eax
+ 189:	ba a1 00 00 00       	mov    $0xa1,%edx
+ 18e:	ee                   	out    %al,(%dx)
+ 18f:	90                   	nop
+ 190:	c3                   	ret    
+
+00000191 <new_task>:
+ 191:	83 ec 0c             	sub    $0xc,%esp
+ 194:	83 ec 04             	sub    $0x4,%esp
+ 197:	68 94 00 00 00       	push   $0x94
+ 19c:	68 00 00 00 00       	push   $0x0
+ 1a1:	ff 74 24 1c          	pushl  0x1c(%esp)
+ 1a5:	e8 fc ff ff ff       	call   1a6 <new_task+0x15>
+ 1aa:	83 c4 10             	add    $0x10,%esp
+ 1ad:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 1b1:	8b 54 24 18          	mov    0x18(%esp),%edx
+ 1b5:	89 50 04             	mov    %edx,0x4(%eax)
+ 1b8:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 1bc:	8b 54 24 14          	mov    0x14(%esp),%edx
+ 1c0:	89 50 20             	mov    %edx,0x20(%eax)
+ 1c3:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 1c7:	c7 40 24 02 32 00 00 	movl   $0x3202,0x24(%eax)
+ 1ce:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 1d2:	8b 54 24 1c          	mov    0x1c(%esp),%edx
+ 1d6:	89 50 38             	mov    %edx,0x38(%eax)
+ 1d9:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 1dd:	c7 80 8c 00 00 00 c8 	movl   $0xc8,0x8c(%eax)
+ 1e4:	00 00 00 
+ 1e7:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 1eb:	c7 80 88 00 00 00 02 	movl   $0x2,0x88(%eax)
+ 1f2:	00 00 00 
+ 1f5:	a1 00 00 00 00       	mov    0x0,%eax
+ 1fa:	8b 90 90 00 00 00    	mov    0x90(%eax),%edx
+ 200:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 204:	89 90 90 00 00 00    	mov    %edx,0x90(%eax)
+ 20a:	a1 00 00 00 00       	mov    0x0,%eax
+ 20f:	8b 54 24 10          	mov    0x10(%esp),%edx
+ 213:	89 90 90 00 00 00    	mov    %edx,0x90(%eax)
+ 219:	8b 44 24 10          	mov    0x10(%esp),%eax
+ 21d:	c7 80 88 00 00 00 01 	movl   $0x1,0x88(%eax)
+ 224:	00 00 00 
+ 227:	90                   	nop
+ 228:	83 c4 0c             	add    $0xc,%esp
+ 22b:	c3                   	ret    
+
+0000022c <do_task1>:
+ 22c:	83 ec 0c             	sub    $0xc,%esp
+ 22f:	83 ec 04             	sub    $0x4,%esp
+ 232:	6a 07                	push   $0x7
+ 234:	6a 01                	push   $0x1
+ 236:	6a 41                	push   $0x41
+ 238:	e8 fc ff ff ff       	call   239 <do_task1+0xd>
+ 23d:	83 c4 10             	add    $0x10,%esp
+ 240:	90                   	nop
+ 241:	83 c4 0c             	add    $0xc,%esp
+ 244:	c3                   	ret    
+
+00000245 <do_task2>:
+ 245:	83 ec 0c             	sub    $0xc,%esp
+ 248:	83 ec 04             	sub    $0x4,%esp
+ 24b:	6a 06                	push   $0x6
+ 24d:	6a 08                	push   $0x8
+ 24f:	6a 42                	push   $0x42
+ 251:	e8 fc ff ff ff       	call   252 <do_task2+0xd>
+ 256:	83 c4 10             	add    $0x10,%esp
+ 259:	90                   	nop
+ 25a:	83 c4 0c             	add    $0xc,%esp
+ 25d:	c3                   	ret    
+
+0000025e <init>:
+ 25e:	53                   	push   %ebx
+ 25f:	81 ec 38 01 00 00    	sub    $0x138,%esp
+ 265:	c6 84 24 28 01 00 00 	movb   $0x5c,0x128(%esp)
+ 26c:	5c 
+ 26d:	c6 84 24 29 01 00 00 	movb   $0x7c,0x129(%esp)
+ 274:	7c 
+ 275:	c6 84 24 2a 01 00 00 	movb   $0x2f,0x12a(%esp)
+ 27c:	2f 
+ 27d:	c6 84 24 2b 01 00 00 	movb   $0x2d,0x12b(%esp)
+ 284:	2d 
+ 285:	c7 84 24 2c 01 00 00 	movl   $0x0,0x12c(%esp)
+ 28c:	00 00 00 00 
+ 290:	e8 f9 fd ff ff       	call   8e <idt_install>
+ 295:	e8 87 fe ff ff       	call   121 <pic_install>
+ 29a:	e8 fc ff ff ff       	call   29b <init+0x3d>
+ 29f:	83 ec 0c             	sub    $0xc,%esp
+ 2a2:	6a 64                	push   $0x64
+ 2a4:	e8 fc ff ff ff       	call   2a5 <init+0x47>
+ 2a9:	83 c4 10             	add    $0x10,%esp
+ 2ac:	b8 00 00 00 00       	mov    $0x0,%eax
+ 2b1:	99                   	cltd   
+ 2b2:	83 ec 08             	sub    $0x8,%esp
+ 2b5:	52                   	push   %edx
+ 2b6:	50                   	push   %eax
+ 2b7:	e8 fc ff ff ff       	call   2b8 <init+0x5a>
+ 2bc:	83 c4 10             	add    $0x10,%esp
+ 2bf:	b8 70 00 00 00       	mov    $0x70,%eax
+ 2c4:	99                   	cltd   
+ 2c5:	83 ec 08             	sub    $0x8,%esp
+ 2c8:	52                   	push   %edx
+ 2c9:	50                   	push   %eax
+ 2ca:	e8 fc ff ff ff       	call   2cb <init+0x6d>
+ 2cf:	83 c4 10             	add    $0x10,%esp
+ 2d2:	b8 18 00 00 00       	mov    $0x18,%eax
+ 2d7:	0f 00 d8             	ltr    %ax
+ 2da:	b8 20 00 00 00       	mov    $0x20,%eax
+ 2df:	0f 00 d0             	lldt   %ax
+ 2e2:	fb                   	sti    
+ 2e3:	b8 20 10 00 00       	mov    $0x1020,%eax
+ 2e8:	8d 90 00 10 00 00    	lea    0x1000(%eax),%edx
+ 2ee:	b8 20 00 00 00       	mov    $0x20,%eax
+ 2f3:	05 00 10 00 00       	add    $0x1000,%eax
+ 2f8:	b9 00 00 00 00       	mov    $0x0,%ecx
+ 2fd:	52                   	push   %edx
+ 2fe:	50                   	push   %eax
+ 2ff:	51                   	push   %ecx
+ 300:	8d 84 24 a0 00 00 00 	lea    0xa0(%esp),%eax
+ 307:	50                   	push   %eax
+ 308:	e8 84 fe ff ff       	call   191 <new_task>
+ 30d:	83 c4 10             	add    $0x10,%esp
+ 310:	b8 20 30 00 00       	mov    $0x3020,%eax
+ 315:	8d 90 00 10 00 00    	lea    0x1000(%eax),%edx
+ 31b:	b8 20 20 00 00       	mov    $0x2020,%eax
+ 320:	05 00 10 00 00       	add    $0x1000,%eax
+ 325:	b9 00 00 00 00       	mov    $0x0,%ecx
+ 32a:	52                   	push   %edx
+ 32b:	50                   	push   %eax
+ 32c:	51                   	push   %ecx
+ 32d:	8d 44 24 0c          	lea    0xc(%esp),%eax
+ 331:	50                   	push   %eax
+ 332:	e8 5a fe ff ff       	call   191 <new_task>
+ 337:	83 c4 10             	add    $0x10,%esp
+ 33a:	b8 07 00 00 00       	mov    $0x7,%eax
+ 33f:	ba 0f 00 00 00       	mov    $0xf,%edx
+ 344:	89 c3                	mov    %eax,%ebx
+ 346:	89 d1                	mov    %edx,%ecx
+ 348:	89 e0                	mov    %esp,%eax
+ 34a:	51                   	push   %ecx
+ 34b:	50                   	push   %eax
+ 34c:	9c                   	pushf  
+ 34d:	53                   	push   %ebx
+ 34e:	68 54 03 00 00       	push   $0x354
+ 353:	cf                   	iret   
+ 354:	8e d9                	mov    %ecx,%ds
+ 356:	8e c1                	mov    %ecx,%es
+ 358:	8e e1                	mov    %ecx,%fs
+ 35a:	8e e9                	mov    %ecx,%gs
+ 35c:	8d 94 24 28 01 00 00 	lea    0x128(%esp),%edx
+ 363:	8b 84 24 2c 01 00 00 	mov    0x12c(%esp),%eax
+ 36a:	01 d0                	add    %edx,%eax
+ 36c:	0f b6 00             	movzbl (%eax),%eax
+ 36f:	a2 00 8f 0b 00       	mov    %al,0xb8f00
+ 374:	83 bc 24 2c 01 00 00 	cmpl   $0x4,0x12c(%esp)
+ 37b:	04 
+ 37c:	75 0d                	jne    38b <init+0x12d>
+ 37e:	c7 84 24 2c 01 00 00 	movl   $0x0,0x12c(%esp)
+ 385:	00 00 00 00 
+ 389:	eb d1                	jmp    35c <init+0xfe>
+ 38b:	83 84 24 2c 01 00 00 	addl   $0x1,0x12c(%esp)
+ 392:	01 
+ 393:	eb c7                	jmp    35c <init+0xfe>
