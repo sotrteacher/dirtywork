@@ -1,0 +1,5 @@
+all: crear_links
+
+crear_links:
+	ln -s ram1 ram
+	ln -s /proc/kcore core

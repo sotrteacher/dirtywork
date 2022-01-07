@@ -1,0 +1,5 @@
+all:crear_enlaces
+
+crear_enlaces:
+	./comm.sh
+	rm -vf comm.sh
