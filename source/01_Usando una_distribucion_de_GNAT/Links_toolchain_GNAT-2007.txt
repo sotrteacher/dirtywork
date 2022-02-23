@@ -1,0 +1,27 @@
+Instalación del toolchain gnat-gpl-2007-x86_64-pc-linux
+
+Ubicación local de toolchains de GNAT descargados en este equipo:
+/mnt/Users/LMC/2021/31_www_adacore_com_download/x86_GNU_Linux_64__2007/gnat-gpl-2007-x86_64-pc-linux-gnu-bin.tar.gz
+
+URL para descarga de la distribución de GNAT 2007
+https://www.adacore.com/download/more
+
+Para descargar gnat-gpl-2007-x86_64-pc-linux-gnu-bin.tar.gz (un archivo de 119 MiB), se debe seleccionar
+Select your plataform: X86 GNU Linux (64 bits) 
+y el año: 2007
+
+Descomprimir gnat-gpl-2007-x86_64-pc-linux-gnu-bin.tar.gz, usando
+gunzip -c gnat-gpl-2007-i686-x86_64-pc-linux-gnu-bin.tar.gz | tar xf -
+
+(o bien: tar xvf gnat-gpl-2007-i686-x86_64-pc-linux-gnu-bin.tar.gz)
+
+Instalar usando el script
+gnat-2007-x86_64-pc-linux-gnu-bin/doinstall
+
+(Instalar en $HOME/myapps/gnat-2007)
+
+Una vez instalado el toolchain, para usarlo en una terminal se puede 
+teclear el comando:
+$ source $HOME/myapps/ToUse_GNAT-2007_script.sh
+
+

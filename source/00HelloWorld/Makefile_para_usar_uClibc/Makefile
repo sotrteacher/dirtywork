@@ -11,10 +11,11 @@ LIBS = -lc
 USER_CFLAGS += -static -nostdlib ${LINKED_FILES} -L${TARGET_PREFIX}/usr/lib ${LIBS}
 
 all: holauclibc.xtn
+# Suffix Rule
 .c.o:
 	$(CC) -Wall -c $<
 holauclibc.xtn:hola.o
 	$(LD) $< ${USER_CFLAGS} -o $@
 clean:
-	rm -v holauclibc.xtn 
+	rm -v holauclibc.xtn *.o
 

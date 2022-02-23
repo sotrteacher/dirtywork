@@ -1,0 +1,32 @@
+Viernes 11 de febrero de 2022
+
+Con el archivo make en este directorio:
+<code>
+TARGET_PREFIX = /usr/x86_64-linux-uclibc
+all: hola_4_1_3.xtn
+.c.o:
+	gcc -Wall -c $<
+hola_4_1_3.xtn: hola.o
+#	ld hola.o -static -nostdlib /usr/lib/x86_64-linux-gnu/crt1.o /usr/lib/x86_64-linux-gnu/crti.o /usr/lib/x86_64-linux-gnu/crtn.o -o hola_4_1_3.xtn
+#	ld hola.o /usr/lib/x86_64-linux-gnu/crt1.o -o hola_4_1_3.xtn
+#	ld hola.o /usr/lib/x86_64-linux-gnu/crti.o -o hola_4_1_3.xtn
+#	ld hola.o /usr/lib/x86_64-linux-gnu/crtn.o -o hola_4_1_3.xtn
+#	ld hola.o /usr/lib/x86_64-linux-gnu/crtn.o -o hola_4_1_3.xtn
+	ld hola.o -static -nostdlib ${TARGET_PREFIX}/usr/lib/crt1.o ${TARGET_PREFIX}/usr/lib/crti.o -L${TARGET_PREFIX}/usr/lib -lc -o hola_4_1_3.xtn
+clean:
+	rm -v *.xtn *.o
+</code>
+El archivo hola_4_1_3.xtn se logra construir, pero al correrlo se produce 
+una violaci\'on de segmento. ?`Por qu\'e?
+
+NOTA: Antes de la construcci\'on se utiliz\'o el comando:
+$ source $HOME/myapps/ToUse_GNAT-2007_script.sh
+$ gcc --version
+ 4.1.3 
+
+Viernes 11 de febrero de 2022
+El problema se corrigi\'o agregando en el archivo make en el comando que usa ld, lo siguiente:
+${TARGET_PREFIX}/usr/lib/crtn.o
+
+Es decir, se pudo usar el compilador gcc version 4.1.3 y enlazar est\'aticamente con la 
+biblioteca uClibc (version 1.0.39)

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Hello_MaRTE_2_OS" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/Hello_MaRTE_2_OS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-nostdinc -I/home/usuario/marte_2.0_22Feb2017/arch/include -g  -m32 -march=i686" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="/home/usuario/marte_2.0_22Feb2017/arch/call_main/wrapper_main_c.o   -Wl,-T,/home/usuario/marte_2.0_22Feb2017/utils/linker.lds -static -nostartfiles -L/home/usuario/marte_2.0_22Feb2017/lib -L/home/usuario/marte_2.0_22Feb2017/gnat_rts/rts/adalib -L/home/usuario/myapps/gnat/lib/gcc/x86_64-pc-linux-gnu/4.9.4 -lmarte -lgnarl -lgnat -lmarte -lgcc_sjlj" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="hello_world_c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

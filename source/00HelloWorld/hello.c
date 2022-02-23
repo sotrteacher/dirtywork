@@ -8,7 +8,6 @@ $ vim hello.c
 //int printf(char *,...);
 int atoi(const char *);
 
-
 int main(int argc,char *argv[])
 {
   int intA;
