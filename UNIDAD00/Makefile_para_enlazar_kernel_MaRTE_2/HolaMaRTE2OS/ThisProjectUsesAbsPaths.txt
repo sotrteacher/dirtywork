@@ -1,0 +1,7 @@
+Este proyecto usa rutas absolutas cuando compila y cuando enlaza el kernel MaRTE 2.
+En la compilaci\'on:
+-nostdinc -I/home/usuario/marte_2.0_22Feb2017/arch/include -g  -m32 -march=i686
+En el enlazado:
+/home/usuario/marte_2.0_22Feb2017/arch/call_main/wrapper_main_c.o   -Wl,-T,/home/usuario/marte_2.0_22Feb2017/utils/linker.lds -static -nostartfiles -L/home/usuario/marte_2.0_22Feb2017/lib -L/home/usuario/marte_2.0_22Feb2017/gnat_rts/rts/adalib -L/home/usuario/myapps/gnat/lib/gcc/x86_64-pc-linux-gnu/4.9.4 -lmarte -lgnarl -lgnat -lmarte -lgcc_sjlj
+
+

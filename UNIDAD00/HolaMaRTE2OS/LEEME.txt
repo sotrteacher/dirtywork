@@ -1,0 +1,20 @@
+                                   Mi\'ercoles 23 de febrero de 2022
+NOTA:
+El directorio ./MaRTE2/ al que se hace referencia en las opciones en:
+Other compiler options y en Linker settings, por el momento no lo he
+puesto en github/sotrteacher/dirtywork porque aun no se si contiene
+alg\'un archivo de tama\~no mayor a 22 MB con lo cual github ya no
+me permitir\'ia subirlo. As\'i que la mejor opci\'on por ahora es
+colocar ese directorio en alg\'un subdirectorio en el diretorio
+Materiales de clase en MS Teams.
+
+                                    Viernes 25 de febrero de 2022
+Ya hice el intento de subir el directorio MaRTE2 a MSTeams, pero
+no confio en la integridad de los archivos subidos a msteams, ya que
+el directorio MaRTE2 contiene varios enlaces sib\'olicos, y en
+ms teams, lo que deberían ser algunos enlaces simb\'olicos se ve\'ian
+como archivos ordinarios. As\'i que opt\'e por subir el directorio
+MaRTE2 como un archivo tar a MSTeams o a github (o a ambos).
+
+
+

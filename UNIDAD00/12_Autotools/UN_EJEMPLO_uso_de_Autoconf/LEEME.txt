@@ -1,0 +1,224 @@
+
+REF.:
+https://stackoverflow.com/questions/47458876/autoconf-save-program-output-in-variable
+
+Autoconf -- save program output in variable
+Asked 4 years, 4 months ago
+Modified 2 months ago
+Viewed 258 times
+4
+1
+
+I have an autoconf problem. During ./configure, I need to compile and run a small C program, and capture and prune it's stdout into a variable and then confirm the variable was successfully set. It feels like this should be simple, but I've been struggling for several hours.
+
+I am hoping to parse the stdout:
+
+hello "world"
+
+And store the contents of the quoted string in the variable GREETING. Instead my snippet generates the error "Cannot detect greeting".
+
+Here's what I have so far:
+
+
+AC_RUN_IFELSE(
+        [AC_LANG_PROGRAM(
+            [[#include <stdio>]],
+            [[printf("hello \"world\"\n");]])
+        ],
+        [AC_SUBST(GREETING,
+            [[`./conftest$EXEEXT | sed 's/.*"\(.*\)".*/\1/'`]])
+        ]
+    )
+if test -z "${GREETING}"; then
+    AC_MSG_ERROR([Cannot detect greeting])
+fi
+
+Can someone point me in the right direction?
+
+
+
+You are over-quoting many of your macro arguments, and under-quoting another. In any case, for testing purposes, at least, I suggest adding code that verifies more directly which branch of the AC_RUN_IF_ELSE is taken. You could use an AC_MSG_NOTICE for this, or an AC_MSG_CHECKING / AC_MSG_RESULT pair. – 
+John Bollinger
+Nov 24, 2017 at 5:40
+
+
+
+
+1 Answer
+Sorted by:
+1
+
+I am currently using autoconf 2.69 and I implemented a cached test with AC_RUN_IFELSE that #defines a MACRO to be used by my program. This goes through an environment variable, so it is useful if you only need that too.
+
+A problem that I found with AC_RUN_IFELSE is that it does not write to a file (as is suggested by an example in the documentation); it seems only intended to test if a program compiles, links AND runs (that is, has exit code 0).
+
+If you are confident that your program will run when it compiles and links, you might as well use AC_LINK_IFELSE, which also produces a binary - but doesn't test if that returns exit code 0.
+
+Doing caching, using AC_CACHE_CHECK, the test program is only compiled, linked and run when that wasn't done before; but the result is still printed (aka:
+
+    checking for greeting message... world (cached)
+
+Where 'world' is the cached value. In other words, this prints the cached value. However AC_RUN_IFELSE also prints the program output to stdout! So, if the value wasn't cached yet this would produce the output twice. As in
+
+    checking for greeting message... world
+    world
+
+The solution to this seems to print your output to stderr, which is sent to the log file rather than the screen.
+
+A complete autoconf macro then becomes something like,
+
+AC_DEFUN([CW_SYS_GREETING],
+[AC_CACHE_CHECK(
+    [for greeting message],
+    [cw_cv_system_greeting],[dnl
+    AC_LANG_PUSH(C)
+    AC_RUN_IFELSE([dnl
+        AC_LANG_PROGRAM(
+            [#include <stdio.h>],
+            [fprintf(stderr, "hello \"world\"\n")])],
+        [cw_cv_system_greeting=$(./conftest$EXEEXT 2>&1 | sed 's/.*"\(.*\)".*/\1/')],
+        [AC_MSG_ERROR(Failed to compile a test program!?)])
+    AC_LANG_POP(C)])
+eval "CW_GREETING=$cw_cv_system_greeting"
+AC_SUBST(CW_GREETING)
+m4_pattern_allow(CW_GREETING)
+AC_DEFINE_UNQUOTED([CW_GREETING], $cw_cv_system_greeting, [The greeting to use.])
+])
+
+
+Which would add
+
+/* The greeting to use. */
+#define CW_GREETING world
+
+to config.h.
+
+NOTE that I use the prefix CW_ for my macros in order not to collide with ones defined by autoconf. To make sure everything is expanded, I therefore also add to my configure.ac:
+
+dnl Detect unexpanded macros.
+m4_pattern_forbid([^AX_]) dnl These macros are defined in the package 'autoconf-archive' available from the ubuntu "universe" repository.
+m4_pattern_forbid([^CW_])
+m4_pattern_forbid([^LT_])
+
+
+
+
+I am currently using autoconf 2.69 and I implemented a cached test with AC_RUN_IFELSE that #defines a MACRO to be used by my program. This goes through an environment variable, so it is useful if you only need that too.
+
+A problem that I found with AC_RUN_IFELSE is that it does not write to a file (as is suggested by an example in the documentation); it seems only intended to test if a program compiles, links AND runs (that is, has exit code 0).
+
+If you are confident that your program will run when it compiles and links, you might as well use AC_LINK_IFELSE, which also produces a binary - but doesn't test if that returns exit code 0.
+
+Doing caching, using AC_CACHE_CHECK, the test program is only compiled, linked and run when that wasn't done before; but the result is still printed (aka:
+
+    checking for greeting message... world (cached)
+
+Where 'world' is the cached value. In other words, this prints the cached value. However AC_RUN_IFELSE also prints the program output to stdout! So, if the value wasn't cached yet this would produce the output twice. As in
+
+    checking for greeting message... world
+    world
+
+The solution to this seems to print your output to stderr, which is sent to the log file rather than the screen.
+
+A complete autoconf macro then becomes something like,
+
+AC_DEFUN([CW_SYS_GREETING],
+[AC_CACHE_CHECK(
+    [for greeting message],
+    [cw_cv_system_greeting],[dnl
+    AC_LANG_PUSH(C)
+    AC_RUN_IFELSE([dnl
+        AC_LANG_PROGRAM(
+            [#include <stdio.h>],
+            [fprintf(stderr, "hello \"world\"\n")])],
+        [cw_cv_system_greeting=$(./conftest$EXEEXT 2>&1 | sed 's/.*"\(.*\)".*/\1/')],
+        [AC_MSG_ERROR(Failed to compile a test program!?)])
+    AC_LANG_POP(C)])
+eval "CW_GREETING=$cw_cv_system_greeting"
+AC_SUBST(CW_GREETING)
+m4_pattern_allow(CW_GREETING)
+AC_DEFINE_UNQUOTED([CW_GREETING], $cw_cv_system_greeting, [The greeting to use.])
+])
+
+Which would add
+
+/* The greeting to use. */
+#define CW_GREETING world
+
+to config.h.
+
+NOTE that I use the prefix CW_ for my macros in order not to collide with ones defined by autoconf. To make sure everything is expanded, I therefore also add to my configure.ac:
+
+dnl Detect unexpanded macros.
+m4_pattern_forbid([^AX_]) dnl These macros are defined in the package 'autoconf-archive' available from the ubuntu "universe" repository.
+m4_pattern_forbid([^CW_])
+m4_pattern_forbid([^LT_])
+
+This is why I also need/added the m4_pattern_allow(CW_GREETING) because this C macro isn't expanded by m4, but uses the same prefix.
+
+
+
+
+
+Otra REF:
+https://blog.inliniac.net/2013/07/17/fixing-error-m4_defn-undefined-macro-_m4_divert_diversion/
+
+
+(******************************************)
+https://www.math.utah.edu/docs/info/autoconf_6.html
+
+REF:
+https://www.math.utah.edu/docs/info/autoconf_2.html#SEC2
+
+Writing `configure.in'
+
+To produce a configure script for a software package, create a file called `configure.in' that contains invocations of the Autoconf macros that test the system features your package needs or can use. Autoconf macros already exist to check for many features; see section Existing Tests, for their descriptions. For most other features, you can use Autoconf template macros to produce custom checks; see section Writing Tests, for information about them. For especially tricky or specialized features, `configure.in' might need to contain some hand-crafted shell commands. The autoscan program can give you a good start in writing `configure.in' (see section Using autoscan to Create `configure.in', for more information).
+
+The order in which `configure.in' calls the Autoconf macros is not important, with a few exceptions. Every `configure.in' must contain a call to AC_INIT before the checks, and a call to AC_OUTPUT at the end (see section Creating Output Files). Additionally, some macros rely on other macros having been called first, because they check previously set values of some variables to decide what to do. These macros are noted in the individual descriptions (see section Existing Tests), and they also warn you when creating configure if they are called out of order.
+
+To encourage consistency, here is a suggested order for calling the Autoconf macros. Generally speaking, the things near the end of this list could depend on things earlier in it. For example, library functions could be affected by typedefs and libraries.
+
+AC_INIT(file)
+checks for programs
+checks for libraries
+checks for header files
+checks for typedefs
+checks for structures
+checks for compiler characteristics
+checks for library functions
+checks for system services
+AC_OUTPUT([file...])
+
+
+Martes 5 de abril de 2022
+$ cat configure.in
+AC_INIT
+
+AC_DEFUN([CW_SYS_GREETING],
+[AC_CACHE_CHECK(
+    [for greeting message],
+    [cw_cv_system_greeting],[dnl
+    AC_LANG_PUSH(C)
+    AC_RUN_IFELSE([dnl
+        AC_LANG_PROGRAM(
+            [#include <stdio.h>],
+            [fprintf(stderr, "hello \"world\"\n")])],
+        [cw_cv_system_greeting=$(./conftest$EXEEXT 2>&1 | sed 's/.*"\(.*\)".*/\1/')],
+        [AC_MSG_ERROR(Failed to compile a test program!?)])
+    AC_LANG_POP(C)])
+eval "CW_GREETING=$cw_cv_system_greeting"
+AC_SUBST(CW_GREETING)
+m4_pattern_allow(CW_GREETING)
+AC_DEFINE_UNQUOTED([CW_GREETING], $cw_cv_system_greeting, [The greeting to use.])
+])
+
+CW_SYS_GREETING
+AC_OUTPUT
+
+
+Martes 5 de abril de 2022
+OTROS EJEMPLOS
+
+https://www.gnu.org/software/autoconf/manual/autoconf-2.63/html_node/Generating-Sources.html
+ 
+

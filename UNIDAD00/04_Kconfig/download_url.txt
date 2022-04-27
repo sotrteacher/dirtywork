@@ -1,0 +1,18 @@
+2012.15342.pdf
+
+https://arxiv.org/pdf/2012.15342.pdf
+
+
+kconfig-3.12.0-Windows-x86.zip
+
+http://uvc.de/posts/linux-kernel-configuration-tool-kconfig-under-windows.html
+
+
+
+Under non Windows platforms use the original package from:
+http://ymorin.is-a-geek.org/projects/kconfig-frontends
+404 Not Found
+
+
+
+

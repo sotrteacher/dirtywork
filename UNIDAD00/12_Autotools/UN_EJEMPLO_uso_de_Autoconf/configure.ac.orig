@@ -1,0 +1,5 @@
+dnl Detect unexpanded macros.
+m4_pattern_forbid([^AX_]) dnl These macros are defined in the package 'autoconf-archive' available from the ubuntu "universe" repository.
+m4_pattern_forbid([^CW_])
+m4_pattern_forbid([^LT_])
+

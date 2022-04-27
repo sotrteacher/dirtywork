@@ -30,10 +30,29 @@
 # fue una de las l\'ineas de salida (vease las l\'ineas de salida arriba) del comando
 # ls -lh `find /home/usuario/marte_2.0_22Feb2017/ -name multiboot.o`
 #
-#
+# Para compilaci\'on
+# /home/usuario/marte_2.0_22Feb2017/arch -> /home/usuario/marte_2.0_22Feb2017/x86_arch
+# /home/usuario/marte_2.0_22Feb2017/x86_arch/include
+# Para enlazado
+#/home/usuario/marte_2.0_22Feb2017/arch/call_main/wrapper_main_c.o 
+# es /home/usuario/marte_2.0_22Feb2017/x86_arch/call_main/wrapper_main_c.o
 #/home/usuario/marte_2.0_22Feb2017/objs/x86_objs
-#/home/usuario/marte_2.0_22Feb2017/gnat_rts/rts/adalib
+#/home/usuario/marte_2.0_22Feb2017/gnat_rts/rts/adalib 
+#/home/usuario/marte_2.0_22Feb2017/gnat_rts/rts -> /home/usuario/marte_2.0_22Feb2017/gnat_rts/rts-marteuc_x86 
+# As\'i que
+#/home/usuario/marte_2.0_22Feb2017/gnat_rts/rts/adalib es en realidad
+# /home/usuario/marte_2.0_22Feb2017/gnat_rts/rts-marteuc_x86/adalib/
 #/home/usuario/myapps/gnat/lib/gcc/x86_64-pc-linux-gnu/4.9.4
+# En este directorio, para saber a qu\'e apuntan los softlinks, utilice el comando: ls -l `find . -type l `
+# y encontr\'e que:
+# lrwxrwxrwx 1 usuario usuario 21 nov 21 03:10 ./adainclude -> rts-native/adainclude
+# lrwxrwxrwx 1 usuario usuario 17 nov 21 03:10 ./adalib -> rts-native/adalib
+# lrwxrwxrwx 1 usuario usuario 21 nov 20 16:54 ./include-fixed/bits -> x86_64-linux-gnu/bits
+# lrwxrwxrwx 1 usuario usuario 58 nov 21 03:06 ./rts-marteuc_x86 -> /home/usuario/marte_2.0_22Feb2017/gnat_rts/rts-marteuc_x86
+# lrwxrwxrwx 1 usuario usuario 16 may 16  2016 ./rts-native/adalib/libgnarl.so -> libgnarl-2016.so
+# lrwxrwxrwx 1 usuario usuario 15 may 16  2016 ./rts-native/adalib/libgnat.so -> libgnat-2016.so
+# As\'i que modificar\'e el soft link rts-marteuc_x86 para que quede como sigue:
+# ./rts-marteuc_x86 -> ./../../../../../gnat_rts/rts-marteuc_x86
 # du -sh --total /home/usuario/marte_2.0_22Feb2017/objs/x86_objs /home/usuario/marte_2.0_22Feb2017/gnat_rts/rts/adalib /home/usuario/myapps/gnat/lib/gcc/x86_64-pc-linux-gnu/4.9.4
 
 all: hello_world_c.xtn

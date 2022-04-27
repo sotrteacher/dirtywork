@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="HolaMaRTE2OS" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Release">
+				<Option output="bin/Release/HolaMaRTE2OS" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-nostdinc -I./MaRTE2/x86_arch/include -g  -m32 -march=i686" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+					<Add option="./MaRTE2/x86_arch/call_main/wrapper_main_c.o   -Wl,-T,./MaRTE2/utils/linker.lds -static -nostartfiles -L./MaRTE2/objs/x86_objs -L./MaRTE2/gnat_rts/rts/adalib -L./MaRTE2/gnat/lib/gcc/x86_64-pc-linux-gnu/4.9.4 -lmarte -lgnarl -lgnat -lmarte -lgcc_sjlj" />
+				</Linker>
+			</Target>
+			<Target title="identifytoolchain">
+				<Option output="bin/identifytoolchain/HolaMaRTE2OS" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="bin/identifytoolchain/" />
+				<Option object_output="obj/identifytoolchain/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+		</Compiler>
+		<Unit filename="LEEME.txt" />
+		<Unit filename="Makefile" />
+		<Unit filename="hello_world_c.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

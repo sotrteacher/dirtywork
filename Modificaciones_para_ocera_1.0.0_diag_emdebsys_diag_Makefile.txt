@@ -1,0 +1,10 @@
+L\'inea 29, archivo /user/share/ocera_1.0.0/emdebsys/Makefile
+#LMC 2022.04.12.12.59
+mconf: lkc $(LINUX_DIR)/arch/$(ARCH)/Kconfig lxdialog defconfig
+#	$(KCONFIG_DIR)/mconf $(EMDEBSYS_DIR)/Kconfig
+	kconfig-mconf $(EMDEBSYS_DIR)/Kconfig
+	./scripts/kconfig/conf --silentoldconfig $(EMDEBSYS_DIR)/Kconfig        # <--Esta l\'inea tiene que ir en el archivo 
+#LMC 2022.04.12.12.59                                                           # /usr/share/ocera_1.0.0/Makefile
+                                                                                # Tambi\'en se debe agregar en el directorio 
+                                                                                # /usr/share/ocera_1.0.0/include los directorios
+                                                                                # config/ y generated/ (inicialmente vac\'ios)

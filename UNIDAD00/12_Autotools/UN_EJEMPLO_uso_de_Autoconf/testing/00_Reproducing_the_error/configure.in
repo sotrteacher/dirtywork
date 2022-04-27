@@ -1,0 +1,17 @@
+AC_INIT
+
+AC_RUN_IFELSE(
+        [AC_LANG_PROGRAM(
+            [[#include <stdio>]],
+            [[printf("hello \"world\"\n");]])
+        ],
+        [AC_SUBST(GREETING,
+            [[`./conftest$EXEEXT | sed 's/.*"\(.*\)".*/\1/'`]])
+        ]
+    )
+if test -z "${GREETING}"; then
+    AC_MSG_ERROR([Cannot detect greeting])
+fi
+
+
+AC_OUTPUT

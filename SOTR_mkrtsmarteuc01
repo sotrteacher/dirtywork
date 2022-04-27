@@ -300,7 +300,7 @@ if ($march eq "x86") {
 #exec_command "mv $GNAT_PATH/adalib.bak $GNAT_PATH/adalib";
 
 # ----------------------------------------------
-# -- restore links to origninal adainclude and adalib directories
+# -- restore links to original adainclude and adalib directories
 if ($march ne "rpi") {
     exec_command "cd $GNAT_L_PATH && rm adainclude adalib";
     exec_command "cd $GNAT_L_PATH && ln -s rts-native/adainclude adainclude";
