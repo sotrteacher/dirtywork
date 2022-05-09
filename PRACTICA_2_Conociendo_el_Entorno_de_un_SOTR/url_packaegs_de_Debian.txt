@@ -1,0 +1,13 @@
+https://www.debian.org/distrib/packages
+
+
+https://mrubiales.tumblr.com/post/126091069159/no-kex-alg/amp
+ no kex alg
+
+Las nuevas versiones de openssh-server deniegan el acceso desde clientes ssh más antiguos de lo normal (no kex alg lost connection). Para solucionar este problema lo mejor sería actualizar el cliente, pero si por alguna razón esto no es posible, también podemos solucionarlo agregando el siguiente parámetro al fichero /etc/ssh/sshd_config
+
+KexAlgorithms diffie-hellman-group1-sha1
+
+Después de esto, reiniciar el servidor ssh y listo de papeles
+
+Salud y fiesta
