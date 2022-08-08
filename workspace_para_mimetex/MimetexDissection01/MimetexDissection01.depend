@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1599166389 source:/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection01/gifsave.c
+	<stdlib.h>
+	<stdio.h>
+	<string.h>
+	<fcntl.h>
+	<io.h>
+
+1599166389 source:/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection01/mimetex.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<ctype.h>
+	<math.h>
+	<time.h>
+	<fcntl.h>
+	<io.h>
+	<crtdbg.h>
+	"mimetex.h"
+
+1599166389 /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection01/mimetex.h
+	"texfonts.h"
+
+1599166389 /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection01/texfonts.h
+

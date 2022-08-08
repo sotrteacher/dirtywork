@@ -2,6 +2,10 @@ El c\'odigo fuente para este proyecto fuen tomado del directorio
 ../../mimetex_Debian_Built
 (directorio raiz del repositorio dirtywork, en https://github.com/sotrteacher/dirtywork)
 
+Una url donde aun (2022.08.08) se puede encontrar el archivo mimetex.html es:
+http://biostatisticien.eu/mimetex.html
+
+
 mimetex.h es incluido en mimetex.c
 texfonts.h es incluido en mimetex.h
 La funci\'on main est\'a en el archivo mimetex.c
@@ -388,4 +392,16 @@ Process terminated with status 0 (0 minute(s), 26 second(s))
 
 Por lo tanto, en Debian GNU Linux, decid\'i no incluir el archivo strcasestr.c
 en el proyecto de Codeblocks.
+
+
+La función main est´a en el archivo mimetex.c
+Esta función empieza en la línea 16669 
+y termina en la línea 17632
+
+De acuerdo con el comentario en la línea 245 del archivo mimetex.c, no se necesita el archivo gifsave.c 
+si no se define ni AA ni GIF.
+
+
+
+
 
