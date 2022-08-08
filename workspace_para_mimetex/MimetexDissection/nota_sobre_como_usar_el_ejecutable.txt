@@ -1,0 +1,391 @@
+El c\'odigo fuente para este proyecto fuen tomado del directorio
+../../mimetex_Debian_Built
+(directorio raiz del repositorio dirtywork, en https://github.com/sotrteacher/dirtywork)
+
+mimetex.h es incluido en mimetex.c
+texfonts.h es incluido en mimetex.h
+La funci\'on main est\'a en el archivo mimetex.c
+
+La forma de uso del ejecutable es desde el directorio 
+base del proyecto es con el enlace simb\'olico 
+mimetex.xtn, por ejemplo con un comando como el 
+siuiente:
+./mimetex.exe -e archivo.gif "v(x,y)=x^{2}+y^{2}"
+Y se obtendr\'a el archivo archivo.gif, como se puede 
+corroborar con la salida del comando ls -lhtr
+total 6.9M
+-rwxrwxrwx 1 root root 962K sep  3  2020 mimetex.c
+-rwxrwxrwx 1 root root 112K sep  3  2020 mimetex.h
+-rwxrwxrwx 1 root root  33K sep  3  2020 gifsave.c
+-rwxrwxrwx 1 root root 5.8M sep  3  2020 texfonts.h
+-rwxrwxrwx 1 root root 1.1K ago  8 11:57 MimetexDissection.cbp
+drwxrwxrwx 1 root root  144 ago  8 12:01 obj
+drwxrwxrwx 1 root root  144 ago  8 12:01 bin
+lrwxrwxrwx 1 root root   29 ago  8 12:26 mimetex.xtn -> bin/Release/MimetexDissection
+-rwxrwxrwx 1 root root  515 ago  8 13:08 archivo.gif
+-rwxrwxrwx 1 root root  435 ago  8 13:12 nota.txt
+
+El ejecutable bin/Release/MimetexDissection se construy\'o utilizando 
+Codeblocks sobre Debian GNU Linux, los comandos utilizado por Codeblocks fueron los 
+siguientes:
+-------------- Build: TestMimeTeX in MimetexDissection (compiler: GNU GCC Compiler)---------------
+
+gcc -Wall -DAA -O2  -c /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/gifsave.c -o obj/Release/gifsave.o
+gcc -Wall -DAA -O2  -c /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c -o obj/Release/mimetex.o
+gcc  -o bin/Release/MimetexDissection obj/Release/gifsave.o obj/Release/mimetex.o  -lm -s 
+
+Se presentaron much\'isimos warnings:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastsmash’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:2384:26: warning: variable ‘ymin’ set but not used [-Wunused-but-set-variable]
+ 2384 | int smin=9999, xmin=9999,ymin=9999; /* min separation (s=x+y) */
+      |                          ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘isbrace’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:5895:2: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 5895 |  if ( gotbrace &&    /* found a brace */
+      |  ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:5898:21: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 5898 |    ) return ( 1 );  return ( 0 );  /* return 1,0 accordingly */
+      |                     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘mimeprep’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6348:11: warning: variable ‘isamp’ set but not used [-Wunused-but-set-variable]
+ 6348 |  istag=0, isamp=0,  /* true for <tag>, &char; symbols */
+      |           ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1077:43: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+ 1077 |  else memmove(s,s+(n),1+thislen3-(n)); }} else/*user supplies final;*/
+      |                                           ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6514:9: note: in expansion of macro ‘strsqueeze’
+ 6514 |       { strsqueeze((tokptr+1),(lrlen-1));/*so squeeze out "left" or "right"*/
+      |         ^~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6515:2: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+ 6515 |  expptr = tokptr+2; }  /* and resume search past brace */
+      |  ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1077:43: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+ 1077 |  else memmove(s,s+(n),1+thislen3-(n)); }} else/*user supplies final;*/
+      |                                           ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6522:8: note: in expansion of macro ‘strsqueeze’
+ 6522 |      { strsqueeze((tokptr+1),(lrlen+symlen-2)); /*squeeze out delim*/
+      |        ^~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6523:8: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+ 6523 |        *(tokptr+1) = *(lrto[isymbol]); /* last char now 1-char delim*/
+      |        ^
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘evalterm’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7249:15: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 7249 |     case '/': if ( rightval != 0 ) /* guard against divide by zero */
+      |               ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7250:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 7250 |                 termval = leftval/rightval;  break; /* integer division */
+      |                                              ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7251:15: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 7251 |     case '%': if ( rightval != 0 ) /* guard against divide by zero */
+      |               ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7252:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 7252 |                 termval = leftval%rightval;  break; /*left modulo right */
+      |                                              ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastscripts’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8383:2: warning: variable ‘isbase’ set but not used [-Wunused-but-set-variable]
+ 8383 |  isbase=0;   /* true if we have base symbol */
+      |  ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8379:25: warning: variable ‘supln’ set but not used [-Wunused-but-set-variable]
+ 8379 |  supht=0,  supwidth=0,  supln=0, /* height,width,baseline of sup */
+      |                         ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8378:25: warning: variable ‘subln’ set but not used [-Wunused-but-set-variable]
+ 8378 |  subht=0,  subwidth=0,  subln=0, /* height,width,baseline of sub */
+      |                         ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastleft’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8615:5: warning: variable ‘isleftscript’ set but not used [-Wunused-but-set-variable]
+ 8615 | int isleftscript=0, isrightscript=0; /* true if delims are scripted */
+      |     ^~~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastflags’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9119:23: warning: comparison between pointer and zero character constant [-Wpointer-compare]
+ 9119 |      if ( *expression != '\000' ) /* ill-formed expression */
+      |                       ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9119:11: note: did you mean to dereference the pointer?
+ 9119 |      if ( *expression != '\000' ) /* ill-formed expression */
+      |           ^
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastfrac’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9785:15: warning: variable ‘baseln’ set but not used [-Wunused-but-set-variable]
+ 9785 | int baseht=0, baseln=0;  /* height,baseline of base symbol */
+      |               ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9785:5: warning: variable ‘baseht’ set but not used [-Wunused-but-set-variable]
+ 9785 | int baseht=0, baseln=0;  /* height,baseline of base symbol */
+      |     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastfont’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10326:5: warning: variable ‘family’ set but not used [-Wunused-but-set-variable]
+10326 | int family = 0,   /* fontinfo[ifontnum].family */
+      |     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastarray’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10869:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10869 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10869:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10869 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |                                                  ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10871:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10871 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10871:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10871 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |                                                  ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10873:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10873 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10873:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10873 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |                                                  ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10880:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10880 |   if (rowglobal) growcenter[irow] = rowcenter[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10880:54: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10880 |   if (rowglobal) growcenter[irow] = rowcenter[irow]; break;
+      |                                                      ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10732:25: warning: variable ‘subptr’ set but not used [-Wunused-but-set-variable]
+10732 |   subtok[MAXTOKNSZ+1], *subptr=subtok, /* &,\\ inside { } not a delim*/
+      |                         ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastinput’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:12517:5: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
+12517 | int status, rastreadfile(); /* read input file */
+      |     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘aapattern1124’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14990:2: warning: variable ‘cornval’ set but not used [-Wunused-but-set-variable]
+14990 |  cornval=0, diagval=0;  /* vert+horzcorn, top+botdiag */
+      |  ^~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘aawtpixel’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16479:7: warning: variable ‘iscenter’ set but not used [-Wunused-but-set-variable]
+16479 |   int iscenter = 0;   /* set true if center point black */
+      |       ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘main’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16871:7: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+16871 |       else pbm_outfile = argv[argnum]; break; /*next arg is filename*/
+      |       ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16871:40: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+16871 |       else pbm_outfile = argv[argnum]; break; /*next arg is filename*/
+      |                                        ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:17151:5: warning: variable ‘whundredths’ set but not used [-Wunused-but-set-variable]
+17151 |     whundredths = 0;   /* or wait hundredths of a sec */
+      |     ^~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16695:3: warning: unused variable ‘pdirective’ [-Wunused-variable]
+16695 |  *pdirective = NULL;  /* ptr to char after \directive */
+      |   ^~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16687:2: warning: variable ‘isqempty’ set but not used [-Wunused-but-set-variable]
+16687 |  isqempty = 0,   /* true if query string empty */
+      |  ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘getdirective’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1072:14: warning: array subscript 254 is above array bounds of ‘char[128]’ [-Warray-bounds]
+ 1072 |      (target)[(n)] = '\000'; } }
+      |      ~~~~~~~~^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7500:8: note: in expansion of macro ‘strninit’
+ 7500 |        strninit(optionalargs[noptional],argfld,254); } /*copy to optionalarg*/
+      |        ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1071:6: warning: ‘strncpy’ output may be truncated copying 254 bytes from a string of length 511 [-Wstringop-truncation]
+ 1071 |      strncpy((target),thissource,(n)); \
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7500:8: note: in expansion of macro ‘strninit’
+ 7500 |        strninit(optionalargs[noptional],argfld,254); } /*copy to optionalarg*/
+      |        ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘dbltoa’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14297:23: warning: ‘%0*d’ directive writing between 1 and 2147483647 bytes into a region of size 254 [-Wformat-overflow=]
+14297 |       sprintf(finptr,"%0*d",npts,ifrac); /* convert to string */
+      |                       ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14297:22: note: directive argument in the range [-2147483648, 2147483646]
+14297 |       sprintf(finptr,"%0*d",npts,ifrac); /* convert to string */
+      |                      ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14297:7: note: ‘sprintf’ output between 2 and 2147483648 bytes into a destination of size 254
+14297 |       sprintf(finptr,"%0*d",npts,ifrac); /* convert to string */
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastovalbox’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:12462:37: warning: ‘%s’ directive writing up to 2047 bytes into a region of size 2037 [-Wformat-overflow=]
+12462 |     sprintf(ovalexpr,"\\compose{%s}{%s}",ovalbuff,thisoval); }
+      |                                     ^~            ~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:12462:5: note: ‘sprintf’ output 13 or more bytes (assuming 2060) into a destination of size 2048
+12462 |     sprintf(ovalexpr,"\\compose{%s}{%s}",ovalbuff,thisoval); }
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Output file is bin/Release/MimetexDissection with size 1.60 MB
+Process terminated with status 0 (0 minute(s), 26 second(s))
+0 error(s), 31 warning(s) (0 minute(s), 26 second(s))
+
+Me parece recordar que en Windows, el archivo strcasestr.c se areg\'o para corregir 
+alg\'un o algunos errores de compilaci\'on. 
+Por otra parte, en Debian GNU Linux, si se agrega el archivo strcasestr.c al proyecto de Codeblocks, 
+resulta que se siguen presentando igual que antes much\'isimos warnings:
+
+-------------- Clean: TestMimeTeX in MimetexDissection (compiler: GNU GCC Compiler)---------------
+
+Cleaned "MimetexDissection - TestMimeTeX"
+
+-------------- Build: TestMimeTeX in MimetexDissection (compiler: GNU GCC Compiler)---------------
+
+gcc -Wall -DAA -O2  -c /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/gifsave.c -o obj/Release/gifsave.o
+gcc -Wall -DAA -O2  -c /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c -o obj/Release/mimetex.o
+gcc -Wall -DAA -O2  -c /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/strcasestr.c -o obj/Release/strcasestr.o
+gcc  -o bin/Release/MimetexDissection obj/Release/gifsave.o obj/Release/mimetex.o obj/Release/strcasestr.o  -lm -s  
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastsmash’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:2384:26: warning: variable ‘ymin’ set but not used [-Wunused-but-set-variable]
+ 2384 | int smin=9999, xmin=9999,ymin=9999; /* min separation (s=x+y) */
+      |                          ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘isbrace’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:5895:2: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 5895 |  if ( gotbrace &&    /* found a brace */
+      |  ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:5898:21: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 5898 |    ) return ( 1 );  return ( 0 );  /* return 1,0 accordingly */
+      |                     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘mimeprep’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6348:11: warning: variable ‘isamp’ set but not used [-Wunused-but-set-variable]
+ 6348 |  istag=0, isamp=0,  /* true for <tag>, &char; symbols */
+      |           ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1077:43: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+ 1077 |  else memmove(s,s+(n),1+thislen3-(n)); }} else/*user supplies final;*/
+      |                                           ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6514:9: note: in expansion of macro ‘strsqueeze’
+ 6514 |       { strsqueeze((tokptr+1),(lrlen-1));/*so squeeze out "left" or "right"*/
+      |         ^~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6515:2: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+ 6515 |  expptr = tokptr+2; }  /* and resume search past brace */
+      |  ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1077:43: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+ 1077 |  else memmove(s,s+(n),1+thislen3-(n)); }} else/*user supplies final;*/
+      |                                           ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6522:8: note: in expansion of macro ‘strsqueeze’
+ 6522 |      { strsqueeze((tokptr+1),(lrlen+symlen-2)); /*squeeze out delim*/
+      |        ^~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:6523:8: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+ 6523 |        *(tokptr+1) = *(lrto[isymbol]); /* last char now 1-char delim*/
+      |        ^
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘evalterm’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7249:15: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 7249 |     case '/': if ( rightval != 0 ) /* guard against divide by zero */
+      |               ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7250:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 7250 |                 termval = leftval/rightval;  break; /* integer division */
+      |                                              ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7251:15: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 7251 |     case '%': if ( rightval != 0 ) /* guard against divide by zero */
+      |               ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7252:46: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 7252 |                 termval = leftval%rightval;  break; /*left modulo right */
+      |                                              ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastscripts’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8383:2: warning: variable ‘isbase’ set but not used [-Wunused-but-set-variable]
+ 8383 |  isbase=0;   /* true if we have base symbol */
+      |  ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8379:25: warning: variable ‘supln’ set but not used [-Wunused-but-set-variable]
+ 8379 |  supht=0,  supwidth=0,  supln=0, /* height,width,baseline of sup */
+      |                         ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8378:25: warning: variable ‘subln’ set but not used [-Wunused-but-set-variable]
+ 8378 |  subht=0,  subwidth=0,  subln=0, /* height,width,baseline of sub */
+      |                         ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastleft’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:8615:5: warning: variable ‘isleftscript’ set but not used [-Wunused-but-set-variable]
+ 8615 | int isleftscript=0, isrightscript=0; /* true if delims are scripted */
+      |     ^~~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastflags’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9119:23: warning: comparison between pointer and zero character constant [-Wpointer-compare]
+ 9119 |      if ( *expression != '\000' ) /* ill-formed expression */
+      |                       ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9119:11: note: did you mean to dereference the pointer?
+ 9119 |      if ( *expression != '\000' ) /* ill-formed expression */
+      |           ^
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastfrac’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9785:15: warning: variable ‘baseln’ set but not used [-Wunused-but-set-variable]
+ 9785 | int baseht=0, baseln=0;  /* height,baseline of base symbol */
+      |               ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:9785:5: warning: variable ‘baseht’ set but not used [-Wunused-but-set-variable]
+ 9785 | int baseht=0, baseln=0;  /* height,baseline of base symbol */
+      |     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastfont’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10326:5: warning: variable ‘family’ set but not used [-Wunused-but-set-variable]
+10326 | int family = 0,   /* fontinfo[ifontnum].family */
+      |     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastarray’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10869:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10869 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10869:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10869 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |                                                  ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10871:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10871 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10871:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10871 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |                                                  ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10873:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10873 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10873:50: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10873 |   if (colglobal) gjustify[irow] = justify[irow]; break;
+      |                                                  ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10880:3: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+10880 |   if (rowglobal) growcenter[irow] = rowcenter[irow]; break;
+      |   ^~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10880:54: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+10880 |   if (rowglobal) growcenter[irow] = rowcenter[irow]; break;
+      |                                                      ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:10732:25: warning: variable ‘subptr’ set but not used [-Wunused-but-set-variable]
+10732 |   subtok[MAXTOKNSZ+1], *subptr=subtok, /* &,\\ inside { } not a delim*/
+      |                         ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastinput’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:12517:5: warning: variable ‘status’ set but not used [-Wunused-but-set-variable]
+12517 | int status, rastreadfile(); /* read input file */
+      |     ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘aapattern1124’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14990:2: warning: variable ‘cornval’ set but not used [-Wunused-but-set-variable]
+14990 |  cornval=0, diagval=0;  /* vert+horzcorn, top+botdiag */
+      |  ^~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘aawtpixel’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16479:7: warning: variable ‘iscenter’ set but not used [-Wunused-but-set-variable]
+16479 |   int iscenter = 0;   /* set true if center point black */
+      |       ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘main’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16871:7: warning: this ‘else’ clause does not guard... [-Wmisleading-indentation]
+16871 |       else pbm_outfile = argv[argnum]; break; /*next arg is filename*/
+      |       ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16871:40: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘else’
+16871 |       else pbm_outfile = argv[argnum]; break; /*next arg is filename*/
+      |                                        ^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:17151:5: warning: variable ‘whundredths’ set but not used [-Wunused-but-set-variable]
+17151 |     whundredths = 0;   /* or wait hundredths of a sec */
+      |     ^~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16695:3: warning: unused variable ‘pdirective’ [-Wunused-variable]
+16695 |  *pdirective = NULL;  /* ptr to char after \directive */
+      |   ^~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:16687:2: warning: variable ‘isqempty’ set but not used [-Wunused-but-set-variable]
+16687 |  isqempty = 0,   /* true if query string empty */
+      |  ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘getdirective’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1072:14: warning: array subscript 254 is above array bounds of ‘char[128]’ [-Warray-bounds]
+ 1072 |      (target)[(n)] = '\000'; } }
+      |      ~~~~~~~~^~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7500:8: note: in expansion of macro ‘strninit’
+ 7500 |        strninit(optionalargs[noptional],argfld,254); } /*copy to optionalarg*/
+      |        ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:1071:6: warning: ‘strncpy’ output may be truncated copying 254 bytes from a string of length 511 [-Wstringop-truncation]
+ 1071 |      strncpy((target),thissource,(n)); \
+      |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:7500:8: note: in expansion of macro ‘strninit’
+ 7500 |        strninit(optionalargs[noptional],argfld,254); } /*copy to optionalarg*/
+      |        ^~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘dbltoa’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14297:23: warning: ‘%0*d’ directive writing between 1 and 2147483647 bytes into a region of size 254 [-Wformat-overflow=]
+14297 |       sprintf(finptr,"%0*d",npts,ifrac); /* convert to string */
+      |                       ^~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14297:22: note: directive argument in the range [-2147483648, 2147483646]
+14297 |       sprintf(finptr,"%0*d",npts,ifrac); /* convert to string */
+      |                      ^~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:14297:7: note: ‘sprintf’ output between 2 and 2147483648 bytes into a destination of size 254
+14297 |       sprintf(finptr,"%0*d",npts,ifrac); /* convert to string */
+      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c: In function ‘rastovalbox’:
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:12462:37: warning: ‘%s’ directive writing up to 2047 bytes into a region of size 2037 [-Wformat-overflow=]
+12462 |     sprintf(ovalexpr,"\\compose{%s}{%s}",ovalbuff,thisoval); }
+      |                                     ^~            ~~~~~~~~
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection/mimetex.c:12462:5: note: ‘sprintf’ output 13 or more bytes (assuming 2060) into a destination of size 2048
+12462 |     sprintf(ovalexpr,"\\compose{%s}{%s}",ovalbuff,thisoval); }
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Output file is bin/Release/MimetexDissection with size 1.60 MB
+Process terminated with status 0 (0 minute(s), 26 second(s))
+0 error(s), 31 warning(s) (0 minute(s), 26 second(s))
+
+Por lo tanto, en Debian GNU Linux, decid\'i no incluir el archivo strcasestr.c
+en el proyecto de Codeblocks.
+

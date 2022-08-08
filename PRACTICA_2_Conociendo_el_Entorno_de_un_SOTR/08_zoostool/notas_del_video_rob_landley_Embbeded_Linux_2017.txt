@@ -1,0 +1,115 @@
+NOTAS obtenidas del video:
+Tutorial Building the simplest possible Linux system 
+Rob Landley se.instruments.com
+En el directorio de fuentes del kernel:
+make ARCH=x86 help | grep _defconfig
+
+make i386_defconfig o bien make x86_64_defconfig
+make -j 8
+
+mkdir root;cd root
+vim hello.c
+#include <stdio.h>
+#include <unistd.h>
+int main(int argc,char *argv[])
+{
+  printf("Hello World Linux!\n");
+
+  sleep(99999999999);
+}
+:wq
+gcc --static hello.c -o init
+find . | cpio -H newc -o | gzip > ../root.cpio.gz
+cd ..
+qemu-system-i386 -nographic -no-reboot -kernel arch/x86/boot/bzImage -initrd root.cpio.gz -append "panic=1 console=ttyS0"
+
+Despues descargar y compilar busybox, para Debian 6.0.10, downloaded from
+https://busybox.net/oldnews.html
+
+Despu\'es de descargar busybox-1.10.2.tar.bz2, los descomprimimos con:
+tar xvjf busybox-1.10.2.tar.bz2 
+
+cd busybox-1.10.2/
+make defconfig    (tmb se puede usar make menuconfig para ''tunear'')
+
+make CFLAGS=--static -j 8
+
+make help |grep install
+
+mkdir ../BUSYBOX_1_10_2 
+make CFLAGS=--static CONFIG_PREFIX=../BUSYBOX_1_10_2 install
+
+cd ../BUSYBOX_1_10_2
+file bin/busybox  (debe decir statically linked)
+find . | cpio -H newc -o | gzip > ../root2.cpio.gz
+
+cd linux-2.6.31.6_modLMC/
+qemu-system-i386 -nographic -no-reboot -kernel arch/x86/boot/bzImage -initrd ../root2.cpio.gz -append "panic=1 console=ttyS0 rdinit=/bin/sh"
+
+Para salir se puede ejecutar el comando exit.
+
+
+La version del kernel usada es aprox (yo la use en Debian 9):
+linux-4.17-rc2
+
+Ahora bien, en el minuto 1:10:35 las versiones de busybox y 
+de toybox son: 
+mkroot/packages $ ls
+busybox-1.24.1.tar.bz2  y  toybox-0.7.1.tar.gz
+
+git clone https://github.com/landley/toybox
+cloning into toybox...
+
+git clone https://github.com/landley/mkroot
+cloning into mkroot...
+
+
+cd mkroot
+./mkroot.sh
+
+En este caso, el userland se crea en el directorio:
+output/host/root/
+Al ejecutar ls -l output/host/root/ se obtiene algo como:
+bin -> usr/bin
+dev
+etc
+home
+init
+lib -> usr/lib
+mnt
+proc
+root
+sbin -> usr/sbin
+sys
+tmp
+usr
+var
+
+mkdir build
+find output/host/root/ | cpio -H newc -o | gzip > build/root3.cpio.gz
+
+Nuevamente, nos cambimos al directorio de las fuentes del kernel
+cd ~/KERNEL_SRC/linux-4-17-rc2
+y ejecutamos qemu
+qemu-system-i386 -nographic -no-reboot -kernel arch/x86/boot/bzImage -initrd ~/KERNEL_SRC/root3.cpio.gz -append "panic=1 console=ttyS0 rdinit=/bin/sh"
+
+Despu\'es de muchos mensajes se debe obtener un prompt como este:
+/ #
+Al ejecutar ls -lh se debe obtener algo como:
+bin -> usr/bin
+dev
+etc
+home
+init
+lib -> usr/lib
+mnt
+proc
+root
+sbin -> usr/sbin
+sys
+tmp
+usr
+var
+
+Para salir se puede ejecutar el comando exit.
+

@@ -1,0 +1,4 @@
+all:un_enlace
+
+un_enlace:
+	ln -s bin sbin

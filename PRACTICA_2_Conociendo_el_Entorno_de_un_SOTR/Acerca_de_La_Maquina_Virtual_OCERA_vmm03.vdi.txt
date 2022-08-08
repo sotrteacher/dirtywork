@@ -1,0 +1,26 @@
+Para configurar las fuentes de la distribukci\'on de OCERA 1.0.0 
+# cd /usr/share/ocera_1.0.0
+# gcc -v
+ gcc version 3.3.5 (Debian 1:3.3.5-13)
+# make xconfig
+
+Se abre la ventana de configuraci\'on y podemos configurar la distribuci\'on de ocera de 
+acuerdo con la indicaciones de la Gu\'ia de Usuario Ocera_UG.pdf.
+
+Para construir los kernels y los m\'odulos de OCERA 1.0.0
+# cd /usr/share/ocera_1.0.0
+# source /home/usuario/downloads/GCC_2_95_3_script.sh
+
+Con esto se habr\'a seleccionado un juego de herramientas que contiene la version 2.95.3 de gcc 
+y la versi\'on 2.2.5 de glibc. Con lo cual ya podremos construir los kernels y ejemplos de 
+OCERA 1.0.0 ejecutando el comando
+# make
+
+(Con esto debe iniciar la construcci\'on de la distribuci\'on de OCERA).
+
+
+
+
+
+
+

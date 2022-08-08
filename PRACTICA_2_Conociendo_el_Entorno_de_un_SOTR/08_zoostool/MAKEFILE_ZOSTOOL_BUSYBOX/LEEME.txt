@@ -1,0 +1,20 @@
+INSTRUCCIONES PARA CONSTRUIR EL Live CD
+Antes de hacer 
+# make
+hacer primero 
+# make clean 
+y tambien 
+# modprobe brd
+
+Despues hacer 
+# make
+El archivo iso del live cd recien creado estara en
+isolinux/slinux.iso
+
+Se puede probar con qemu usando:
+# qemu-system-i386 -cdrom isolinux/slinux.iso
+
+Para grabar el archivo iso a un CD, se puede usar:
+# wodim -v -sao -eject dev=/dev/sr0  isolinux/slinux.iso
+
+(con un CD-R o CD+R --tmb puede usarse CD-RW-- en la charola del quemador de CD)
