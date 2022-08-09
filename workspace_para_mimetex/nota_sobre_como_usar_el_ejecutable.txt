@@ -1,4 +1,4 @@
-El c\'odigo fuente para este proyecto fuen tomado del directorio
+El c\'odigo fuente para este proyecto fue tomado del directorio
 ../../mimetex_Debian_Built
 (directorio raiz del repositorio dirtywork, en https://github.com/sotrteacher/dirtywork)
 
