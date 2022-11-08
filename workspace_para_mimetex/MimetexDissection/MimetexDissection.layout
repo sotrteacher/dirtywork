@@ -2,14 +2,14 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="TestMimeTeX" />
-	<File name="mimetex.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="898872" topLine="16626" />
-		</Cursor>
-	</File>
 	<File name="gifsave.c" open="0" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="-5" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="0" topLine="116" />
+		</Cursor>
+	</File>
+	<File name="mimetex.c" open="0" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="-2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="898872" topLine="16626" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>

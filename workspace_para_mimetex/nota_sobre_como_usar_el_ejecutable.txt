@@ -29,6 +29,18 @@ lrwxrwxrwx 1 root root   29 ago  8 12:26 mimetex.xtn -> bin/Release/MimetexDisse
 -rwxrwxrwx 1 root root  515 ago  8 13:08 archivo.gif
 -rwxrwxrwx 1 root root  435 ago  8 13:12 nota.txt
 
+/************************************************************************************
+                                                       Jueves 1 de septiembre de 2022
+PARA CORRER EL EJECUTABLE DESDE Codeblocks se tienen que colocar los parámetros 
+Project -> Set programs' arguments
+donde dice "Program arguments"
+-e AFunctionExample.gif \"v(x,y)=x^{2}+y^{2}\"
+
+Y al ejecutar el programa se crea el archivo AFunctionExample.gif en el directorio 
+base del proyecto.
+************************************************************************************/
+
+
 El ejecutable bin/Release/MimetexDissection se construy\'o utilizando 
 Codeblocks sobre Debian GNU Linux, los comandos utilizado por Codeblocks fueron los 
 siguientes:

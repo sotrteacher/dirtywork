@@ -1,0 +1,42 @@
+Mi\'ercoles 10 de agosto de 2022
+
+/usr/bin/ld: obj/Debug/mimetex.o: warning: relocation against `gifSize' in read-only section `.text'
+/usr/bin/ld: 
+obj/Debug/mimetex.o: en la función `main':
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:16791: referencia a `gifSize' sin definir
+
+En la l\'inea 77 del archivo gifsave.c tenemos:
+int gifSize = 0;		/* " #bytes comprising gif */
+
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17542: referencia a `GIF_Create' sin definir
+
+En las l\'ineas 888 a la 891 del archivo gifsave.c tenemos:
+int
+GIF_Create(const char *filename, int width, int height,
+	   int numcolors, int colorres)
+{
+
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17558: referencia a `GIF_SetColor' sin definir
+
+En las l\'ineas 961 a la 963 del archivo gifsave.c tenemos:
+void
+GIF_SetColor(int colornum, int red, int green, int blue)
+{
+
+
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17560: referencia a `GIF_SetColor' sin definir
+
+En las l\'ineas 961 a la 963 del archivo gifsave.c tenemos:
+void
+GIF_SetColor(int colornum, int red, int green, int blue)
+{
+
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17573: referencia a `GIF_SetColor' sin definir
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17577: referencia a `GIF_SetTransparent' sin definir
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17580: referencia a `GIF_CompressImage' sin definir
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17581: referencia a `GIF_Close' sin definir
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17583: referencia a `gifSize' sin definir
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17596: referencia a `gifSize' sin definir
+/usr/bin/ld: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17599: referencia a `gifSize' sin definir
+/usr/bin/ld: obj/Debug/mimetex.o: en la función `emitcache':
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/workspace_para_mimetex/MimetexDissection02/mimetex.c:17820: referencia a `gifSize' sin definir

@@ -35,8 +35,16 @@
 		<Linker>
 			<Add option="-lm" />
 		</Linker>
-		<Unit filename="mimetex.c">
+		<Unit filename="gifsave.c">
 			<Option compilerVar="CC" />
+			<Option target="TestMimeTeX" />
+		</Unit>
+		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+			<Option target="TestMimeTeX" />
+		</Unit>
+		<Unit filename="main.c.prep">
+			<Option target="TestMimeTeX" />
 		</Unit>
 		<Unit filename="mimetex.h" />
 		<Unit filename="texfonts.h" />
