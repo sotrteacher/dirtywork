@@ -1,0 +1,17 @@
+cargo new Hello_World --bin --edition 2018
+cd Hello_World
+cargo build
+cargo run
+
+warning: crate `Hello_World` should have a snake case name
+  |
+  = note: `#[warn(non_snake_case)]` on by default
+  = help: convert the identifier to snake case: `hello_world`
+
+warning: 1 warning emitted
+
+    Finished dev [unoptimized + debuginfo] target(s) in 0.05s
+     Running `target/debug/Hello_World`
+Hello, world!
+
+

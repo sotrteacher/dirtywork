@@ -1,0 +1,21 @@
+cargo new Rust_Hello_World_Hygienic_macro --bin --edition 2018
+cd Rust_Hello_World_Hygienic_macro
+cargo build
+   Compiling Rust_Hello_World_Hygienic_macro v0.1.0 (/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/UNIDAD01/Rust_Hello_World_Hygienic_Macros/Rust_Hello_World_Hygienic_macro)
+error: expected expression, found `$`
+  --> src/main.rs:5:10
+   |
+5  |       $a*$z
+   |          ^^ expected expression
+...
+12 |  println!("Multiplication Macro in Rust = {}", f!(a, b));
+   |                                                -------- in this macro invocation
+   |
+   = note: this error originates in a macro (in Nightly builds, run with -Z macro-backtrace for more info)
+
+error: aborting due to previous error
+
+error: could not compile `Rust_Hello_World_Hygienic_macro`.
+
+To learn more, run the command again with --verbose.
+

@@ -1,0 +1,9 @@
+[package]
+name = "Rust_Hello_World_shows_memory_safety"
+version = "0.1.0"
+authors = ["lambertomaza <lmaza@ipn.mx>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]

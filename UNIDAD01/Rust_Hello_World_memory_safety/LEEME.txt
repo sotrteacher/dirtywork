@@ -1,0 +1,246 @@
+REF:
+Banik, Zimmer, Firmware Development, A Guide to Specialized Systemic Knowledge
+APress, 2022.
+
+The Rust programming language is designed for modern and
+future platforms where security and reliability are major concerns. It’s a
+multimodel system programming language that provides the comfort of a
+high-level programming language and still is able to provide the low-level
+control. 
+Here are some unique features of Rust that are the reasons behind
+its continuous popularity:
+
+-
+Memory safety: Typically, being vulnerable to software bugs
+is caused due by coding errors such as buffer overflows,
+no provision for boundary checks, dangling pointers, etc.
+Tools like Coverity allow static memory analysis for C to
+ensure the program is free of memory errors. The Rust 
+programming language implements a borrow checker for
+ensuring memory safety. It follows these principles:
+
+All variables are initiated before they are used.
+
+Movement of a variable value is not allowed while it
+is borrowed.
+
+When a variable goes out of scope, Rust
+automatically calls the drop function and cleans up
+the heap memory for that variable.
+
+Table A-C is an example that shows both data pointers pointing to the
+same location using the C and Rust programming languages to highlight
+what the memory safety signifies and how Rust ensures safety at compile
+time rather than running into the undefined behavior error at runtime.
+
+Table A-C. Example
+Implementing Code in C
+#include <stdio.h>
+void main()
+{
+char *src = "Hello";
+char *dst = src;
+printf("%s World!\n", src);
+printf("Writing %s World Program.\n", dst);
+}
+Output
+Hello World!
+Writing Hello World Program.
+
+Table A-C. (continued)
+Implementing Code in Rust
+
+1| fn main() {
+2|
+let src = String::from("Hello");
+3|
+let dst = src;
+4|
+5|
+println!("{} World!", src);
+6|
+println!("Writing {} World Program", dst);
+7| }
+Output
+error[E0382]: borrow of moved value: `src`
+--> main.rs:5:27
+|
+2 |
+let src = String::from("Hello");
+5 |
+--- move occurs because `src` has type
+`std::string::String`, which does not
+implement the `Copy` trait
+3 |
+let dst = src;
+5 |
+--- value moved here
+4 |
+5 |
+println!("{} World!", src);
+5 |
+^^^ value borrowed
+here after move
+error: aborting due to previous error
+For more information about this error, try `rustc --explain E0382`.
+
+
+
+
+/**********************************************************************************************/
+cargo new Rust_Hello_World_shows_memory_safety
+cd Rust_Hello_World_shows_memory_safety
+cargo build
+   Compiling Rust_Hello_World_shows_memory_safety v0.1.0 (/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/UNIDAD01/Rust_Hello_World_memory_safety/Rust_Hello_World_shows_memory_safety)
+error[E0382]: borrow of moved value: `src`
+ --> src/main.rs:5:23
+  |
+2 |  let src = String::from("Hello"); 
+  |      --- move occurs because `src` has type `String`, which does not implement the `Copy` trait
+3 |  let dst = src;
+  |            --- value moved here
+4 | 
+5 |  println!("{} World!",src);
+  |                       ^^^ value borrowed here after move
+
+error: aborting due to previous error
+
+For more information about this error, try `rustc --explain E0382`.
+error: could not compile `Rust_Hello_World_shows_memory_safety`.
+/**********************************************************************************************/
+-
+Executable size: Rust uses static linking to compile
+its programs, meaning all different types of libraries
+required by the Rust program will be compiled
+and be part of the executable. Typically, when a
+C executable runs, it actually makes a system call
+that transfers control to the operating systems to
+perform the required operation. For example, when
+the C executable wants to printf a message such as
+“Hello World!” it just makes the write system call to
+the standard output. But for the Rust programming
+language, it bundles all the required standard libraries
+so that it doesn’t need to rely on OSs.
+
+-
+Better access to hardware registers: Memory-
+mapped hardware registers are numerous in the
+firmware programming space, and unknowingly or
+unintentionally modifying a bit might be sufficient
+to change the behavior of the hardware. Hence, it’s
+important to ensure that the compiler is able to detect
+any such scenarios where the given value is within
+the prescribed register boundary. Using a type-level
+programming to get more advanced checking on the
+memory-mapped register at compile time would help
+to make a safer system program.
+
+-
+Namespaces: For any language, the names are the
+way to uniquely identify an entity and can be labels,
+variables, functions, etc. In Rust, a namespace is a
+logical grouping of declared names. It allows the
+occurrence of the same name in different namespaces
+without any conflict. For example, to maintain the
+semantics in function names in a system firmware
+project that involves cross-architectures, you need to
+maintain different techniques in the C programming
+language such as weak symbols and NULL pointer
+checks to ensure only one instance of the function call
+is getting included. Also, it’s hard to debug and figure
+out which function is actually in use. In Rust, within
+a namespace, names are organized in a hierarchy,
+where each level of the hierarchy has its own name.
+The double colon (::) is an operator that is used to
+define the namespace. In Rust, calling arch::halt()
+is enough from the mainboard directory to resolve the
+symbol issues without any additional overhead.
+The mainboard directory calls these functions:
+src/mainboard/sifive/hifive/src/main.rs:154:    arch::halt()
+src/mainboard/aaeon/upsquared/src/main.rs:39:    arch::halt()
+The SoC directory implements the halt() function:
+src/arch/riscv/rv32/src/lib.rs:9:pub fn halt() -> ! {
+src/arch/x86/x86_64/src/lib.rs:13:pub fn halt() -> ! {
+In the previous example, HiFive, a mainboard built around RISC-V SoC
+and upsquared, is a x86-based platform.
+
+-
+Replacement of the makefile: A makefile is the set of
+instructions that you use to tell how to build your
+program. Typically, a handwritten makefile is too error-
+prone as you need to instruct the machine to include a
+set of files during compilation. Many high-level system
+programming languages are trying to remove the
+handwritten makefile dependency from programmers.
+In Rust, the cargo-make task runner is able to define
+and configure sets of tasks via Cargo.toml files and run
+them as a flow.
+
+Hygienic macros: For safe system programming,
+hygienic macros ensure there are no accidental
+captures of identifiers. Macros are getting preprocessed
+and expand the scope of the code prior passing the
+expanded source code to the compiler. A programming
+language embedded with a non-hygienic macro
+system has a problem where an existent variable may
+get hidden during the macro creation or even during
+its expansion, which finally would result in incorrect
+output. A system programming language that supports
+hygienic macros prevents macros from interfering with
+variables that are declared outside of the macro.
+
+Demonstrate the Nonhygienic Macro Problem Using C
+
+#include <stdio.h>
+#define f(a,b) a*z
+int main()
+{
+int a = 2, b = 5, z = 3;
+printf("Multiplication Macro in `C` = %d\n", f(a, b));
+return 0;
+}
+Output:
+Multiplication Macro in `C` = 6
+
+In this example, after preprocessing the input variable, b is getting replaced by the
+local variable z, which results in unexpected output from this multiplication function.
+
+Let’s rerun the same multiplication operation in Rust that supports
+hygienic macros.
+
+Demonstrate the Hygienic Macro Using Rust
+macro_rules! f{
+($a:expr,$b:expr)=>{
+{
+$a*$z
+}
+}
+}
+fn main() {
+let (a, b, z) = (2, 5, 3);
+println!("Multiplication Macro in Rust = {}", f!(a, b));
+}
+Output
+error: expected expression, found `$`
+--> main.rs:12:16
+|
+12 |
+$a*$z
+|
+^^ expected expression
+...
+19 |
+println!("Multiplication Macro in Rust = {}", f!(a, b));
+|
+-------- in this macro invocation
+|
+= note: this error originates in the macro `f` (in Nightly
+builds, run with -Z macro-­backtrace for more info)
+error: aborting due to previous error
+The hygienic macro in Rust allows metaprogramming. Unlike macros in C
+languages, Rust macros are expanded into abstract syntax trees, rather than just
+string preprocessing, so programmers won’t run into unexpected problems as
+illustrated earlier with the usage of nonhygienic macros.
+
+
+

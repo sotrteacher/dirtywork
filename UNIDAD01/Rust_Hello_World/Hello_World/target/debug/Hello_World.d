@@ -1,0 +1,1 @@
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/UNIDAD01/Rust_Hello_World/Hello_World/target/debug/Hello_World: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/UNIDAD01/Rust_Hello_World/Hello_World/src/main.rs
