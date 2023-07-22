@@ -1,0 +1,1 @@
+/mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/UNIDAD01/Rust_Test_immutable/Test_immutable/target/debug/Test_immutable: /mnt/sda3/Users/LMC/2020/REPOS_2020/SOTR-2020-2/REPO/dirtywork/UNIDAD01/Rust_Test_immutable/Test_immutable/src/main.rs

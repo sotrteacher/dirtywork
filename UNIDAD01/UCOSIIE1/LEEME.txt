@@ -1,0 +1,91 @@
+                              Jueves 20 de julio de 2023
+Archivos correspondientes al Example #1 
+(Example #1 para correr sobre el kernel uCOS-II, Port 
+para 80x86, construir usando DOSBOX, TurboC++ 3.0)
+del libro
+MicroC/OS-II The Real-Time Kernel, Jean J. Labrosse
+CMP Books, Lawrence, Kansas 66046
+Archivo: 100-uC-OS-II-002.pdf
+
+Archivos fuente
+File name    Location
+PC.C         BLOCKS\PC\BC45
+OS_TASK.C    UCOS-II\SOURCE
+OS_FLAG.C    UCOS-II\SOURCE
+OS_MEM.C     UCOS-II\SOURCE
+OS_Q.C       UCOS-II\SOURCE
+OS_CPU_A.ASM UCOS-II\IX86L\BC45
+OS_TIME.C    UCOS-II\SOURCE
+OS_CPU_C.C   UCOS-II\IX86L\BC45
+OS_CORE.C    UCOS-II\SOURCE
+OS_SEM.C     UCOS-II\SOURCE
+TEST.C       UCOS-II\EX1_X86L\BC45\SOURCE
+
+Archivos de cabecera
+File name    Location
+PC.H         BLOCKS/PC/BC45
+INCLUDES.H   UCOS-II/EX1_X86L/BC45/SOURCE
+OS_CFG.H     UCOS-II/EX1_X86L/BC45/SOURCE
+OS_CPU.H     UCOS-II/IX86L/BC45
+uCOS_II.H    UCOS-II/SOURCE
+
+Archivo de proyecto de Turbo C++, Version 3.0
+Copyright (c) 1990, 1992 by Borland International, Inc.
+File name    Location
+UCEJEM1.PRJ  ..\UCOSIIE1\
+
+Construcci\'on del Port de uCOS-II para DOS (microC OS II)
+(Para ejecutarlo sobre FreeDos, o bien MSDOS, menciono
+FreeDOS porque es el sistema operativo sobre el que me 
+ha sido m\'as r\'apido probar, MSDOS no lo he buscado
+o instalado aun en m\'aquina virtual).
+Se coloc\'o una copia de turbo assembler (TASM.EXE)
+En el directorio TC\BIN (dentro del directorio TurboC4)
+
+En el proyecto fue necesario modificar en
+Options->Transfers el elemento ~Turbo Assembler
+colocando en el campo 'Path to the file' lo siguiente:
+C:\TC\BIN\TASM.EXE
+
+Y tambi\'en para corregir el error 
+"Cannot find filter TASM2MSG"
+se coloc\'o una copia del archivo TASM2MSG.EXE en el 
+mismo directorio donde est\'a colocado el archivo del 
+proyecto de TurboC++ (En el ejemplo construido hoy
+jueves 21 de julio de 2023, el archivo UCEJEM1.PRJ)
+
+NOTA: Por alguna raz\'on que por ahora desconozco --v\'ease
+actualizaci\'on--, el archivo ejecutable queda en el directorio
+C:\TC\SOURCE
+El ejecutable es C:\TC\SOURCE\UCEJEM1.EXE. VEASE LA 
+Siguiente actualizaci\'on:
+                          Viernes 21 de julio de 2023
+ACTUALIZACI\'ON: Se puede elegir donde se colocan los 
+archivos objeto modificando el Output Directory
+Options --> Directories
+Output Directory
+C:\UCOSIIE1
+
+Tambi\'en, para corregir el error de que no se encuentra 
+el archivo INCLUDES.H, se debe modificar los directorios 
+de b\'usqueda:
+Options --> Directories
+Include Directories
+C:\TC\INCLUDE;C:\UCOSIIE1\UCOS-II\EX1_X86L\BC45\SOURCE
+(Para el caso del proyecto UCEJEM1.PRJ, ^-- As\'i es como
+debe quedar).
+---
+Aunque aqu\'i escribo la ruta de esta manera, como se 
+esta trabajando con DOSBOX, en lugar de la unidad C, 
+en realidad, la ruta es el directorio en donde est\'a 
+contenido el directorio TC dentro de DOSBOX, en este caso,
+el directorio TurboC4. Es decir que la ruta del ejecutable 
+es TurboC4\UCOSIIE1\UCEJEM1.EXE
+---
+
+Tambi\'en antes de que se me olvide, el archivo ejecutable
+(Port de microC operaring system para DOS) al concluir la 
+construcci\'on del proyecto, TurboC++ lo crea en el mismo 
+``lugar'' donde est\'a el archivo del proyecto.
+
+
